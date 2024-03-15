@@ -9,17 +9,22 @@ import lombok.Getter;
 public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "menu_id")
     private Long menuId;
 
+    @Column(name = "menu_name")
     private String menuName;
 
+    @Column(name = "introduce")
     private String introduce;
 
+    @Column(name = "price")
     private Long price;
 
+    @Column(name = "menu_category")
     private String menuCategory;
 
     @ManyToOne
-    @JoinColumn(name = "storeId")
+    @JoinColumn(name = "store_id")
     private Store store;
 }

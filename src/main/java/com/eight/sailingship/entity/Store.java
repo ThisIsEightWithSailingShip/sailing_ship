@@ -9,21 +9,30 @@ import lombok.Getter;
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "store_id")
     private long storeId;
 
+    @Column(name = "email")
     private String email;
 
+    @Column(name = "password")
     private String password;
 
-    private RoleEnum roleEnum;
+    @Column(name = "role")
+    private RoleEnum role;
 
+    @Column(name = "address")
     private String address;
 
+    @Column(name = "phone")
     private String phone;
 
-    private StoreEnum storeEnum;
+    @Column(name = "category")
+    private StoreEnum category;
 
+    @Column(name = "store_name")
     private String storeName;
 
+    @Column(name = "owner_name")
     private String ownerName;
 }

@@ -9,8 +9,10 @@ import lombok.Getter;
 public class OrderMenu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_menu_id")
     private Long orderMenuId;
 
+    @Column(name = "quantity")
     private int quantity;
 
     @ManyToOne
