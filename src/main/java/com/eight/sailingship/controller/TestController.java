@@ -7,6 +7,7 @@ import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -24,8 +25,4 @@ public class TestController {
         return "menu/store-detail.html";
     }
 
-    @PostMapping("/sail/menu")
-    public String createMenu(Model model){
-        return "menu/createMenu.html";
-    }
 }

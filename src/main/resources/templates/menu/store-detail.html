@@ -36,7 +36,7 @@
     <main>
 
 
-        <!-- 매장 정보 -->
+<!--        &lt;!&ndash; 매장 정보 &ndash;&gt;
         <div class="store-info">
             <h2>매장 정보</h2>
             <p><strong>위치:</strong> <span th:text="${store.address}">매장 주소</span></p>
@@ -45,15 +45,15 @@
 
         <h2>메뉴</h2>
         <div class="menu-container">
-            <!-- 메뉴 카드 -->
+            &lt;!&ndash; 메뉴 카드 &ndash;&gt;
             <div class="menu-card" th:each="menu : ${menu}">
                 <h3 th:text="${menu.menuName}">메뉴 제목</h3>
                 <p th:text="${menu.introduce}">메뉴 설명</p>
                 <p th:text="${menu.price}">가격: $10</p>
-                <!-- 메뉴 이미지 -->
-<!--                <img th:src="${menu.imageUrl}" alt="메뉴 이미지">-->
+                &lt;!&ndash; 메뉴 이미지 &ndash;&gt;
+&lt;!&ndash;                <img th:src="${menu.imageUrl}" alt="메뉴 이미지">&ndash;&gt;
             </div>
-        </div>
+        </div>-->
 
 
 

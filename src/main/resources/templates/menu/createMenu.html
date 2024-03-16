@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sailor_Hang_Hae</title>
-    <link rel="stylesheet" href="../../static/css/style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
     <style>
         body {
             display: flex;
@@ -51,7 +51,7 @@
 <body>
 <header class="header">
     <div class="header-left">
-        <img src="../../static/images/logo.png" alt="logo" class="logo">
+        <img th:src="@{/images/logo.png}" class="logo" />
     </div>
     <div class="header-center">
         <form class="input-form">
@@ -70,18 +70,18 @@
 <!-- Form Section -->
 <main>
     <div class="form-container">
-        <form>
+        <form action="/sail/menu" method="post">
             <label for="menuName">메뉴 이름:</label>
             <input type="text" id="menuName" name="menuName">
 
-            <label for="description">설명:</label>
-            <input type="text" id="description" name="description">
+            <label for="introduce">설명:</label>
+            <input type="text" id="introduce" name="introduce">
 
             <label for="price">가격:</label>
             <input type="text" id="price" name="price">
 
-            <label for="category">카테고리:</label>
-            <input type="text" id="category" name="category">
+            <label for="menuCategory">카테고리:</label>
+            <input type="text" id="menuCategory" name="menuCategory">
 
             <input type="submit" value="Submit">
         </form>
