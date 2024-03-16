@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sailor_Hang_Hae</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .logo {
+            display: block;
+            margin: 20px auto; /* 위 아래 마진 20px, 좌우 마진은 자동으로 설정하여 이미지를 중앙 정렬 */
+            max-width: 100%; /* 화면 너비를 초과하지 않도록 최대 너비 설정 */
+            height: auto; /* 이미지의 비율을 유지하면서 높이 자동 조절 */
+        }
+        .card-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap; /* 카드가 많아지면 다음 줄로 넘어갈 수 있도록 설정 */
+        }
+        .card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .card h3, .card p {
+            margin: 10px 0;
+        }
+    </style>
+
+</head>
+<body>
+<header class="header">
+    <div class="header-left">
+        <img th:src="@{/images/logo.png}" alt="Logo" class="logo">
+    </div>
+    <div class="header-center">
+        <form class="input-form">
+            <input class="input" type="search" id="searchQuery" placeholder="주변 맛집을 검색해 보세요">
+            <button class="input-button">검색</button>
+        </form>
+    </div>
+    <div class="header-right">
+        <nav class="menu">
+            <span class="menu-button">SIGN UP</span>
+            <span class="menu-button">SIGN IN</span>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <img th:src="@{/images/logo.png}" class="logo" />
+    <div class="card-container">
+        <div th:each="menu : ${menus}" class="card">
+            <h3 th:text="${menu.menuName}">Menu Name</h3>
+            <p th:text="${menu.introduce}">Introduction</p>
+            <p><span>Price: $</span><span th:text="${menu.price}"></span></p>
+            <p><span>Category: </span><span th:text="${menu.menuCategory}"></span></p>
+
+            <div class="card-actions" th:if="${owner}">
+                <a th:href="@{/sail/menu/{id}(id=${menu.menuId})}">✏️</a>
+                <a th:href="@{/sail/menu/trash/{id}(id=${menu.menuId})}">🗑️</a>
+
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

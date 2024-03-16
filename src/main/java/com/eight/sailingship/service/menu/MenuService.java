@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MenuService {
@@ -30,4 +32,36 @@ public class MenuService {
 
         menuRepository.save(menu);
     }
+
+    public List<Menu> listMenu() {
+        return menuRepository.findByStore_StoreId(1L);
+        // ***** 나중에 @AuthenticationPrincipal 이후 변경해 줘야함.
+
+    }
+
+    public Menu editMenu(Long menuId, Long storeId) {
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 메뉴 번호 입니다."));
+        Long menuOwnerId = menu.getStore().getStoreId();
+        if(storeId != menuOwnerId) {
+            throw new IllegalArgumentException("매장이 사장님의 소유가 아닙니다.");
+        }
+        return menu;
+    }
+
+    @Transactional
+    public void editSaveMenu(MenuRequestDto requestDto, Long id) {
+        Menu menu = menuRepository.findById(id).get();
+        menu.update(requestDto);
+        menuRepository.save(menu);
+    }
+
+    public void deleteMenu(Long menuId, Long storeId) {
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 메뉴 번호 입니다."));
+        Long menuOwnerId = menu.getStore().getStoreId();
+        if(storeId != menuOwnerId) {
+            throw new IllegalArgumentException("매장이 사장님의 소유가 아닙니다.");
+        }
+        menuRepository.delete(menu);
+    }
+
 }
