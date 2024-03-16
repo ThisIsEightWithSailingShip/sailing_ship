@@ -37,7 +37,7 @@ public class Customer {
     @Column(name = "account")
     private Integer account;
 
-    @OneToMany(mappedBy = "order_id", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<Order> orderList;
 
     public void addOrderList(Order order) {
