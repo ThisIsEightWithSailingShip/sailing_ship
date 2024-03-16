@@ -1,5 +1,6 @@
 package com.eight.sailingship.service.store;
 
+import com.eight.sailingship.dto.store.StoreRequestDto;
 import com.eight.sailingship.entity.Menu;
 import com.eight.sailingship.entity.Store;
 import com.eight.sailingship.repository.StoreRepository;
@@ -38,5 +39,10 @@ public class StoreServiceImpl implements StoreService {
         model.addAttribute("categories",allCategory);
 
         return "store-detail.html";
+    }
+
+    @Override
+    public void updateStore(Model model, StoreRequestDto requestDto) {
+        Store findStore = storeRepository.findById(1L).orElseThrow(); // 인증객체 UserDetails에서 매장 아이디 추출 필요
     }
 }
