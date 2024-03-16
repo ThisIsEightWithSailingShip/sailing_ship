@@ -33,7 +33,7 @@ public class MenuController {
     public String listMenu(Model model) {
         List<Menu> menus = menuService.listMenu();
         model.addAttribute("menus", menus);
-        model.addAttribute("owner", false); // *** 나중에 사장이면, 배달 완료 클릭 가능. customer면 수량 체크 배달 가능.
+        model.addAttribute("owner", true); // *** 나중에 사장이면, 배달 완료 클릭 가능. customer면 수량 체크 배달 가능.
         return "menu/listMenu";
     }
 
