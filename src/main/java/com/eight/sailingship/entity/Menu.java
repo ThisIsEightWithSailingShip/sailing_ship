@@ -1,5 +1,6 @@
 package com.eight.sailingship.entity;
 
+import com.eight.sailingship.dto.menu.MenuRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,5 +39,12 @@ public class Menu {
     public void addOrderMenuList(OrderMenu orderMenu) {
         this.orderMenuList.add(orderMenu);
         orderMenu.setMenu(this);
+    }
+
+    public void update(MenuRequestDto requestDto) {
+        this.menuName = requestDto.getMenuName();
+        this.introduce = requestDto.getIntroduce();
+        this.price = requestDto.getPrice();
+        this.menuCategory = requestDto.getMenuCategory();
     }
 }

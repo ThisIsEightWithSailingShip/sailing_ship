@@ -3,6 +3,7 @@ package com.eight.sailingship.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.util.Date;
 import java.util.List;
@@ -21,11 +22,15 @@ public class Order {
     private Integer status;
 
     @Column(name = "order_date")
+    @CreatedDate
     private Date orderDate;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @Column
+    private Long totalPrice;
 
     @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<OrderMenu> orderMenuList;

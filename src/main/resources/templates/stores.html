@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sailor_Hang_Hae</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" th:href="@{/css/stores.css}" />
+  </head>
+  <body>
+    <!-- header -->
+    <header class="header">
+      <div class="header-left">
+        <img th:src="@{/images/logo.png}" class="logo" />
+      </div>
+      <div class="header-center">
+        <form class="input-form">
+          <input
+            class="input"
+            type="search"
+            id="searchQuery"
+            placeholder="주변 맛집을 검색해 보세요"
+          />
+          <button class="input-button">검색</button>
+        </form>
+      </div>
+      <div class="header-right">
+        <nav class="menu">
+          <span class="menu-button">SIGN UP</span>
+          <span class="menu-button">SIGN IN</span>
+        </nav>
+      </div>
+    </header>
+
+    <!-- main -->
+    <main>
+      <div class="main-background">
+        <h1 class="store-introduce">원하시는 매장을 찾아보세요</h1>
+        <div class="store-container">
+          <!-- 매장 카드 -->
+          <div class="store-card" th:each="store : ${stores}", th:attr="storeId = ${store.storeId}">
+            <div class="store-img-cover">
+              <img th:src="@{/images/logo.png}" class="store-img"/>
+            </div>
+            <h3 th:text="${store.storeName}" class="store-info">가게명</h3>
+            <p th:text="${store.phone}" class= "store-info">전화번호</p>
+            <p th:text="${store.address}" class="store-info">주소</p>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="/js/stores.js"></script>
+  </body>
+</html>
