@@ -3,6 +3,7 @@ package com.eight.sailingship.service.store;
 import com.eight.sailingship.dto.store.StoreRequestDto;
 import com.eight.sailingship.entity.Menu;
 import com.eight.sailingship.entity.Store;
+import com.eight.sailingship.entity.StoreEnum;
 import com.eight.sailingship.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,25 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    @Transactional
     public void updateStore(Model model, StoreRequestDto requestDto) {
         Store findStore = storeRepository.findById(1L).orElseThrow(); // 인증객체 UserDetails에서 매장 아이디 추출 필요
+        String roleString = requestDto.getCategory();
+
+        StoreEnum storeEnum;
+        if (roleString.equalsIgnoreCase("korea")) {
+            storeEnum = StoreEnum.KOREA;
+        } else if (roleString.equalsIgnoreCase("japan")) {
+            storeEnum = StoreEnum.JAPAN;
+        } else if (roleString.equalsIgnoreCase("china")) {
+            storeEnum = StoreEnum.CHINA;
+        } else {
+            storeEnum = StoreEnum.ETC;
+        }
+
+        findStore.setAddress(requestDto.getAddress());
+        findStore.setPhone(requestDto.getPhone());
+        findStore.setCategory(storeEnum);
+        findStore.setStoreName(requestDto.getStoreName());
     }
 }
