@@ -1,4 +1,7 @@
 .stores {
-  column-count: 3;
-  column-gap: 20px;
+  margin: 40px auto;
+  max-width: 930px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }

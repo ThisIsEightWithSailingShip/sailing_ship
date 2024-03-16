@@ -34,72 +34,14 @@
     <!-- main -->
     <main>
       <div class="main-background">
-        <div class="stores">
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
-          <p>This is the main area.</p>
+        <h2>가게</h2>
+        <div class="store-container">
+          <!-- 메뉴 카드 -->
+          <div class="store-card" th:each="store : ${stores}">
+            <h3 th:text="${store.storeName}">가게명</h3>
+            <p th:text="${store.phone}">전화번호</p>
+            <p th:text="${store.address}">주소</p>
+          </div>
         </div>
       </div>
     </main>
