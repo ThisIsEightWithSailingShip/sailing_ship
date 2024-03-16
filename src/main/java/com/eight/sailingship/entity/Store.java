@@ -2,10 +2,14 @@ package com.eight.sailingship.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "stores")
 @Getter
+@Setter
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +39,12 @@ public class Store {
 
     @Column(name = "owner_name")
     private String ownerName;
+
+    @OneToMany(mappedBy = "menu_id", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private List<Menu> menuList;
+
+    public void addMenuList(Menu menu) {
+        this.menuList.add(menu);
+        menu.setStore(this);
+    }
 }

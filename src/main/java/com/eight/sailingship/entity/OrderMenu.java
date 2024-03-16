@@ -2,10 +2,12 @@ package com.eight.sailingship.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "ordermenus")
 @Getter
+@Setter
 public class OrderMenu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,8 +18,8 @@ public class OrderMenu {
     private int quantity;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "order_id")
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "menu_id")

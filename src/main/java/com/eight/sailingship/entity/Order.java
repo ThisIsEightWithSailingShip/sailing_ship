@@ -2,11 +2,14 @@ package com.eight.sailingship.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "orders")
 public class Order {
     @Id
@@ -19,4 +22,16 @@ public class Order {
 
     @Column(name = "order_date")
     private Date orderDate;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
+    @OneToMany(mappedBy = "order_menu_id", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private List<OrderMenu> orderMenuList;
+
+    public void addOrderMenuList(OrderMenu orderMenu) {
+        this.orderMenuList.add(orderMenu);
+        orderMenu.setOrder(this);
+    }
 }

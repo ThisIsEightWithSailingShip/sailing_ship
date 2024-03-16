@@ -2,9 +2,13 @@ package com.eight.sailingship.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "menus")
 public class Menu {
     @Id
@@ -27,4 +31,12 @@ public class Menu {
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
+
+    @OneToMany(mappedBy = "order_menu_id", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private List<OrderMenu> orderMenuList;
+
+    public void addOrderMenuList(OrderMenu orderMenu) {
+        this.orderMenuList.add(orderMenu);
+        orderMenu.setMenu(this);
+    }
 }
