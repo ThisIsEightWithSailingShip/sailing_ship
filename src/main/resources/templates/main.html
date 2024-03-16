@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sailor_Hang_Hae</title>
-    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
   </head>
   <body>
     <!-- header -->
     <header class="header">
       <div class="header-left">
-        <img src="./images/logo.png" class="logo" />
+        <img th:src="@{/images/logo.png}" class="logo" />
       </div>
       <div class="header-center">
         <form class="input-form">
@@ -34,71 +34,73 @@
     <!-- main -->
     <main>
       <div class="main-background">
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
-        <p>This is the main area.</p>
+        <div class="stores">
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+          <p>This is the main area.</p>
+        </div>
       </div>
     </main>
   </body>
