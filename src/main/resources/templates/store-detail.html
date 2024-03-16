@@ -50,8 +50,11 @@
         .category-button.active {
             background-color: #ccc;
         }
-    </style>
 
+        .cart-item {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -92,7 +95,6 @@
         <button th:each="category : ${categories}" th:text="${category}" class="category-button" th:attr="data-category=${category}" onclick="filterMenu(this.getAttribute('data-category'))"></button>
     </div>
 
-
     <h2>메뉴</h2>
     <div class="menu-container">
         <!-- 메뉴 카드 -->
@@ -103,12 +105,25 @@
             <p><strong>가격:</strong> <span th:text="${menu.price}">가격</span></p>
             <p><strong>카테고리:</strong> <span th:text="${menu.menuCategory}">카테고리</span></p>
             <!-- 장바구니 추가 버튼 -->
-            <button class="add-to-cart-button" data-menuId="${menu.menuId}">장바구니에 추가</button>
+            <div>
+                <button class="add-to-cart-button" th:attr="data-menuId=${menu.menuId}, data-menuName=${menu.menuName}, data-price=${menu.price}"
+                        onclick="addToCart(this.getAttribute('data-menuId'), this.getAttribute('data-menuName'), this.getAttribute('data-price'))">장바구니에 추가</button>
+                <input type="number" class="quantity-input" value="1" min="1" step="1">
+            </div>
         </div>
+    </div>
+
+    <!-- 장바구니 -->
+    <div id="cart" style="display: none;">
+        <h2>장바구니</h2>
+        <div id="cart-items"></div>
+        <button onclick="checkout()">주문하기</button>
     </div>
 </main>
 
 <script>
+    let cart = [];
+
     // 카테고리 별 메뉴 필터링 함수
     function filterMenu(category) {
         const menuCards = document.querySelectorAll('.menu-card');
@@ -130,9 +145,90 @@
         });
     }
 
+    // 장바구니에 메뉴 추가
+    function addToCart(menuId, menuName, price) {
+        const quantityInput = document.querySelector('.quantity-input');
+        const quantity = parseInt(quantityInput.value);
+        let existingItem = cart.find(item => item.menuId === menuId);
 
+        if (existingItem) {
+            // 이미 장바구니에 있는 메뉴라면 수량을 증가시킴
+            existingItem.quantity += quantity;
+        } else {
+            // 장바구니에 새로운 메뉴를 추가함
+            const item = {
+                menuId: menuId,
+                menuName: menuName,
+                price: price,
+                quantity: quantity
+            };
+            cart.push(item);
+        }
+        renderCart();
+    }
+
+
+    // 장바구니 표시
+    function renderCart() {
+        const cartItemsDiv = document.getElementById('cart-items');
+        cartItemsDiv.innerHTML = '';
+        cart.forEach(item => {
+            const div = document.createElement('div');
+            div.classList.add('cart-item');
+            div.innerHTML = `
+                    <span>${item.menuName}</span>
+                    <span>${item.price}원</span>
+                    <input type="number" value="${item.quantity}" min="1" step="1" onchange="updateQuantity('${item.menuId}', this.value)">
+                    <button onclick="removeFromCart('${item.menuId}')">삭제</button>
+                `;
+            cartItemsDiv.appendChild(div);
+        });
+        document.getElementById('cart').style.display = 'block';
+    }
+
+    // 장바구니에서 메뉴 삭제
+    function removeFromCart(menuId) {
+        cart = cart.filter(item => item.menuId !== menuId);
+        renderCart();
+    }
+
+    // 수량 업데이트
+    function updateQuantity(menuId, quantity) {
+        cart.forEach(item => {
+            if (item.menuId === menuId) {
+                item.quantity = parseInt(quantity);
+            }
+        });
+        renderCart();
+    }
+
+    // 주문하기
+    // 주문하기
+    function checkout() {
+        // 여기에 주문 처리 로직을 구현합니다.
+        console.log('주문 정보:', cart);
+
+        // AJAX를 이용하여 주문 정보를 서버로 전송합니다.
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/order'); // 서버의 주문 처리 엔드포인트 경로를 지정합니다.
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                console.log('주문이 성공적으로 처리되었습니다.');
+                // 주문 성공 시 추가적인 처리를 할 수 있습니다.
+                // 예를 들어, 주문 완료 메시지를 표시하거나 페이지를 리디렉션할 수 있습니다.
+            } else {
+                console.error('주문 처리 중 오류가 발생했습니다.');
+                // 오류 처리 로직을 구현합니다.
+            }
+        };
+        xhr.send(JSON.stringify(cart));
+
+        // 주문 처리 후에 장바구니를 초기화하고 화면에 표시를 갱신합니다.
+        cart = [];
+        document.getElementById('cart').style.display = 'none';
+    }
 </script>
-
 </body>
 
 </html>
