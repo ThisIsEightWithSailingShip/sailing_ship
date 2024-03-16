@@ -1,0 +1,31 @@
+.update-form-container {
+    width: 300px;
+    margin: 0 auto;
+}
+
+#store-update-form {
+    display: flex;
+    flex-direction: column;
+}
+
+#store-update-form label {
+    margin-bottom: 5px;
+    color: teal;
+}
+
+#store-update-form input[type="text"] {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+#store-update-form button {
+    padding: 8px 16px;
+    background-color: teal;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#store-update-form button:hover {
+    background-color: #2bafaf;
+}
