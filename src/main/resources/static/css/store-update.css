@@ -1,11 +1,17 @@
 .update-form-container {
-    width: 300px;
-    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #store-update-form {
     display: flex;
     flex-direction: column;
+    width: 350px;
+    margin-top: 35px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fa;
+    padding: 40px;
 }
 
 #store-update-form label {
@@ -19,6 +25,7 @@
 }
 
 #store-update-form button {
+    margin-top: 20px;
     padding: 8px 16px;
     background-color: teal;
     color: white;
