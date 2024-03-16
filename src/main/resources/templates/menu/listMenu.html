@@ -37,7 +37,45 @@
         .card h3, .card p {
             margin: 10px 0;
         }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        .quantity-controls input {
+            text-align: center;
+            width: 50px;
+            margin: 0 10px;
+        }
+
+        .global-order-button {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+        }
     </style>
+    <script>
+        function increaseQuantity(button) {
+            var input = button.previousElementSibling;
+            var currentValue = parseInt(input.value, 10);
+            input.value = currentValue + 1;
+        }
+
+        function decreaseQuantity(button) {
+            var input = button.nextElementSibling;
+            var currentValue = parseInt(input.value, 10);
+            if (currentValue > 1) { // 수량은 1 이상이어야 함
+                input.value = currentValue - 1;
+            }
+        }
+
+        function submitOrder() {
+            // 주문 로직 구현
+            alert('주문이 완료되었습니다.');
+        }
+    </script>
 
 </head>
 <body>
@@ -68,12 +106,27 @@
             <p><span>Price: $</span><span th:text="${menu.price}"></span></p>
             <p><span>Category: </span><span th:text="${menu.menuCategory}"></span></p>
 
+            <div th:if="${not owner}">
+                <!-- 수량 조절 버튼 -->
+                <div class="quantity-controls">
+                    <button onclick="decreaseQuantity(this)">-</button>
+                    <input type="text" value="1" readonly>
+                    <button onclick="increaseQuantity(this)">+</button>
+                </div>
+                <!-- 체크박스 -->
+                <input type="checkbox" th:id="${'checkbox-' + menu.menuId}" th:name="${'checkbox-' + menu.menuId}">
+                <label th:for="${'checkbox-' + menu.menuId}">주문하기</label>
+            </div>
+
             <div class="card-actions" th:if="${owner}">
                 <a th:href="@{/sail/menu/{id}(id=${menu.menuId})}">✏️</a>
                 <a th:href="@{/sail/menu/trash/{id}(id=${menu.menuId})}">🗑️</a>
-
             </div>
         </div>
+    </div>
+
+    <div th:if="${not owner}" class="global-order-button">
+        <button onclick="submitOrder()">주문하기</button>
     </div>
 </main>
 </body>
