@@ -106,7 +106,8 @@
     <!-- 카테고리 버튼 -->
     <div class="category-buttons">
         <button class="category-button" onclick="filterMenu('all')">전체</button>
-        <button th:each="category : ${categories}" th:text="${category}" class="category-button" th:attr="data-category=${category}" onclick="filterMenu(this.getAttribute('data-category'))"></button>
+        <button th:each="category : ${categories}" th:text="${category}" class="category-button"
+                th:attr="data-category=${category}" onclick="filterMenu(this.getAttribute('data-category'))"></button>
     </div>
 
     <h2>메뉴</h2>
@@ -122,11 +123,6 @@
             <div>
                 <button class="add-to-cart-button" th:attr="data-menuId=${menu.menuId}, data-menuName=${menu.menuName}, data-price=${menu.price}"
                         onclick="addToCart(this.getAttribute('data-menuId'), this.getAttribute('data-menuName'), this.getAttribute('data-price'))">장바구니에 추가</button>
-                <div class="quantity-buttons" style="display: none;">
-                    <button class="quantity-button" onclick="decreaseQuantity(this.parentElement.querySelector('.quantity-input'))">-</button>
-                    <input type="number" class="quantity-input" value="1" min="1" step="1">
-                    <button class="quantity-button" onclick="increaseQuantity(this.parentElement.querySelector('.quantity-input'))">+</button>
-                </div>
             </div>
         </div>
     </div>
@@ -183,19 +179,21 @@
     }
 
     // 수량 감소
-    function decreaseQuantity(input) {
-        const value = parseInt(input.value);
-        if (value > 1) {
-            input.value = value - 1;
-            updateQuantityInCart(input.parentElement.parentElement.dataset.menuId, value - 1);
+    function decreaseQuantity(menuId) {
+        const item = cart.find(item => item.menuId === menuId);
+        if (item && item.quantity > 1) {
+            item.quantity--;
+            renderCart(cart);
         }
     }
 
     // 수량 증가
-    function increaseQuantity(input) {
-        const value = parseInt(input.value);
-        input.value = value + 1;
-        updateQuantityInCart(input.parentElement.parentElement.dataset.menuId, value + 1);
+    function increaseQuantity(menuId) {
+        const item = cart.find(item => item.menuId === menuId);
+        if (item) {
+            item.quantity++;
+            renderCart(cart);
+        }
     }
 
     // 장바구니 표시
@@ -211,9 +209,9 @@
                 <span>${item.menuName}</span>
                 <span>${item.price}원</span>
                 <div class="quantity-buttons">
-                    <button class="quantity-button" onclick="decreaseQuantity(this.parentElement.querySelector('.quantity-input'))">-</button>
-                    <input type="number" class="quantity-input" value="${item.quantity}" min="1" step="1">
-                    <button class="quantity-button" onclick="increaseQuantity(this.parentElement.querySelector('.quantity-input'))">+</button>
+                    <button class="quantity-button" onclick="decreaseQuantity('${item.menuId}')">-</button>
+                    <span>${item.quantity}</span>
+                    <button class="quantity-button" onclick="increaseQuantity('${item.menuId}')">+</button>
                 </div>
                 <button onclick="removeFromCart('${item.menuId}')">삭제</button>
             `;
@@ -230,20 +228,29 @@
         renderCart(cart);
     }
 
-    // 수량 업데이트
-    function updateQuantityInCart(menuId, quantity) {
-        cart.forEach(item => {
-            if (item.menuId === menuId) {
-                item.quantity = parseInt(quantity);
-            }
-        });
-        renderCart(cart);
+    // 주문 정보와 총 가격을 JSON 형식으로 내보내는 함수
+    function exportOrderData(totalPrice) {
+        const orderData = {
+            items: cart.map(item => {
+                return {
+                    menuId: item.menuId,
+                    quantity: item.quantity
+                };
+            }),
+            totalPrice: totalPrice
+        };
+        return JSON.stringify(orderData);
     }
 
+
+    // 주문하기
     // 주문하기
     function checkout() {
         // 주문 정보를 가져옵니다.
-        const orderData = JSON.stringify(cart);
+        const totalPrice = calculateTotalPrice(); // 총 가격 계산
+        const orderData = exportOrderData(totalPrice); // 주문 정보 및 총 가격을 JSON으로 내보냅니다.
+
+        console.log(orderData); // 콘솔에 JSON 데이터 출력
 
         // fetch를 사용하여 POST 요청을 보냅니다.
         fetch('/sail/order', {
@@ -264,6 +271,7 @@
             })
             .then(data => {
                 // 서버로부터의 추가 데이터 처리
+                console.log(data); // 콘솔에 JSON 데이터 출력
             })
             .catch(error => {
                 console.error(error.message);
@@ -272,8 +280,20 @@
 
         // 주문 처리 후에 장바구니를 초기화하고 화면에 표시를 갱신합니다.
         cart = [];
-        document.getElementById('cart').style.display = 'none';
+        renderCart(cart);
     }
+
+
+    // 총 가격을 계산하는 함수
+    function calculateTotalPrice() {
+        let totalPrice = 0;
+        cart.forEach(item => {
+            totalPrice += item.price * item.quantity;
+        });
+        return totalPrice;
+    }
+
+
 </script>
 </body>
 
