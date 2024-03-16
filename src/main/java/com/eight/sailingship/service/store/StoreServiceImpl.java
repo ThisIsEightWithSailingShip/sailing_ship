@@ -1,7 +1,7 @@
-package com.eight.sailingship.repository;
+package com.eight.sailingship.service.store;
 
 import com.eight.sailingship.entity.Store;
-import com.eight.sailingship.service.StoreService;
+import com.eight.sailingship.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

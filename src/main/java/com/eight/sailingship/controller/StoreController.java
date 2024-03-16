@@ -1,6 +1,6 @@
 package com.eight.sailingship.controller;
 
-import com.eight.sailingship.service.StoreService;
+import com.eight.sailingship.service.store.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
