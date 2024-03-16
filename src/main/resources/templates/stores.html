@@ -38,7 +38,7 @@
         <h1 class="store-introduce">원하시는 매장을 찾아보세요</h1>
         <div class="store-container">
           <!-- 매장 카드 -->
-          <div class="store-card" th:each="store : ${store}">
+          <div class="store-card" th:each="store : ${stores}", th:attr="storeId = ${store.storeId}">
             <div class="store-img-cover">
               <img th:src="@{/images/logo.png}" class="store-img"/>
             </div>
