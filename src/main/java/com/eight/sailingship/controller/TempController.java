@@ -18,7 +18,7 @@ public class TempController {
     @GetMapping
     public String stores(Model model) {
         List<Store> stores = tempRepository.findAll();
-        model.addAttribute("stores", stores);
+        model.addAttribute("store", stores);
 
         return "main.html";
     }
