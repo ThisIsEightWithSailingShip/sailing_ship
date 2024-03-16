@@ -72,8 +72,28 @@
         }
 
         function submitOrder() {
-            // 주문 로직 구현
-            alert('주문이 완료되었습니다.');
+            const selectedMenus = [];
+            document.querySelectorAll('.card').forEach(card => {
+                const checkbox = card.querySelector('input[type="checkbox"]');
+                if (checkbox && checkbox.checked) {
+                    const menuId = card.getAttribute('data-menu-id');
+                    const quantity = card.querySelector('input[type="text"]').value;
+                    selectedMenus.push({ menuId, quantity });
+                }
+            });
+
+            // 선택된 메뉴가 없으면 알림
+            if (selectedMenus.length === 0) {
+                alert('주문할 메뉴를 선택해주세요.');
+                return;
+            }
+
+            // 주문 로직 구현 (예: 서버로 요청 보내기)
+            // 이 예제에서는 선택된 메뉴와 수량을 알림으로 표시
+            alert('주문되었습니다.\n' + JSON.stringify(selectedMenus, null, 2));
+
+            // 실제 애플리케이션에서는 여기서 AJAX 요청 등을 통해 서버로 데이터를 전송
+            console.log(selectedMenus); // 개발자 도구의 콘솔에서 확인 가능
         }
     </script>
 
@@ -100,20 +120,18 @@
 <main>
     <img th:src="@{/images/logo.png}" class="logo" />
     <div class="card-container">
-        <div th:each="menu : ${menus}" class="card">
+        <div th:each="menu, menuStat : ${menus}" class="card" th:data-menu-id="${menu.menuId}">
             <h3 th:text="${menu.menuName}">Menu Name</h3>
             <p th:text="${menu.introduce}">Introduction</p>
             <p><span>Price: $</span><span th:text="${menu.price}"></span></p>
             <p><span>Category: </span><span th:text="${menu.menuCategory}"></span></p>
 
             <div th:if="${not owner}">
-                <!-- 수량 조절 버튼 -->
                 <div class="quantity-controls">
                     <button onclick="decreaseQuantity(this)">-</button>
-                    <input type="text" value="1" readonly>
+                    <input type="text" value="1" readonly th:id="${'quantity-' + menu.menuId}">
                     <button onclick="increaseQuantity(this)">+</button>
                 </div>
-                <!-- 체크박스 -->
                 <input type="checkbox" th:id="${'checkbox-' + menu.menuId}" th:name="${'checkbox-' + menu.menuId}">
                 <label th:for="${'checkbox-' + menu.menuId}">주문하기</label>
             </div>
