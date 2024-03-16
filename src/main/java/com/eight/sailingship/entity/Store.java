@@ -40,7 +40,7 @@ public class Store {
     @Column(name = "owner_name")
     private String ownerName;
 
-    @OneToMany(mappedBy = "menu_id", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "store", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<Menu> menuList;
 
     public void addMenuList(Menu menu) {
