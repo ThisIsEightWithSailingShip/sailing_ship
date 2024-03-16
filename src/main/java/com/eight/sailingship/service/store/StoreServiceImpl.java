@@ -44,8 +44,10 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public void updateStore(Model model, StoreRequestDto requestDto) {
-        Store findStore = storeRepository.findById(1L).orElseThrow(); // 인증객체 UserDetails에서 매장 아이디 추출 필요
+    public void updateStore(Long storeId, StoreRequestDto requestDto) {
+        // storeId 일치 여부
+
+        Store findStore = storeRepository.findById(storeId).orElseThrow(); // 인증객체 UserDetails에서 매장 아이디 추출 필요
         String roleString = requestDto.getCategory();
 
         StoreEnum storeEnum;

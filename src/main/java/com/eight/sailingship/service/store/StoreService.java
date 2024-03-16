@@ -12,5 +12,5 @@ public interface StoreService {
     String getStore(Model model, Long storeId);
 
     // 매장 정보 수정
-    void updateStore(Model model, StoreRequestDto requestDto);
+    void updateStore(Long storeId, StoreRequestDto requestDto);
 }

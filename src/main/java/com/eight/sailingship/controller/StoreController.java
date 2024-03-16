@@ -27,15 +27,17 @@ public class StoreController {
     }
 
     // 매장 수정 페이지 조회
-    @GetMapping("/{storeId}/update")
-    public String updateStore(@PathVariable Long storeId, Model model) {
+    @GetMapping("/update")
+    public String updateStore() {
         // storeId의 값이 UserDetails 객체의 값에서 타고 타고 조회해야 함
         return "store-update.html";
     }
 
-    @PutMapping
-    public String updateStore(Model model, @ModelAttribute StoreRequestDto requestDto) {
-        storeService.updateStore(model, requestDto);
+    @PutMapping("/update")
+    public String updateStore(@RequestBody StoreRequestDto requestDto) {
+        // storeId의 값이 UserDetails 객체의 값에서 타고 타고 검증해야 함
+        Long storeId = 1L;
+        storeService.updateStore(storeId, requestDto);
         return "redirect:/sail/store";
     }
 }
