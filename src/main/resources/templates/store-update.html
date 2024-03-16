@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sailor_Hang_Hae</title>
     <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/store-update.css" />
 </head>
 <body>
 <!-- header -->
@@ -35,20 +36,20 @@
 <main>
     <div class="main-background">
         <div class="update-form-container">
-            <form action="/sail/menu" method="post">
-                <label for="menuName">메뉴 이름:</label>
-                <input type="text" id="menuName" name="menuName">
+            <form id = "store-update-form">
+                <label for="address">주소</label>
+                <input type="text" id="address" name="address">
 
-                <label for="introduce">설명:</label>
-                <input type="text" id="introduce" name="introduce">
+                <label for="phone">전화번호</label>
+                <input type="text" id="phone" name="phone">
 
-                <label for="price">가격:</label>
-                <input type="text" id="price" name="price">
+                <label for="category">분류</label>
+                <input type="text" id="category" name="category">
 
-                <label for="menuCategory">카테고리:</label>
-                <input type="text" id="menuCategory" name="menuCategory">
+                <label for="storeName">가게명</label>
+                <input type="text" id="storeName" name="storeName">
 
-                <input type="submit" value="Submit">
+                <button>수정</button>
             </form>
         </div>
     </div>
