@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sailor_Hang_Hae</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
   </head>
   <body>
     <!-- header -->
@@ -34,13 +35,16 @@
     <!-- main -->
     <main>
       <div class="main-background">
-        <h2>가게</h2>
+        <h1 class="store-introduce">원하시는 매장을 찾아보세요</h1>
         <div class="store-container">
-          <!-- 메뉴 카드 -->
+          <!-- 매장 카드 -->
           <div class="store-card" th:each="store : ${store}">
-            <h3 th:text="${store.storeName}">가게명</h3>
-            <p th:text="${store.phone}">전화번호</p>
-            <p th:text="${store.address}">주소</p>
+            <div class="store-img-cover">
+              <img th:src="@{/images/logo.png}" class="store-img"/>
+            </div>
+            <h3 th:text="${store.storeName}" class="store-info">가게명</h3>
+            <p th:text="${store.phone}" class= "store-info">전화번호</p>
+            <p th:text="${store.address}" class="store-info">주소</p>
           </div>
         </div>
       </div>
