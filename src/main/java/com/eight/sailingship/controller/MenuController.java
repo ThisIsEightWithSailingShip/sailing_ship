@@ -4,6 +4,7 @@ import com.eight.sailingship.dto.menu.MenuRequestDto;
 import com.eight.sailingship.entity.Menu;
 import com.eight.sailingship.service.menu.MenuService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -60,11 +61,10 @@ public class MenuController {
     }
 
 
-    @GetMapping("/sail/menu/trash/{id}")
-    public String deleteMenu(@PathVariable Long id) {
+    @DeleteMapping("/sail/menu/trash/{id}")
+    public ResponseEntity<String> deleteMenu(@PathVariable Long id) {
         Long storeId = 1L; // 나중에 authorization 써서, 실제 storeId 넘겨줘야하마.
-        menuService.deleteMenu(id, storeId);
-        return "redirect:/sail/listmenu";
+        return menuService.deleteMenu(id, storeId);
     }
 
 

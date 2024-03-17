@@ -88,7 +88,8 @@
 
             <div class="card-actions" th:if="${owner}">
                 <a th:href="@{/sail/menu/{id}(id=${menu.menuId})}">✏️</a>
-                <a th:href="@{/sail/menu/trash/{id}(id=${menu.menuId})}">🗑️</a>
+                <a href="#" th:onclick="'javascript:deleteMenu(' + ${menu.menuId} + ');'">🗑️</a>
+
             </div>
         </div>
     </div>
@@ -97,5 +98,21 @@
         <button onclick="submitOrder()">주문하기</button>
     </div>
 </main>
+<script>
+    function deleteMenu(menuId) {
+        fetch(`/sail/menu/trash/${menuId}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("메뉴가 성공적으로 지워졌습니다.");
+                    location.reload(); // Reload the page to reflect the deletion
+                } else {
+                    alert("메뉴가 사장님 소유가 아닙니다.");
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
 </body>
 </html>

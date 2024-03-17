@@ -6,6 +6,7 @@ import com.eight.sailingship.entity.Store;
 import com.eight.sailingship.repository.MenuRepository;
 import com.eight.sailingship.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -32,13 +33,14 @@ public class MenuService {
 
         menuRepository.save(menu);
     }
-
+    @Transactional(readOnly = true)
     public List<Menu> listMenu() {
         return menuRepository.findByStore_StoreId(1L);
         // ***** 나중에 @AuthenticationPrincipal 이후 변경해 줘야함.
 
     }
 
+    @Transactional
     public Menu editMenu(Long menuId, Long storeId) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 메뉴 번호 입니다."));
         Long menuOwnerId = menu.getStore().getStoreId();
@@ -55,13 +57,15 @@ public class MenuService {
         menuRepository.save(menu);
     }
 
-    public void deleteMenu(Long menuId, Long storeId) {
+    @Transactional
+    public ResponseEntity<String> deleteMenu(Long menuId, Long storeId) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 메뉴 번호 입니다."));
         Long menuOwnerId = menu.getStore().getStoreId();
         if(storeId != menuOwnerId) {
-            throw new IllegalArgumentException("매장이 사장님의 소유가 아닙니다.");
+            return ResponseEntity.badRequest().body("매장이 사장님의 소유가 아닙니다.");
         }
         menuRepository.delete(menu);
+        return ResponseEntity.ok().body("삭제 되었습니다.");
     }
 
 }
