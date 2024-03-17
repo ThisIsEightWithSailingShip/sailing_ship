@@ -29,7 +29,7 @@ public class MenuController {
     }
 
     //나중에 authorization 필요
-    @GetMapping("/sail/listmenu")
+    @GetMapping("/sail/listmenu") // owner만 접슨할 수 있도록 authorization해야함.
     public String listMenu(Model model) {
         List<Menu> menus = menuService.listMenu();
         model.addAttribute("menus", menus);
