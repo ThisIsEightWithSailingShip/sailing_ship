@@ -26,7 +26,7 @@ public class MenuController {
     @PostMapping("/sail/menu")
     public String createMenu(@ModelAttribute MenuRequestDto requestDto, Model model) {
         menuService.createMenu(requestDto, model);
-        return "redirect:/sail/menu";
+        return "redirect:/sail/listmenu";
     }
 
     //나중에 authorization 필요

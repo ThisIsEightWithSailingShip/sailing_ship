@@ -55,6 +55,22 @@
             right: 20px;
             bottom: 20px;
         }
+
+        .add-menu-button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px; /* 콘텐츠와 버튼 사이의 간격 */
+        }
+
+        /* 버튼에 호버 효과 추가 */
+        .add-menu-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 
 </head>
@@ -94,10 +110,11 @@
         </div>
     </div>
 
-    <div th:if="${not owner}" class="global-order-button">
-        <button onclick="submitOrder()">주문하기</button>
+    <div>
+        <a href="/sail/menu" class="add-menu-button">메뉴 추가하기</a>
     </div>
 </main>
+
 <script>
     function deleteMenu(menuId) {
         fetch(`/sail/menu/trash/${menuId}`, {
