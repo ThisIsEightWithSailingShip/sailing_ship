@@ -23,9 +23,7 @@ public class Customer {
     private String password;
 
     @Column(name = "role")
-   // @Enumerated(EnumType.STRING) // 문자열로 열거형 상수를 저장
-    private String role;
-
+    private RoleEnum role;
 
     @Column(name = "nickname")
     private String nickname;

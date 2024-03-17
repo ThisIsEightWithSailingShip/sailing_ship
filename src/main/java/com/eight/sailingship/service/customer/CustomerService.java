@@ -18,29 +18,27 @@ public class CustomerService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public void signup(CustomerDto customerDto) {
-        if (customerDto.getEmail() == null || customerDto.getPassword() == null) {
-            throw new IllegalArgumentException("Email and password cannot be null");
+        if (customerDto.getPassword() == null) {
+            throw new IllegalArgumentException("Password cannot be null");
         }
 
-        // 이미 존재하는 이메일인지 확인
+        // DB에 이미 동일한 이메일을 가진 회원이 존재하는지 확인
         boolean isUser = customerRepository.existsByEmail(customerDto.getEmail());
         if (isUser) {
-            throw new IllegalArgumentException("User with this email already exists");
+            return; // 이미 가입된 회원이므로 처리 중단
         }
 
+        // 회원 가입 정보 생성
         Customer customer = new Customer();
         customer.setEmail(customerDto.getEmail());
         customer.setPassword(bCryptPasswordEncoder.encode(customerDto.getPassword()));
-        customer.setRole(RoleEnum.Role.CUSTOMER);
+        customer.setRole(RoleEnum.CUSTOMER);
         customer.setNickname(customerDto.getNickname());
         customer.setAddress(customerDto.getAddress());
         customer.setPhone(customerDto.getPhone());
-        customer.setAccount(1000000);
+        customer.setAccount(10000);
 
+        // 회원 저장
         customerRepository.save(customer);
     }
-
-
-
-
 }
