@@ -55,47 +55,23 @@
             right: 20px;
             bottom: 20px;
         }
+
+        .add-menu-button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px; /* 콘텐츠와 버튼 사이의 간격 */
+        }
+
+        /* 버튼에 호버 효과 추가 */
+        .add-menu-button:hover {
+            background-color: #0056b3;
+        }
     </style>
-    <script>
-        function increaseQuantity(button) {
-            var input = button.previousElementSibling;
-            var currentValue = parseInt(input.value, 10);
-            input.value = currentValue + 1;
-        }
-
-        function decreaseQuantity(button) {
-            var input = button.nextElementSibling;
-            var currentValue = parseInt(input.value, 10);
-            if (currentValue > 1) { // 수량은 1 이상이어야 함
-                input.value = currentValue - 1;
-            }
-        }
-
-        function submitOrder() {
-            const selectedMenus = [];
-            document.querySelectorAll('.card').forEach(card => {
-                const checkbox = card.querySelector('input[type="checkbox"]');
-                if (checkbox && checkbox.checked) {
-                    const menuId = card.getAttribute('data-menu-id');
-                    const quantity = card.querySelector('input[type="text"]').value;
-                    selectedMenus.push({ menuId, quantity });
-                }
-            });
-
-            // 선택된 메뉴가 없으면 알림
-            if (selectedMenus.length === 0) {
-                alert('주문할 메뉴를 선택해주세요.');
-                return;
-            }
-
-            // 주문 로직 구현 (예: 서버로 요청 보내기)
-            // 이 예제에서는 선택된 메뉴와 수량을 알림으로 표시
-            alert('주문되었습니다.\n' + JSON.stringify(selectedMenus, null, 2));
-
-            // 실제 애플리케이션에서는 여기서 AJAX 요청 등을 통해 서버로 데이터를 전송
-            console.log(selectedMenus); // 개발자 도구의 콘솔에서 확인 가능
-        }
-    </script>
 
 </head>
 <body>
@@ -126,26 +102,34 @@
             <p><span>Price: $</span><span th:text="${menu.price}"></span></p>
             <p><span>Category: </span><span th:text="${menu.menuCategory}"></span></p>
 
-            <div th:if="${not owner}">
-                <div class="quantity-controls">
-                    <button onclick="decreaseQuantity(this)">-</button>
-                    <input type="text" value="1" readonly th:id="${'quantity-' + menu.menuId}">
-                    <button onclick="increaseQuantity(this)">+</button>
-                </div>
-                <input type="checkbox" th:id="${'checkbox-' + menu.menuId}" th:name="${'checkbox-' + menu.menuId}">
-                <label th:for="${'checkbox-' + menu.menuId}">주문하기</label>
-            </div>
-
             <div class="card-actions" th:if="${owner}">
                 <a th:href="@{/sail/menu/{id}(id=${menu.menuId})}">✏️</a>
-                <a th:href="@{/sail/menu/trash/{id}(id=${menu.menuId})}">🗑️</a>
+                <a href="#" th:onclick="'javascript:deleteMenu(' + ${menu.menuId} + ');'">🗑️</a>
+
             </div>
         </div>
     </div>
 
-    <div th:if="${not owner}" class="global-order-button">
-        <button onclick="submitOrder()">주문하기</button>
+    <div>
+        <a href="/sail/menu" class="add-menu-button">메뉴 추가하기</a>
     </div>
 </main>
+
+<script>
+    function deleteMenu(menuId) {
+        fetch(`/sail/menu/trash/${menuId}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("메뉴가 성공적으로 지워졌습니다.");
+                    location.reload(); // Reload the page to reflect the deletion
+                } else {
+                    alert("메뉴가 사장님 소유가 아닙니다.");
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
 </body>
 </html>
