@@ -61,6 +61,13 @@ public class StoreServiceImpl implements StoreService {
             storeEnum = StoreEnum.ETC;
         }
 
+        if (requestDto.getAddress() == null) {
+            throw new NullPointerException();
+        }
+        if (requestDto.getStoreName() == null) {
+            throw new NullPointerException();
+        }
+
         findStore.setAddress(requestDto.getAddress());
         findStore.setPhone(requestDto.getPhone());
         findStore.setCategory(storeEnum);

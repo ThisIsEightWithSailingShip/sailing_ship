@@ -12,6 +12,8 @@ function submitForm() {
         storeName: document.getElementById("storeName").value
     };
 
+    console.log(formData)
+
     fetch("/sail/store/update", {
         method: "PUT",
         headers: {
@@ -26,10 +28,10 @@ function submitForm() {
             return response.json();
         })
         .then(data => {
-            console.log(data); // 서버 응답 로그
-            // 처리할 작업 추가
+            console.log(data);
+            window.location.href = '/sail/store';
         })
         .catch(error => {
-            console.error("Error submitting form:", error);
+            console.error("Error submitting form:", error); // 리다이렉팅 방지
         });
 }

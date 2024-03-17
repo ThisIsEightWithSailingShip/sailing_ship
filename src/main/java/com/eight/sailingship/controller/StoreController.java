@@ -38,6 +38,6 @@ public class StoreController {
         // storeId의 값이 UserDetails 객체의 값에서 타고 타고 검증해야 함
         Long storeId = 1L;
         storeService.updateStore(storeId, requestDto);
-        return "redirect:/sail/store";
+        return "stores.html";
     }
 }
