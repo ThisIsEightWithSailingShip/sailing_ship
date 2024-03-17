@@ -18,10 +18,9 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        // 현재 Customer 엔티티에는 롤 정보가 저장되어 있으므로 해당 롤을 반환함
-        authorities.add(new SimpleGrantedAuthority(customer.getRole().toString()));
-        return authorities;
+        Collection<GrantedAuthority> collection = new ArrayList<>();
+        collection.add((GrantedAuthority) () -> customer.getRole());
+        return collection;
     }
 
     @Override
@@ -31,7 +30,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return customer.getEmail(); // 이메일을 사용자명으로 사용
+        return customer.getEmail();
     }
 
     @Override

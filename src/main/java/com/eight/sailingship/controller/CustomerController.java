@@ -21,6 +21,8 @@ public class CustomerController {
         return "login"; // 로그인 페이지로 이동
     }
 
+
+
     @GetMapping("/signup")
     public String signupPage(@ModelAttribute("customerDto") CustomerDto customerDto) {
 

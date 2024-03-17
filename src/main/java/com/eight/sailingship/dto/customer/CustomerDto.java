@@ -1,6 +1,5 @@
 package com.eight.sailingship.dto.customer;
 
-import com.eight.sailingship.entity.RoleEnum;
 import lombok.Getter;
 import lombok.Setter;
 

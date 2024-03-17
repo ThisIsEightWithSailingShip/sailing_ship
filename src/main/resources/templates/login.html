@@ -1,151 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sailor_Hang_Hae</title>
-    <link rel="stylesheet" href="../static/css/style.css" />
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sailor_Hang_Hae</title>
+  <link rel="stylesheet" href="../static/css/style.css"/>
 
+  <style>
+    .main-background {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-    <style>
-      .main-background {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-      }
-  
-      .login-container {
-        background-color: #fff;
-        padding: 40px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
-        width: 100%;
-      }
-  
-      .login-container h2 {
-        margin-top: 0;
-        margin-bottom: 20px;
-        text-align: center;
-        color: #333;
-      }
-  
-      .login-form {
-        display: flex;
-        flex-direction: column;
-      }
-  
-      .login-form input {
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 16px;
-      }
-  
-      .login-form button {
-        padding: 10px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-      }
-  
-      .login-form button:hover {
-        background-color: #0056b3;
-      }
-  
-      .login-form p {
-        margin-top: 10px;
-        font-size: 14px;
-        text-align: center;
-      }
-  
-      .login-form a {
-        color: #007bff;
-        text-decoration: none;
-      }
-  
-      .login-form a:hover {
-        text-decoration: underline;
-      }
-    </style>
+    .login-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
 
+    .login-container h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #333;
+    }
 
+    .login-form {
+      display: flex;
+      flex-direction: column;
+    }
 
+    .login-form input {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
 
-  </head>
-  <body>
-    <!-- header -->
-    <header class="header">
-      <div class="header-left">
-        <img src="../static/images/logo.png" class="logo" />
-      </div>
-      <div class="header-center">
-        <form class="input-form">
-          <input
-            class="input"
-            type="search"
-            id="searchQuery"
-            placeholder="주변 맛집을 검색해 보세요"
-          />
-          <button class="input-button">검색</button>
-        </form>
-      </div>
-      <div class="header-right">
-        <nav class="menu">
-          <span class="menu-button">SIGN UP</span>
-          <span class="menu-button">SIGN IN</span>
-        </nav>
-      </div>
-    </header>
+    .login-form button {
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
 
-    <!-- main -->
-    <main>
-      <div class="main-background">
-        <!-- 로그인 페이지 -->
-        <div class="login-container">
-          <h2>로그인</h2>
-          <form class="login-form" id="loginForm" action="/login" method="post">
-            <input type="text" id="email" name="email" placeholder="이메일">
-            <input type="password" id="password" name="password" placeholder="비밀번호">
-            <button type="submit">로그인</button>
-          </form>
-          <p>계정이 없으신가요? <a href="#">회원가입</a></p>
-        </div>
-        <!-- 로그인 페이지 끝 -->
-      </div>
-    </main>
+    .login-form button:hover {
+      background-color: #0056b3;
+    }
 
-    <!-- JavaScript 코드 추가 -->
-    <script>
-      document.getElementById("loginForm").addEventListener("submit", function (event) {
-        event.preventDefault(); // 기본 동작 중지
-        var formData = new FormData(this); // 폼 데이터 가져오기
-        fetch("/login", { // 서버에 POST 요청 보내기
-          method: "POST",
-          body: formData
-        })
-                .then(response => {
-                  if (response.status === 200) {
-                    // 로그인 성공 시 알림창 표시
-                    alert("로그인 성공!");
-                    window.location.href = "/"; // 로그인 성공 시 홈페이지로 이동
-                  } else {
-                    // 로그인 실패 시 알림창 표시
-                    alert("로그인 실패. 이메일과 비밀번호를 확인해주세요.");
-                    console.error("로그인 실패");
-                  }
-                })
-                .catch(error => {
-                  // 오류 발생 시 알림창 표시
-                  alert("오류 발생. 다시 시도해주세요.");
-                  console.error("오류 발생:", error);
-                });
-      });
-    </script>
-  </body>
+    .login-form p {
+      margin-top: 10px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .login-form a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .login-form a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+</head>
+<body>
+<!-- header -->
+<header class="header">
+  <div class="header-left">
+    <img src="../static/images/logo.png" class="logo"/>
+  </div>
+  <div class="header-center">
+    <form class="input-form">
+      <input
+              class="input"
+              type="search"
+              id="searchQuery"
+              placeholder="주변 맛집을 검색해 보세요"
+      />
+      <button class="input-button">검색</button>
+    </form>
+  </div>
+  <div class="header-right">
+    <nav class="menu">
+      <span class="menu-button">SIGN UP</span>
+      <span class="menu-button">SIGN IN</span>
+    </nav>
+  </div>
+</header>
+
+<!-- main -->
+<main>
+  <div class="main-background">
+    <!-- 로그인 페이지 -->
+    <div class="login-container">
+      <h2>로그인</h2>
+      <form class="login-form" id="loginForm" action="/loginProc" method="post">
+        <input type="text" id="email" name="email" placeholder="이메일">
+        <input type="password" id="password" name="password" placeholder="비밀번호">
+        <button type="submit">로그인</button>
+      </form>
+      <p>계정이 없으신가요? <a href="#">회원가입</a></p>
+    </div>
+    <!-- 로그인 페이지 끝 -->
+  </div>
+</main>
+
+<!-- JavaScript 코드 추가 -->
+<script>
+  document.getElementById("loginForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // 기본 동작 중지
+    var formData = new FormData(this); // 폼 데이터 가져오기
+    fetch("/loginProc", { // 서버에 POST 요청 보내기
+      method: "POST",
+      body: formData
+    })
+            .then(response => {
+              if (response.status === 200) {
+                // 로그인 성공 시 알림창 표시
+                alert("로그인 성공!");
+                window.location.href = "stores.html"; // 로그인 성공 시 홈페이지로 이동
+              } else {
+                // 로그인 실패 시 알림창 표시
+                alert("로그인 실패. 이메일과 비밀번호를 확인해주세요.");
+                console.error("로그인 실패");
+              }
+            })
+            .catch(error => {
+              // 오류 발생 시 알림창 표시
+              alert("오류 발생. 다시 시도해주세요.");
+              console.error("오류 발생:", error);
+            });
+  });
+</script>
+</body>
 </html>
