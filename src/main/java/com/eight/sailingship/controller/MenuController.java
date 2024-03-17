@@ -4,6 +4,7 @@ import com.eight.sailingship.dto.menu.MenuRequestDto;
 import com.eight.sailingship.entity.Menu;
 import com.eight.sailingship.service.menu.MenuService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +26,11 @@ public class MenuController {
     @PostMapping("/sail/menu")
     public String createMenu(@ModelAttribute MenuRequestDto requestDto, Model model) {
         menuService.createMenu(requestDto, model);
-        return "redirect:/sail/menu";
+        return "redirect:/sail/listmenu";
     }
 
     //나중에 authorization 필요
-    @GetMapping("/sail/listmenu")
+    @GetMapping("/sail/listmenu") // owner만 접슨할 수 있도록 authorization해야함.
     public String listMenu(Model model) {
         List<Menu> menus = menuService.listMenu();
         model.addAttribute("menus", menus);
@@ -60,11 +61,10 @@ public class MenuController {
     }
 
 
-    @GetMapping("/sail/menu/trash/{id}")
-    public String deleteMenu(@PathVariable Long id) {
+    @DeleteMapping("/sail/menu/trash/{id}")
+    public ResponseEntity<String> deleteMenu(@PathVariable Long id) {
         Long storeId = 1L; // 나중에 authorization 써서, 실제 storeId 넘겨줘야하마.
-        menuService.deleteMenu(id, storeId);
-        return "redirect:/sail/listmenu";
+        return menuService.deleteMenu(id, storeId);
     }
 
 
