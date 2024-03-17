@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sailor_Hang_Hae</title>
-    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="../static/css/style.css" />
 
 
     <style>
@@ -82,7 +82,7 @@
     <!-- header -->
     <header class="header">
       <div class="header-left">
-        <img src="./images/logo.png" class="logo" />
+        <img src="../static/images/logo.png" class="logo" />
       </div>
       <div class="header-center">
         <form class="input-form">
@@ -109,16 +109,43 @@
         <!-- 로그인 페이지 -->
         <div class="login-container">
           <h2>로그인</h2>
-          <form class="login-form">
-            <input type="text" id="email" placeholder="이메일">
-            <input type="password" id="password" placeholder="비밀번호">
+          <form class="login-form" id="loginForm" action="/login" method="post">
+            <input type="text" id="email" name="email" placeholder="이메일">
+            <input type="password" id="password" name="password" placeholder="비밀번호">
             <button type="submit">로그인</button>
-            <button type="submit">회원가입</button>
           </form>
           <p>계정이 없으신가요? <a href="#">회원가입</a></p>
         </div>
         <!-- 로그인 페이지 끝 -->
       </div>
     </main>
+
+    <!-- JavaScript 코드 추가 -->
+    <script>
+      document.getElementById("loginForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // 기본 동작 중지
+        var formData = new FormData(this); // 폼 데이터 가져오기
+        fetch("/login", { // 서버에 POST 요청 보내기
+          method: "POST",
+          body: formData
+        })
+                .then(response => {
+                  if (response.status === 200) {
+                    // 로그인 성공 시 알림창 표시
+                    alert("로그인 성공!");
+                    window.location.href = "/"; // 로그인 성공 시 홈페이지로 이동
+                  } else {
+                    // 로그인 실패 시 알림창 표시
+                    alert("로그인 실패. 이메일과 비밀번호를 확인해주세요.");
+                    console.error("로그인 실패");
+                  }
+                })
+                .catch(error => {
+                  // 오류 발생 시 알림창 표시
+                  alert("오류 발생. 다시 시도해주세요.");
+                  console.error("오류 발생:", error);
+                });
+      });
+    </script>
   </body>
 </html>

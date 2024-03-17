@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sailor_Hang_Hae</title>
-    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="../static/css/style.css" />
 
 
 
@@ -83,7 +83,7 @@
     <!-- header -->
     <header class="header">
       <div class="header-left">
-        <img src="./images/logo.png" class="logo" />
+        <img src="../static/images/logo.png" class="logo" />
       </div>
       <div class="header-center">
         <form class="input-form">
@@ -104,24 +104,52 @@
       </div>
     </header>
 
-    <!-- main -->
     <main>
       <div class="main-background">
         <!-- 회원가입 페이지 -->
         <div class="signup-container">
           <h2>회원가입</h2>
-          <form class="signup-form">
-            <input type="text" id="email" placeholder="이메일">
-            <input type="password" id="password" placeholder="비밀번호">
-            <input type="text" id="nickname" placeholder="닉네임">
-            <input type="text" id="address" placeholder="주소">
-            <input type="text" id="phone" placeholder="전화번호">
-            <button type="submit">가입하기</button>
+          <form class="signup-form" id="signupForm" action="/sail/signup" method="post">
+            <input type="text" id="email" name="email" placeholder="이메일">
+            <input type="password" id="password" name="password" placeholder="비밀번호">
+            <input type="text" id="nickname" name="nickname" placeholder="닉네임">
+            <input type="text" id="address" name="address" placeholder="주소">
+            <input type="text" id="phone" name="phone" placeholder="전화번호">
+            <button type="submit" onclick="signup()">가입하기</button>
           </form>
           <p>이미 계정이 있으신가요? <a href="#">로그인</a></p>
         </div>
         <!-- 회원가입 페이지 끝 -->
       </div>
     </main>
+
+    <!-- JavaScript 코드 추가 -->
+    <script>
+      // 회원가입 버튼 클릭 이벤트
+      document.getElementById("signupButton").addEventListener("click", function() {
+        // 버튼 비활성화
+        this.disabled = true;
+
+        // 폼 데이터 가져오기
+        var formData = new FormData(document.getElementById("signupForm"));
+
+        // 서버로 데이터 전송
+        fetch("/sail/signup", {
+          method: "POST",
+          body: formData
+        })
+                .then(response => {
+                  if (response.ok) {
+                    // 회원가입 성공 시 리다이렉트
+                    window.location.href = "/sail/login";
+                  } else {
+                    console.error("회원가입 실패");
+                  }
+                })
+                .catch(error => {
+                  console.error("오류 발생:", error);
+                });
+      });
+    </script>
   </body>
 </html>
