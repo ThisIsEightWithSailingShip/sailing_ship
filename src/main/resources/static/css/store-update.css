@@ -24,7 +24,7 @@
     margin-bottom: 10px;
 }
 
-#store-update-form button {
+#submitBtn {
     margin-top: 20px;
     padding: 8px 16px;
     background-color: teal;
@@ -33,6 +33,6 @@
     cursor: pointer;
 }
 
-#store-update-form button:hover {
+#submitBtn:hover {
     background-color: #2bafaf;
 }

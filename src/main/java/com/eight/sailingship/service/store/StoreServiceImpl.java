@@ -25,7 +25,7 @@ public class StoreServiceImpl implements StoreService {
         List<Store> stores = storeRepository.findAll();
         model.addAttribute("stores", stores);
 
-        return "stores.html";
+        return "store/stores.html";
     }
 
     @Override
@@ -39,15 +39,27 @@ public class StoreServiceImpl implements StoreService {
         model.addAttribute("menus", menuList);
         model.addAttribute("categories",allCategory);
 
-        return "store-detail.html";
+        return "store/store-detail.html";
     }
+
+    @Transactional
+    public Store getUpdateStore(Long storeId) {
+        return storeRepository.findById(storeId).orElseThrow();
+    }
+
 
     @Override
     @Transactional
     public void updateStore(Long storeId, StoreRequestDto requestDto) {
         // storeId 일치 여부
+        System.out.println(requestDto.getAddress());
+        System.out.println(requestDto.getCategory());
+        System.out.println(requestDto.getStoreName());
+        System.out.println(requestDto.getPhone());
 
         Store findStore = storeRepository.findById(storeId).orElseThrow(); // 인증객체 UserDetails에서 매장 아이디 추출 필요
+        System.out.println(findStore.getStoreId());
+
         String roleString = requestDto.getCategory();
 
         StoreEnum storeEnum;

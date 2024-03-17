@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById("submitBtn").addEventListener("click", function() {
+    document.getElementById("submitBtn").addEventListener("click", function(event) {
+        event.preventDefault();
         submitForm();
     });
 });
@@ -29,7 +30,6 @@ function submitForm() {
         })
         .then(data => {
             console.log(data);
-            window.location.href = '/sail/store';
         })
         .catch(error => {
             console.error("Error submitting form:", error); // 리다이렉팅 방지
