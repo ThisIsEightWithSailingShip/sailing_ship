@@ -35,6 +35,10 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<OrderMenu> orderMenuList;
 
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
+
     public void addOrderMenuList(OrderMenu orderMenu) {
         this.orderMenuList.add(orderMenu);
         orderMenu.setOrder(this);
