@@ -21,7 +21,7 @@ public class OrderController {
     @PostMapping("/sail/order")
     public String createOrder(@RequestBody OrderRequestDto orderRequestDto, Model model) {
         orderService.save(orderRequestDto);
-        return "menu/menu.html";
+        return "redirect:/sail/order";
     }
 
     @GetMapping("/sail/order")
