@@ -63,8 +63,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     @Transactional(readOnly = true)
     public List<Order> getOrderCheckList(Long storeId) {
-        List<Order> orderCheckList;
-
-        return null;
+        Store store = storeRepository.findById(storeId).orElseThrow();
+        return orderRepository.findByStore(store);
     }
 }
