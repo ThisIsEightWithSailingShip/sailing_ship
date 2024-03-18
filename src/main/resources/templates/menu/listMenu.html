@@ -71,6 +71,23 @@
         .add-menu-button:hover {
             background-color: #0056b3;
         }
+
+        .icon-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: center; /* 가운데 정렬 */
+            align-items: center; /* 수직 가운데 정렬 */
+        }
+
+        .form-float {
+            margin: 0 1px; /* 좌우 마진으로 버튼 사이 간격 조정 */
+        }
+
     </style>
 
 </head>
@@ -103,9 +120,10 @@
             <p><span>Category: </span><span th:text="${menu.menuCategory}"></span></p>
 
             <div class="card-actions" th:if="${owner}">
-                <a th:href="@{/sail/menu/{id}(id=${menu.menuId})}">✏️</a>
-                <a href="#" th:onclick="'javascript:deleteMenu(' + ${menu.menuId} + ');'">🗑️</a>
-
+                <form class = "form-float" th:action="@{/sail/menu/{id}(id=${menu.menuId})}" th:method="patch">
+                    <button type="submit" class="icon-button">✏️</button>
+                </form>
+                    <a href="#" th:onclick="'javascript:deleteMenu(' + ${menu.menuId} + ');'">🗑️</a>
             </div>
         </div>
     </div>
