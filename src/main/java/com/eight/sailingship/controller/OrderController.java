@@ -1,10 +1,12 @@
 package com.eight.sailingship.controller;
 
+import com.eight.sailingship.dto.Order.OrderCheckRequestDto;
 import com.eight.sailingship.dto.Order.OrderRequestDto;
 import com.eight.sailingship.dto.Order.OrderResponseDto;
 import com.eight.sailingship.entity.Order;
 import com.eight.sailingship.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,9 +45,10 @@ public class OrderController {
         return "order/order-check";
     }
 
-//    // 사장 입장 주문 완료 버튼
-//    @PutMapping("/sail/store/order-complete")
-//    public String updateOrderStatus() {
-//
-//    }
+    // 사장 입장 주문 완료 버튼
+    @PutMapping("/sail/store/order-complete")
+    public ResponseEntity<String> updateOrderStatus(@RequestBody OrderCheckRequestDto orderCheckRequestDto) {
+        System.out.println(orderCheckRequestDto.getOrderId());
+        return ResponseEntity.ok("Order status updated successfully"); // Put 매핑은 리다이렉팅 허용 x
+    }
 }
