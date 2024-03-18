@@ -2,7 +2,7 @@ package com.eight.sailingship.controller;
 
 import com.eight.sailingship.dto.menu.MenuRequestDto;
 import com.eight.sailingship.entity.Menu;
-import com.eight.sailingship.service.menu.MenuService;
+import com.eight.sailingship.service.menu.MenuServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MenuController {
 
-    private final MenuService menuService;
+    private final MenuServiceImpl menuService;
 
     @GetMapping("/sail/menu") // 메뉴 보여주는 창 -> 따라서 getmapping 이용. 조회 목적
     public String createMenu(Model model){
@@ -24,8 +24,8 @@ public class MenuController {
 
     // 나중에 authorization 필요
     @PostMapping("/sail/menu")//새로운 메뉴를 추가해주는 api. 따라서 postmapping 이용.
-    public String createMenu(@ModelAttribute MenuRequestDto requestDto, Model model) {
-        menuService.createMenu(requestDto, model);
+    public String createMenu(@ModelAttribute MenuRequestDto requestDto) {
+        menuService.createMenu(requestDto);
         return "redirect:/sail/listmenu";
     }
 
