@@ -70,7 +70,7 @@
 <!-- Form Section -->
 <main>
     <div class="form-container">
-        <form th:action="@{/sail/menu/{id}(id=${menu.menuId})}" method="post">
+        <form th:action="@{/sail/menu/{id}(id=${menu.menuId})}" th:method="patch">
             <label for="menuName">메뉴 이름:</label>
             <input type="text" id="menuName" name="menuName" th:value="${menu.menuName}">
 
