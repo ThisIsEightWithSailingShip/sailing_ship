@@ -39,19 +39,19 @@
         <div class="order-container">
             <!-- 주문 확인 카드 -->
 <!--            주문자 주소, 주문자 닉네임, 주문자 전화번호, 주문 메뉴 리스트, 주문 상태 변환하는 버튼-->
-            <div class="order-card">
-                <h4 class="order-nickname">
+            <div class="order-card" th:each="orderCheck : ${orderCheckList}" th:attr="storeId = ${orderCheck.store.storeId}">
+                <h4 th:text="${orderCheck.customer.nickname}" class="order-nickname">
                     닉네임
                 </h4>
-                <h3 class="order-address">
+                <h3 th:text="${orderCheck.customer.address}" class="order-address">
                     주소
                 </h3>
-                <p class= "order-info">주문자 전화번호</p>
-                <p class="order-info">결제 금액</p>
-                <p class="order-info">주문 메뉴 리스트</p>
-                <ul>
-                    <li class="order-menu">주문 메뉴</li>
-                </ul>
+                <p th:text="${orderCheck.customer.phone}" class="order-info">주문자 전화번호</p>
+                <p th:text="${orderCheck.totalPrice}" class="order-info">결제 금액</p>
+<!--                <p class="order-info">주문 메뉴 리스트</p>-->
+<!--                <ul class="order-menu" th:each="menu : ${orderCheck.orderMenuList}">-->
+<!--                    <span th:text="${menu.menuName}"></span> - <span th:text="${menu.price}"></span>-->
+<!--                </ul>-->
 <!--                메뉴 리스트도 넣을까...?-->
             </div>
         </div>

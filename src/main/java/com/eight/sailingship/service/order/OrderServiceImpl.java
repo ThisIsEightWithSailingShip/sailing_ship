@@ -4,14 +4,8 @@ import com.eight.sailingship.dto.Order.OrderMenuResponseDto;
 import com.eight.sailingship.dto.Order.OrderRequestDto;
 import com.eight.sailingship.dto.Order.OrderMenuRequestDto;
 import com.eight.sailingship.dto.Order.OrderResponseDto;
-import com.eight.sailingship.entity.Menu;
-import com.eight.sailingship.entity.Order;
-import com.eight.sailingship.entity.OrderMenu;
-import com.eight.sailingship.entity.Store;
-import com.eight.sailingship.repository.MenuRepository;
-import com.eight.sailingship.repository.OrderMenusRepository;
-import com.eight.sailingship.repository.OrderRepository;
-import com.eight.sailingship.repository.StoreRepository;
+import com.eight.sailingship.entity.*;
+import com.eight.sailingship.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,12 +19,17 @@ public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
+    private final CustomerRepository customerRepository;
+
     @Override
     @Transactional
     public void save(OrderRequestDto orderRequestDto) {
         Store store = storeRepository.findById(orderRequestDto.getStoreId()).orElseThrow(() ->
                 new NullPointerException("해당하는 매장이 없습니다"));
-        Order order = new Order(orderRequestDto,store);
+
+        Customer customer = customerRepository.findById(1L).orElseThrow(); // 차후 인증객체 기반 고객정보 저장 필요
+
+        Order order = new Order(orderRequestDto, store, customer);
         List<OrderMenuRequestDto> orderMenus = orderRequestDto.getMenus();
         for (OrderMenuRequestDto orderMenu : orderMenus) {
             Menu menu = menuRepository.findById(orderMenu.getMenuId()).orElseThrow(() ->
