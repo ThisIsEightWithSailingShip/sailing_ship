@@ -2,12 +2,14 @@ package com.eight.sailingship.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "ordermenus")
 @Getter
 @Setter
+@NoArgsConstructor
 public class OrderMenu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,4 +26,11 @@ public class OrderMenu {
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
+
+    public OrderMenu(Menu menu, int quantity) {
+        this.menu = menu;
+        this.quantity = quantity;
+    }
+
+
 }
