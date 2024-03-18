@@ -1,6 +1,7 @@
 package com.eight.sailingship.dto.Order;
 
 import com.eight.sailingship.entity.Order;
+import com.eight.sailingship.entity.StatusEnum;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ public class OrderResponseDto {
     private LocalDateTime orderDateTime;
     private List<OrderMenuResponseDto> orderMenuList;
     private Long totalPrice;
-    private int status;
+    private StatusEnum status;
     public OrderResponseDto(List<OrderMenuResponseDto> orderMenus, Order customerOrder) {
         this.orderId = customerOrder.getOrderId();
         this.orderDateTime = customerOrder.getOrderDate();
