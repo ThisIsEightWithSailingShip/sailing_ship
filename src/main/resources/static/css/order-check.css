@@ -1,0 +1,36 @@
+.order-introduce {
+    color: teal;
+}
+
+.order-container {
+    margin: 40px auto;
+    max-width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 5.8em;
+}
+
+.order-card {
+    width: 20rem;
+    height: 20rem;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fa;
+    transition: transform 0.3s ease;
+}
+
+/*.store-card:hover {*/
+/*    transform: scale(1.05);*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.store-card:active {*/
+/*    transform: scale(0.95);*/
+/*    cursor: grab;*/
+/*}*/
+
+.order-info {
+    color: teal;
+}
+
