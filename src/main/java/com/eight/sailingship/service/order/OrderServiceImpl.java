@@ -59,4 +59,12 @@ public class OrderServiceImpl implements OrderService{
         return orderResponseDtoList;
 
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Order> getOrderCheckList(Long storeId) {
+        List<Order> orderCheckList;
+
+        return null;
+    }
 }
