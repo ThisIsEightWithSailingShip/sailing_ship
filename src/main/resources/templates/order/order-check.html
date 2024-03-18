@@ -4,14 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sailor_Hang_Hae</title>
-    <link rel="stylesheet" href="./css/style.css" />
-    <link rel="stylesheet" href="./css/order-check.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" th:href="@{/css/order-check.css}">
 </head>
 <body>
 <!-- header -->
 <header class="header">
     <div class="header-left">
-        <img src="./images/logo.png" class="logo" />
+        <img th:src="@{/images/logo.png}" class="logo" />
     </div>
     <div class="header-center">
         <form class="input-form">
@@ -43,12 +43,15 @@
                 <h4 class="order-nickname">
                     닉네임
                 </h4>
-                <h3 class="order-status">
+                <h3 class="order-address">
                     주소
                 </h3>
                 <p class= "order-info">주문자 전화번호</p>
-                <p class="order-price">결제 금액</p>
-                <ul class="order-info">주문 메뉴 리스트</ul>
+                <p class="order-info">결제 금액</p>
+                <p class="order-info">주문 메뉴 리스트</p>
+                <ul>
+                    <li class="order-menu">주문 메뉴</li>
+                </ul>
 <!--                메뉴 리스트도 넣을까...?-->
             </div>
         </div>
