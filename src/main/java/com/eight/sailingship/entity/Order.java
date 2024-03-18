@@ -1,18 +1,20 @@
 package com.eight.sailingship.entity;
 
+import com.eight.sailingship.dto.Order.OrderRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "orders")
-public class Order {
+@NoArgsConstructor
+public class Order extends OrderTimeStamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
@@ -20,10 +22,6 @@ public class Order {
 
     @Column(name = "status")
     private Integer status;
-
-    @Column(name = "order_date")
-    @CreatedDate
-    private Date orderDate;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -39,8 +37,17 @@ public class Order {
     @JoinColumn(name = "store_id")
     private Store store;
 
+    public Order(OrderRequestDto orderRequestDto, Store store) {
+        this.status = 0;
+        this.totalPrice = orderRequestDto.getTotalPrice();
+        this.orderMenuList = new ArrayList<>();
+        this.store = store;
+    }
+
     public void addOrderMenuList(OrderMenu orderMenu) {
         this.orderMenuList.add(orderMenu);
         orderMenu.setOrder(this);
     }
+
+
 }
