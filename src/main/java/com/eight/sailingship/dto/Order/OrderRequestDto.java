@@ -12,6 +12,7 @@ import java.util.List;
 public class OrderRequestDto {
     private List<OrderMenuRequestDto> menus;
     private Long totalPrice;
+    private Long storeId;
 
     // Getter 및 Setter 메서드
 }

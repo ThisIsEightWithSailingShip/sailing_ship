@@ -7,9 +7,11 @@ import com.eight.sailingship.dto.Order.OrderResponseDto;
 import com.eight.sailingship.entity.Menu;
 import com.eight.sailingship.entity.Order;
 import com.eight.sailingship.entity.OrderMenu;
+import com.eight.sailingship.entity.Store;
 import com.eight.sailingship.repository.MenuRepository;
 import com.eight.sailingship.repository.OrderMenusRepository;
 import com.eight.sailingship.repository.OrderRepository;
+import com.eight.sailingship.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,12 +23,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
-    private final OrderMenusRepository orderMenusRepository;
     private final MenuRepository menuRepository;
+    private final StoreRepository storeRepository;
     @Override
     @Transactional
     public void save(OrderRequestDto orderRequestDto) {
-        Order order = new Order(orderRequestDto);
+        Store store = storeRepository.findById(orderRequestDto.getStoreId()).orElseThrow(() ->
+                new NullPointerException("해당하는 매장이 없습니다"));
+        Order order = new Order(orderRequestDto,store);
         List<OrderMenuRequestDto> orderMenus = orderRequestDto.getMenus();
         for (OrderMenuRequestDto orderMenu : orderMenus) {
             Menu menu = menuRepository.findById(orderMenu.getMenuId()).orElseThrow(() ->

@@ -5,10 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -38,11 +36,12 @@ public class Order extends OrderTimeStamped{
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
-    
-    public Order(OrderRequestDto orderRequestDto) {
+
+    public Order(OrderRequestDto orderRequestDto, Store store) {
         this.status = 0;
         this.totalPrice = orderRequestDto.getTotalPrice();
         this.orderMenuList = new ArrayList<>();
+        this.store = store;
     }
 
     public void addOrderMenuList(OrderMenu orderMenu) {

@@ -98,6 +98,7 @@
 <main>
     <!-- 매장 정보 -->
     <div class="store-info">
+        <input type="hidden" id="storeId" th:value="${store.storeId}" />
         <h2><span th:text="${store.storeName}">매장 이름</span></h2>
         <p><strong>위치:</strong> <span th:text="${store.address}">매장 주소</span></p>
         <p><strong>전화번호:</strong> <span th:text="${store.phone}">매장 전화번호</span></p>
@@ -231,6 +232,7 @@
     // 주문 정보와 총 가격을 JSON 형식으로 내보내는 함수
     function exportOrderData(totalPrice) {
         const orderData = {
+            storeId: document.getElementById('storeId').value,
             menus: cart.map(item => {
                 return {
                     menuId: item.menuId,

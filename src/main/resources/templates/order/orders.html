@@ -16,6 +16,10 @@
         .order-card:hover {
             background-color: #f0f0f0;
         }
+
+        .order-button {
+            /* display: none; */ /* 숨겨진 상태 제거 */
+        }
     </style>
 </head>
 <body>
@@ -31,15 +35,43 @@
         <br>
         <span th:text="${'Total Price: ' + order.totalPrice}"></span>
         <br>
-        <span th:text="${order.status == 0 ? 'Status: 주문 접수 완료' : (order.status == 1 ? 'Status: 조리중' : (order.status == 2 ? 'Status: 배달완료' : 'Status: 알 수 없음'))}"></span>
+        <span th:text="${order.status == 0 ? 'Status: 주문 접수 완료' : (order.status == 1 ? 'Status: 조리중' : (order.status == 2 ? 'Status: 배달완료' : (order.status == -1 ? 'Status: 결제 실패' : 'Status: 알 수 없음')))}"></span>
+        <!-- 결제가 정상적으로 이루어지지 않았을 경우 주문하기 버튼 표시 -->
+        <button class="order-button" th:if="${order.status == -1}" onclick="sendOrderId(${order.orderId})">주문하기</button>
     </div>
 </div>
 
 <script>
-    // 해당 주문에 대한 상세 페이지로 이동하는 함수
-    function redirectToOrderDetail(orderId) {
-        window.location.href = '/order-detail/' + orderId; // order-detail 페이지로 이동
+    // 주문하기 버튼 클릭 시 orderId를 JSON 형식으로 서버로 보내는 함수
+    function sendOrderId(orderId) {
+        const data = { orderId: orderId }; // JSON 데이터 생성
+        const url = '/sail/order'; // 데이터를 보낼 URL
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data) // JSON 데이터 문자열로 변환하여 body에 설정
+        };
+
+        // Fetch API를 사용하여 서버로 데이터를 보냄
+        fetch(url, options)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('주문 처리 중 오류가 발생했습니다.');
+                }
+                return response.json(); // JSON 형식으로 응답을 파싱하여 반환
+            })
+            .then(data => {
+                console.log('주문이 성공적으로 처리되었습니다.', data);
+                // 여기에서 필요한 추가적인 처리를 수행할 수 있습니다.
+            })
+            .catch(error => {
+                console.error('주문 처리 중 오류가 발생했습니다.', error);
+                // 오류 발생 시 처리할 내용을 여기에 추가합니다.
+            });
     }
 </script>
+
 </body>
 </html>
