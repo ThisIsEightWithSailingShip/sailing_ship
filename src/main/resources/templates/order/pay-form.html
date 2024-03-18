@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>주문 내역 결제</title>
+    <style>
+        /* CSS 스타일은 생략하겠습니다. */
+    </style>
+</head>
+
+<body>
+<h1>주문 내역</h1>
+<!-- 주문 내역 테이블 -->
+<table>
+    <thead>
+    <tr>
+        <th>메뉴명</th>
+        <th>수량</th>
+        <th>가격</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Thymeleaf 반복문을 사용하여 주문 내역을 표시합니다. -->
+    <tr th:each="orderMenu : ${cart.orderMenuList}">
+        <td th:text="${orderMenu.menuName}">메뉴명</td>
+        <td th:text="${orderMenu.quantity}">수량</td>
+        <td th:text="${orderMenu.price}">가격</td>
+        <td th:text="${cart.orderId}">가격</td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 총 가격 표시 -->
+<div>
+    <strong>총 가격:</strong> <span th:text="${cart.totalPrice}"></span>원
+</div>
+
+<!-- 메시지 입력 창 -->
+<div>
+    <label for="messageToStore">가게 사장에게 보낼 메시지:</label>
+    <textarea id="messageToStore" rows="4" cols="50"></textarea>
+</div>
+
+<div>
+    <label for="messageToDriver">라이더에게 보낼 메시지:</label>
+    <textarea id="messageToDriver" rows="4" cols="50"></textarea>
+</div>
+
+<!-- 결제 및 취소 버튼 -->
+<div th:with="orderId=${cart.orderId}">
+    <button th:onclick="'checkout(' + ${orderId} + ')'" >결제하기</button>
+    <button th:onclick="'cancelOrder(' + ${orderId} + ')'" >취소하기</button>
+</div>
+
+
+<script>
+    // 결제 함수
+    function checkout(orderId) {
+        // 메시지 입력 값 가져오기
+        const messageToStore = document.getElementById('messageToStore').value;
+        const messageToDriver = document.getElementById('messageToDriver').value;
+
+        console.log('주문 ID:', orderId);
+        console.log('가게에게 보낼 메시지:', messageToStore);
+        console.log('라이더에게 보낼 메시지:', messageToDriver);
+
+        // Fetch API를 사용하여 서버로 결제 요청을 보냅니다.
+        fetch('/sail/order', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            // 주문 번호와 메시지를 JSON 형식으로 전송합니다.
+            body: JSON.stringify({
+                orderId: orderId,
+                messageToStore: messageToStore,
+                messageToDriver: messageToDriver
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('결제 처리 중 오류가 발생했습니다.');
+                }
+                // 결제 성공 시 알림창을 띄웁니다.
+                window.alert('결제가 성공적으로 처리되었습니다.');
+                // 결제 성공 시 홈페이지로 이동합니다.
+                window.location.href = response.url;
+            })
+            .catch(error => {
+                console.error('결제 처리 중 오류가 발생했습니다.', error);
+                // 결제 실패 시 알림창을 띄웁니다.
+                window.alert('결제 처리 중 오류가 발생했습니다.');
+                // 오류 처리 로직을 추가할 수 있습니다.
+            });
+    }
+
+    // 주문 취소 함수
+    function cancelOrder(orderId) {
+        // Fetch API를 사용하여 서버로 주문 취소 요청을 보냅니다.
+        fetch('/sail/order', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            // 주문 번호를 JSON 형식으로 전송합니다.
+            body: JSON.stringify({ orderId: orderId })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('주문 취소 처리 중 오류가 발생했습니다.');
+                }
+                // 주문 취소 성공 시 알림창을 띄웁니다.
+                window.alert('주문이 취소되었습니다.');
+                // 주문 취소 성공 시 홈페이지로 이동합니다.
+                window.location.href = response.url;
+            })
+            .catch(error => {
+                console.error('주문 취소 처리 중 오류가 발생했습니다.', error);
+                // 주문 취소 실패 시 알림창을 띄웁니다.
+                window.alert('주문 취소 처리 중 오류가 발생했습니다.');
+                // 오류 처리 로직을 추가할 수 있습니다.
+            });
+    }
+</script>
+</body>
+
+</html>

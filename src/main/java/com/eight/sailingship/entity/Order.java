@@ -1,6 +1,7 @@
 package com.eight.sailingship.entity;
 
-import com.eight.sailingship.dto.Order.OrderRequestDto;
+import com.eight.sailingship.dto.Order.OrderAfterPayRequestDto;
+import com.eight.sailingship.dto.Order.OrderBeforePayRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,12 @@ public class Order extends OrderTimeStamped{
     @Column
     private Long totalPrice;
 
+    @Column
+    private String messageToStore;
+
+    @Column
+    private String messageToDriver;
+
     @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<OrderMenu> orderMenuList;
 
@@ -47,6 +54,12 @@ public class Order extends OrderTimeStamped{
     public void addOrderMenuList(OrderMenu orderMenu) {
         this.orderMenuList.add(orderMenu);
         orderMenu.setOrder(this);
+    }
+
+    public void pay_complete(OrderAfterPayRequestDto orderAfterPayRequestDto){
+        this.messageToStore = orderAfterPayRequestDto.getMessageToStore();
+        this.messageToDriver = orderAfterPayRequestDto.getMessageToDriver();
+        this.status = StatusEnum.PAY_COMPLETE;
     }
 
 
