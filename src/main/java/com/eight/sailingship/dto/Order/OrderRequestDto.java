@@ -9,9 +9,9 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDto {
-    private List<OrderMenuDto> menus;
-    private int totalPrice;
+public class OrderRequestDto {
+    private List<OrderMenuRequestDto> menus;
+    private Long totalPrice;
 
     // Getter 및 Setter 메서드
 }

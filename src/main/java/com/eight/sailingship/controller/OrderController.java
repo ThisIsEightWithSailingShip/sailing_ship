@@ -1,11 +1,12 @@
 package com.eight.sailingship.controller;
 
-import com.eight.sailingship.dto.Order.OrderDto;
-import com.eight.sailingship.dto.Order.OrderMenuDto;
+import com.eight.sailingship.dto.Order.OrderRequestDto;
+import com.eight.sailingship.dto.Order.OrderResponseDto;
 import com.eight.sailingship.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -18,13 +19,16 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/sail/order")
-    public String getOrder(@RequestBody OrderDto orderDto, Model model) {
-        List<OrderMenuDto> menus = orderDto.getMenus();
-        for (OrderMenuDto menu : menus) {
-            System.out.println("메뉴 : " + menu.getMenuId() + ", 수량 : " + menu.getQuantity());
-        }
-
-        System.out.println(orderDto.getTotalPrice());
+    public String createOrder(@RequestBody OrderRequestDto orderRequestDto, Model model) {
+        orderService.save(orderRequestDto);
         return "menu/menu.html";
+    }
+
+    @GetMapping("/sail/order")
+    public String getOrderList(Model model) {
+        List<OrderResponseDto> orderList = orderService.getOrderList();
+        model.addAttribute("orders",orderList);
+
+        return "order/orders";
     }
 }

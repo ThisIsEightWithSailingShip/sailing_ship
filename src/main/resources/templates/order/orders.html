@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order List</title>
+    <style>
+        .order-card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            width: 300px;
+            cursor: pointer;
+        }
+
+        .order-card:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+<h1>Order List</h1>
+
+<div th:each="order : ${orders}">
+    <!-- 주문 카드 -->
+    <div class="order-card" th:id="'orderCard_' + ${order.orderId}" th:onclick="'redirectToOrderDetail(' + ${order.orderId} + ')'">
+        <input type="hidden" th:value="${order.orderId}">
+        <!-- 주문 내용 -->
+        <br>
+        <span th:text="${'Order Date: ' + #temporals.format(order.orderDateTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+        <br>
+        <span th:text="${'Total Price: ' + order.totalPrice}"></span>
+        <br>
+        <span th:text="${order.status == 0 ? 'Status: 주문 접수 완료' : (order.status == 1 ? 'Status: 조리중' : (order.status == 2 ? 'Status: 배달완료' : 'Status: 알 수 없음'))}"></span>
+    </div>
+</div>
+
+<script>
+    // 해당 주문에 대한 상세 페이지로 이동하는 함수
+    function redirectToOrderDetail(orderId) {
+        window.location.href = '/order-detail/' + orderId; // order-detail 페이지로 이동
+    }
+</script>
+</body>
+</html>
