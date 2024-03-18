@@ -27,7 +27,7 @@ public class OrderServiceImpl implements OrderService{
         Store store = storeRepository.findById(orderRequestDto.getStoreId()).orElseThrow(() ->
                 new NullPointerException("해당하는 매장이 없습니다"));
 
-        Customer customer = customerRepository.findById(1L).orElseThrow(); // 차후 인증객체 기반 고객정보 저장 필요
+        Customer customer = customerRepository.findById(2L).orElseThrow(); // 차후 인증객체 기반 고객정보 저장 필요
 
         Order order = new Order(orderRequestDto, store, customer);
         List<OrderMenuRequestDto> orderMenus = orderRequestDto.getMenus();

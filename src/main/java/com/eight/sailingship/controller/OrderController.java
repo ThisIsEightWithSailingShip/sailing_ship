@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -41,4 +42,10 @@ public class OrderController {
 
         return "order/order-check";
     }
+
+//    // 사장 입장 주문 완료 버튼
+//    @PutMapping("/sail/store/order-complete")
+//    public String updateOrderStatus() {
+//
+//    }
 }

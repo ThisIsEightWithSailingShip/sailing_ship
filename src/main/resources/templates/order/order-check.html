@@ -51,11 +51,38 @@
                 <div th:each="orderMenu :${orderCheck.orderMenuList}" class="order-information">
                     <p class="order-info" th:text="${orderMenu.menu.menuName}"></p> : <p class="order-info" th:text="${orderMenu.menu.price}"></p>
                 </div>
-                <input id="orderCompleteBtn" type="submit" value="배송 완료">
+                <input id="orderCompleteBtn" type="submit" value="배송 완료"
+                       th:attr="data-orderId=${orderCheck.orderId}"
+                       onclick="completeOrder(this.getAttribute('data-orderId'))">
             </div>
         </div>
     </div>
 </main>
+<script th:inline="javascript">
+    function completeOrder(orderId) {
+        console.log(orderId)
+        if (orderId) {
+            fetch('/sail/store/order-complete', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    orderId: orderId
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to complete order');
+                    }
+                    console.log('Order completed successfully');
+                })
+                .catch(error => {
+                    console.error('Error completing order:', error);
+                });
+        }
+    }
+</script>
 </body>
 </html>
 
