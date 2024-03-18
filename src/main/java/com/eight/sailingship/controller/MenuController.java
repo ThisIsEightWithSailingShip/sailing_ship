@@ -39,7 +39,7 @@ public class MenuController {
     }
 
 
-    @PatchMapping("/sail/menu/{id}") // 바꾸는 창을 띄워주고
+    @GetMapping("/sail/menu/{id}") // 바꾸는 창을 띄워주고
     public String editMenu(@PathVariable Long id, Model model) {
         Long storeId = 1L; // 나중에authorization 써서, 실제 storeId를 넘겨줘야함.
         Menu menu = menuService.editMenu(id, storeId);
