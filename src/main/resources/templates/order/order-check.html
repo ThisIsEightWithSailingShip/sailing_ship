@@ -51,10 +51,7 @@
                 <div th:each="orderMenu :${orderCheck.orderMenuList}" class="order-information">
                     <p class="order-info" th:text="${orderMenu.menu.menuName}"></p> : <p class="order-info" th:text="${orderMenu.menu.price}"></p>
                 </div>
-<!--                <div class="order-menu" th:each="menu : ${orderCheck.orderMenuList}">-->
-<!--                    <span th:text="${menu.menuName}"></span> - <span th:text="${menu.price}"></span>-->
-<!--                </div>-->
-<!--                메뉴 리스트도 넣을까...?-->
+                <input id="orderCompleteBtn" type="submit" value="배송 완료">
             </div>
         </div>
     </div>

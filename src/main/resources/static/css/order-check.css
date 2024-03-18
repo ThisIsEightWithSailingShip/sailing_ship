@@ -59,3 +59,16 @@
     font-size: 0.8rem
 }
 
+#orderCompleteBtn {
+    margin-top: 20px;
+    padding: 8px 16px;
+    background-color: teal;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#orderCompleteBtn:hover {
+    background-color: #20a2a2;
+}
+
