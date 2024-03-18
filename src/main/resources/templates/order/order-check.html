@@ -43,15 +43,17 @@
                 <h4 th:text="${orderCheck.customer.nickname}" class="order-nickname">
                     닉네임
                 </h4>
-                <h3 th:text="${orderCheck.customer.address}" class="order-address">
+                <h2 th:text="${orderCheck.customer.address}" class="order-address">
                     주소
-                </h3>
+                </h2>
                 <p th:text="${orderCheck.customer.phone}" class="order-info">주문자 전화번호</p>
                 <p th:text="${orderCheck.totalPrice}" class="order-info">결제 금액</p>
-<!--                <p class="order-info">주문 메뉴 리스트</p>-->
-<!--                <ul class="order-menu" th:each="menu : ${orderCheck.orderMenuList}">-->
+                <div th:each="orderMenu :${orderCheck.orderMenuList}" class="order-information">
+                    <p class="order-info" th:text="${orderMenu.menu.menuName}"></p> : <p class="order-info" th:text="${orderMenu.menu.price}"></p>
+                </div>
+<!--                <div class="order-menu" th:each="menu : ${orderCheck.orderMenuList}">-->
 <!--                    <span th:text="${menu.menuName}"></span> - <span th:text="${menu.price}"></span>-->
-<!--                </ul>-->
+<!--                </div>-->
 <!--                메뉴 리스트도 넣을까...?-->
             </div>
         </div>

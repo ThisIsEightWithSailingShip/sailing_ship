@@ -48,6 +48,12 @@
     color: teal;
 }
 
+.order-information {
+    color: teal;
+    display: flex;
+    flex-direction: row;
+}
+
 .order-menu {
     color: teal;
     font-size: 0.8rem
