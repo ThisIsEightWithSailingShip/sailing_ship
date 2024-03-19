@@ -75,6 +75,7 @@
                     if (!response.ok) {
                         throw new Error('Failed to complete order');
                     }
+                    window.alert('배달이 완료되었습니다.');
                     console.log('Order completed successfully');
                 })
                 .catch(error => {
