@@ -116,83 +116,34 @@
 
 <!-- JavaScript 코드 추가 -->
 <script>
-  document.getElementById("loginForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    var formData = new FormData(this);
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      var formData = new FormData(this);
 
-    fetch("/login", {
-      method: "POST",
-      body: formData
-    })
-            .then(response => {
-              if (response.ok) {
-                return response.json();
-              }
-              throw new Error('로그인 실패');
-            })
-            .then(data => {
-              console.log("Access Token: ", data.accessToken);
-              localStorage.setItem("accessToken", data.accessToken);
-              window.location.href = "/home";
-            })
-            .catch(error => {
-              console.error("오류 발생:", error);
-              alert("로그인 실패. 이메일과 비밀번호를 확인해주세요.");
-            });
+      fetch("/login", {
+        method: "POST",
+        body: formData
+      })
+              .then(response => {
+                if (response.ok) {
+                  const accessToken = response.headers.get("access");
+                  if (accessToken) {
+                    localStorage.setItem("accessToken", accessToken);
+                    window.location.href = "/test2";
+                  } else {
+                    throw new Error('로그인 성공하지만 엑세스 토큰을 받지 못함');
+                  }
+                } else {
+                  throw new Error('로그인 실패');
+                }
+              })
+              .catch(error => {
+                console.error("오류 발생:", error);
+                alert("로그인 실패. 이메일과 비밀번호를 확인해주세요.");
+              });
+    });
   });
-
-  function reissueToken() {
-    return fetch("/reissue", {
-      method: "POST", credentials: 'include' // 쿠키를 포함하여 요청
-    })
-            .then(response => {
-              if (!response.ok) throw new Error('토큰 재발급 실패');
-              return response.json();
-            })
-            .then(data => {
-              if (data.accessToken) {
-                // 새 액세스 토큰을 로컬 스토리지에 저장
-                localStorage.setItem("accessToken", data.accessToken);
-                return true; // 재발급 성공을 나타내는 true 반환
-              }
-              return false; // 재발급 실패를 나타내는 false 반환
-            })
-            .catch(error => {
-              console.error("토큰 재발급 중 오류 발생:", error);
-              alert("세션이 만료되었습니다. 다시 로그인해주세요.");
-              window.location.href = "/login"; // 로그인 페이지로 리다이렉트
-              return false;
-            });
-  }
-
-  async function fetchWithToken(url, options = {}) {
-    // 로컬 스토리지에서 액세스 토큰을 가져옵니다.
-    const accessToken = localStorage.getItem("accessToken");
-
-    // 요청 옵션에 Authorization 헤더를 추가합니다.
-    const headers = new Headers(options.headers || {});
-    headers.append("Authorization", `Bearer ${accessToken}`);
-
-    // 수정된 옵션으로 요청을 보냅니다.
-    let response = await fetch(url, { ...options, headers });
-
-    // 토큰이 만료되었다면, 401 응답을 받게 됩니다.
-    if (response.status === 401) {
-      // reissueToken 함수를 호출하여 토큰을 재발급 받습니다.
-      const tokenReissued = await reissueToken();
-      if (tokenReissued) {
-        // 재발급 받은 토큰으로 헤더를 업데이트합니다.
-        headers.set("Authorization", `Bearer ${localStorage.getItem("accessToken")}`);
-
-        // 요청을 재시도합니다.
-        response = await fetch(url, { ...options, headers });
-      }
-    }
-
-    // 최종 응답을 반환합니다.
-    return response;
-  }
 </script>
-
 </body>
 </html>
