@@ -2,6 +2,7 @@ package com.eight.sailingship.service.customer;
 
 import com.eight.sailingship.dto.customer.CustomUserDetails;
 import com.eight.sailingship.entity.Customer;
+import com.eight.sailingship.repository.CustomerRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final com.eight.sailingship.repository.CustomerRepository CustomerRepository;
+    private final CustomerRepository CustomerRepository;
 
     public CustomUserDetailsService(CustomerRepository CustomerRepository) {
 

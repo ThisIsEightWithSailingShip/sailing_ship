@@ -1,127 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sailor_Hang_Hae</title>
-    <link rel="stylesheet" href="../static/css/style.css" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sailor_Hang_Hae</title>
+  <link rel="stylesheet" href="../static/css/style.css"/>
 
+  <style>
+    .main-background {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
+    .login-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
 
-    <style>
-      .main-background {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-      }
-  
-      .signup-container {
-        background-color: #fff;
-        padding: 40px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
-        width: 100%;
-      }
-  
-      .signup-container h2 {
-        margin-top: 0;
-        margin-bottom: 20px;
-        text-align: center;
-        color: #333;
-      }
-  
-      .signup-form {
-        display: flex;
-        flex-direction: column;
-      }
-  
-      .signup-form input {
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 16px;
-      }
-  
-      .signup-form button {
-        padding: 10px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-      }
-  
-      .signup-form button:hover {
-        background-color: #0056b3;
-      }
-  
-      .signup-form p {
-        margin-top: 10px;
-        font-size: 14px;
-        text-align: center;
-      }
-  
-      .signup-form a {
-        color: #007bff;
-        text-decoration: none;
-      }
-  
-      .signup-form a:hover {
-        text-decoration: underline;
-      }
-    </style>
+    .login-container h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #333;
+    }
 
+    .login-form {
+      display: flex;
+      flex-direction: column;
+    }
 
+    .login-form input {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
 
+    .login-form button {
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
 
-  </head>
-  <body>
-    <!-- header -->
-    <header class="header">
-      <div class="header-left">
-        <img src="../static/images/logo.png" class="logo" />
-      </div>
-      <div class="header-center">
-        <form class="input-form">
-          <input
-            class="input"
-            type="search"
-            id="searchQuery"
-            placeholder="주변 맛집을 검색해 보세요"
-          />
-          <button class="input-button">검색</button>
-        </form>
-      </div>
-      <div class="header-right">
-        <nav class="menu">
-          <span class="menu-button">SIGN UP</span>
-          <span class="menu-button">SIGN IN</span>
-        </nav>
-      </div>
-    </header>
+    .login-form button:hover {
+      background-color: #0056b3;
+    }
 
-    <!-- main -->
-    <main>
-      <div class="main-background">
-        <!-- 회원가입 페이지 -->
-        <div class="signup-container">
-          <h2>회원가입</h2>
-          <form class="signup-form">
-            <input type="text" id="email" placeholder="이메일">
-            <input type="password" id="password" placeholder="비밀번호">
-            <input type="text" id="nickname" placeholder="닉네임">
-            <input type="text" id="address" placeholder="주소">
-            <input type="text" id="phone" placeholder="전화번호">
-            <button type="submit">가입하기</button>
-          </form>
-          <p>이미 계정이 있으신가요? <a href="#">로그인</a></p>
-        </div>
-        <!-- 회원가입 페이지 끝 -->
-      </div>
-    </main>
-  </body>
+    .login-form p {
+      margin-top: 10px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .login-form a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .login-form a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<!-- header -->
+<header class="header">
+  <div class="header-left">
+    <img src="../static/images/logo.png" class="logo"/>
+  </div>
+  <div class="header-center">
+    <form class="input-form">
+      <input class="input" type="search" id="searchQuery" placeholder="주변 맛집을 검색해 보세요"/>
+      <button class="input-button">검색</button>
+    </form>
+  </div>
+  <div class="header-right">
+    <nav class="menu">
+      <a class="menu-button" href="/signup">SIGN UP</a>
+      <a class="menu-button" href="/login">SIGN IN</a>
+    </nav>
+  </div>
+</header>
+
+<!-- main -->
+<main>
+  <div class="main-background">
+    <!-- 회원가입 페이지 -->
+    <div class="login-container">
+      <h2>회원가입</h2>
+      <form class="login-form" id="signupForm" action="/signup" method="post">
+        <input type="email" id="email" name="email" placeholder="이메일">
+        <input type="password" id="password" name="password" placeholder="비밀번호">
+        <input type="text" id="nickname" name="nickname" placeholder="닉네임">
+        <input type="text" id="address" name="address" placeholder="주소">
+        <input type="text" id="phone" name="phone" placeholder="전화번호">
+        <input type="text" id="role" name="role" placeholder="사장님이라면 사장님이라고 입력해주세요">
+        <button type="submit">가입하기</button>
+      </form>
+      <p>이미 계정이 있으신가요? <a href="/login">로그인</a></p>
+    </div>
+    <!-- 회원가입 페이지 끝 -->
+  </div>
+</main>
+
+<!-- JavaScript 코드 추가 -->
+<script>
+  document.getElementById("signupForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // 기본 동작 중지
+    var formData = {
+      email: document.getElementById("email").value,
+      password: document.getElementById("password").value,
+      nickname: document.getElementById("nickname").value,
+      address: document.getElementById("address").value,
+      phone: document.getElementById("phone").value,
+      role: document.getElementById("role").value
+    };
+
+    fetch("/signup", { // 서버에 POST 요청 보내기
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+            .then(response => {
+              if (response.status === 200) {
+                // 회원가입 성공 시 알림창 표시
+                alert("회원가입 성공!");
+                window.location.href = "/"; // 홈페이지로 이동
+              } else {
+                // 회원가입 실패 시 알림창 표시
+                alert("회원가입 실패. 입력 정보를 확인해주세요.");
+                console.error("회원가입 실패:", response.statusText);
+              }
+            })
+            .catch(error => {
+              // 오류 발생 시 알림창 표시
+              alert("오류 발생. 다시 시도해주세요.");
+              console.error("오류 발생:", error);
+            });
+  });
+</script>
+
+</body>
 </html>
