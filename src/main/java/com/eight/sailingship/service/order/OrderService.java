@@ -2,6 +2,7 @@ package com.eight.sailingship.service.order;
 
 import com.eight.sailingship.dto.Order.OrderAfterPayRequestDto;
 import com.eight.sailingship.dto.Order.OrderBeforePayRequestDto;
+import com.eight.sailingship.dto.Order.OrderDeleteRequestDto;
 import com.eight.sailingship.dto.Order.OrderResponseDto;
 import com.eight.sailingship.entity.Order;
 
@@ -19,4 +20,6 @@ public interface OrderService {
     void saveOrder(OrderAfterPayRequestDto orderAfterPayRequestDto);
     // 매장 id 기반 해당 주문들 전부 조회
     List<Order> getOrderCheckList(Long storeId);
+
+    void deleteOrder(OrderDeleteRequestDto orderDeleteRequestDto);
 }

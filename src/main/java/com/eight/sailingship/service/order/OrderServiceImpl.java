@@ -97,4 +97,12 @@ public class OrderServiceImpl implements OrderService{
         Store store = storeRepository.findById(storeId).orElseThrow();
         return orderRepository.findByStore(store);
     }
+
+    @Override
+    public void deleteOrder(OrderDeleteRequestDto orderDeleteRequestDto) {
+        Order order = orderRepository.findById(orderDeleteRequestDto.getOrderId()).orElseThrow(() ->
+                new NullPointerException("해당하는 주문이 없습니다"));
+
+        orderRepository.delete(order);
+    }
 }

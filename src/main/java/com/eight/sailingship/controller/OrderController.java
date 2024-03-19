@@ -52,6 +52,14 @@ public class OrderController {
         return "order/orders";
     }
 
+    @DeleteMapping("/sail/order")
+    public ResponseEntity<Void> deleteOrder(@RequestBody OrderDeleteRequestDto orderDeleteRequestDto) {
+        orderService.deleteOrder(orderDeleteRequestDto);
+        return ResponseEntity.ok().build();
+    }
+
+
+
     // 사장 입장 주문 확인 페이지 불러오기
     @GetMapping("/sail/store/order-check")
     public String getOrderCheckList(Model model) { // 인증 객체 메소드 파라미터로 추가 필요
