@@ -3,7 +3,6 @@ package com.eight.sailingship.service.customer;
 
 import com.eight.sailingship.dto.customer.CustomerDto;
 import com.eight.sailingship.entity.Customer;
-import com.eight.sailingship.repository.CustomerRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sailor_Hang_Hae</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" th:href="@{/css/order-check.css}">
+</head>
+<body>
+<!-- header -->
+<header class="header">
+    <div class="header-left">
+        <img th:src="@{/images/logo.png}" class="logo" />
+    </div>
+    <div class="header-center">
+        <form class="input-form">
+            <input
+                    class="input"
+                    type="search"
+                    id="searchQuery"
+                    placeholder="주변 맛집을 검색해 보세요"
+            />
+            <button class="input-button">검색</button>
+        </form>
+    </div>
+    <div class="header-right">
+        <nav class="menu">
+            <span class="menu-button">SIGN UP</span>
+            <span class="menu-button">SIGN IN</span>
+        </nav>
+    </div>
+</header>
+
+<!-- main -->
+<main>
+    <div class="main-background">
+        <h1 class="order-introduce">현재까지 들어온 주문입니다.</h1>
+        <div class="order-container">
+            <!-- 주문 확인 카드 -->
+<!--            주문자 주소, 주문자 닉네임, 주문자 전화번호, 주문 메뉴 리스트, 주문 상태 변환하는 버튼-->
+            <div class="order-card" th:each="orderCheck : ${orderCheckList}" th:attr="storeId = ${orderCheck.store.storeId}">
+                <h4 th:text="${orderCheck.customer.nickname}" class="order-nickname">
+                    닉네임
+                </h4>
+                <h2 th:text="${orderCheck.customer.address}" class="order-address">
+                    주소
+                </h2>
+                <p th:text="${orderCheck.customer.phone}" class="order-info">주문자 전화번호</p>
+                <p th:text="${orderCheck.totalPrice}" class="order-info">결제 금액</p>
+                <div th:each="orderMenu :${orderCheck.orderMenuList}" class="order-information">
+                    <p class="order-info" th:text="${orderMenu.menu.menuName}"></p> : <p class="order-info" th:text="${orderMenu.menu.price}"></p>
+                </div>
+                <input id="orderCompleteBtn" type="submit" value="배송 완료"
+                       th:attr="data-orderId=${orderCheck.orderId}"
+                       onclick="completeOrder(this.getAttribute('data-orderId'))">
+            </div>
+        </div>
+    </div>
+</main>
+<script th:inline="javascript">
+    function completeOrder(orderId) {
+        console.log(orderId)
+        if (orderId) {
+            fetch('/sail/store/order-complete', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    orderId: orderId
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to complete order');
+                    }
+                    window.alert('배달이 완료되었습니다.');
+                    console.log('Order completed successfully');
+                })
+                .catch(error => {
+                    console.error('Error completing order:', error);
+                });
+        }
+    }
+</script>
+</body>
+</html>
+
+<!--OrderMenu를 기반으로 정보 조회 시켜야 할듯-->
+
+<!--<h1 class="store-introduce">원하시는 매장을 찾아보세요</h1>-->
+<!--<div class="store-container">-->
+<!--    &lt;!&ndash; 매장 카드 &ndash;&gt;-->
+<!--    <div class="store-card" th:each="store : ${stores}", th:attr="storeId = ${store.storeId}">-->
+<!--        <div class="store-img-cover">-->
+<!--            <img th:src="@{/images/logo.png}" class="store-img"/>-->
+<!--        </div>-->
+<!--        <h3 th:text="${store.storeName}" class="store-info">가게명</h3>-->
+<!--        <p th:text="${store.phone}" class= "store-info">전화번호</p>-->
+<!--        <p th:text="${store.address}" class="store-info">주소</p>-->
+<!--    </div>-->
+<!--</div>-->
