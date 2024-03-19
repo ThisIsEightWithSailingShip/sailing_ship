@@ -23,7 +23,7 @@ public class Customer {
     private String password;
 
     @Column(name = "role")
-    private RoleEnum role;
+    private String role;
 
     @Column(name = "nickname")
     private String nickname;
@@ -37,11 +37,12 @@ public class Customer {
     @Column(name = "account")
     private Integer account;
 
-    @OneToMany(mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private List<Order> orderList;
+   @OneToMany(mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+     private List<Order> orderList;
 
     public void addOrderList(Order order) {
         this.orderList.add(order);
         order.setCustomer(this);
     }
 }
+

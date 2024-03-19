@@ -1,44 +1,55 @@
 package com.eight.sailingship.service.customer;
 
+
 import com.eight.sailingship.dto.customer.CustomerDto;
 import com.eight.sailingship.entity.Customer;
-import com.eight.sailingship.entity.RoleEnum;
 import com.eight.sailingship.repository.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CustomerService {
 
-    @Autowired
-    private CustomerRepository customerRepository;
+    private final com.eight.sailingship.repository.CustomerRepository CustomerRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    public CustomerService(CustomerRepository CustomerRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+
+        this.CustomerRepository = CustomerRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     public void signup(CustomerDto customerDto) {
-        if (customerDto.getPassword() == null) {
-            throw new IllegalArgumentException("Password cannot be null");
+// 이메일과 비밀번호가 null 또는 빈 문자열인 경우 예외 발생
+        if (customerDto.getEmail() == null || customerDto.getEmail().isEmpty() ||
+                customerDto.getPassword() == null || customerDto.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("Email and password cannot be null or empty");
         }
 
-        // DB에 이미 동일한 이메일을 가진 회원이 존재하는지 확인
-        boolean isUser = customerRepository.existsByEmail(customerDto.getEmail());
+        // 이메일이 이미 존재하는지 확인
+        boolean isUser = CustomerRepository.existsByEmail(customerDto.getEmail());
         if (isUser) {
-            return; // 이미 가입된 회원이므로 처리 중단
+            throw new IllegalArgumentException("User with this email already exists");
         }
 
-        // 회원 가입 정보 생성
-        Customer customer = new Customer();
-        customer.setEmail(customerDto.getEmail());
-        customer.setPassword(bCryptPasswordEncoder.encode(customerDto.getPassword()));
-        customer.setRole(RoleEnum.CUSTOMER);
-        customer.setNickname(customerDto.getNickname());
-        customer.setAddress(customerDto.getAddress());
-        customer.setPhone(customerDto.getPhone());
-        customer.setAccount(10000);
+        Customer data = new Customer();
 
-        // 회원 저장
-        customerRepository.save(customer);
+        data.setEmail(customerDto.getEmail());
+        data.setPassword(bCryptPasswordEncoder.encode(customerDto.getPassword()));
+        data.setNickname(customerDto.getNickname());
+        data.setAddress(customerDto.getAddress());
+        data.setPhone(customerDto.getPhone());
+
+        String role;
+        if (customerDto.getRole().contains("사장")) {
+            role = "ROLE_OWNER";
+            data.setAccount(0);
+        } else {
+            role = "ROLE_CUSTOMER";
+            data.setAccount(1000000);
+        }
+        data.setRole(role);
+
+        CustomerRepository.save(data);
     }
 }

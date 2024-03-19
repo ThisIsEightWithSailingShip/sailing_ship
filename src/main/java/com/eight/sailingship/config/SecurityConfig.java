@@ -1,53 +1,81 @@
 package com.eight.sailingship.config;
 
-import com.eight.sailingship.service.customer.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import com.eight.sailingship.jwt.JWTFilter;
+import com.eight.sailingship.jwt.JWTUtil;
+import com.eight.sailingship.jwt.LoginFilter;
+import com.eight.sailingship.repository.RefreshRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
+    private final AuthenticationConfiguration authenticationConfiguration;
+    private final JWTUtil jwtUtil;
+    private final RefreshRepository refreshRepository;
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshRepository refreshRepository) {
 
+        this.authenticationConfiguration = authenticationConfiguration;
+        this.jwtUtil = jwtUtil;
+        this.refreshRepository = refreshRepository;
+    }
+
+    //AuthenticationManager Bean 등록
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf((auth) -> auth.disable()); //배포할때 다시설정
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
 
-
-        http
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/sail/login", "/sail/signup").permitAll()
-                        .requestMatchers("/admin").hasRole("OWNER")
-                        .requestMatchers("/my/**").hasAnyRole("OWNER", "CUSTOMER")
-                        .anyRequest().authenticated()
-                );
-
-        http
-                .formLogin((auth) -> auth
-                        .loginPage("/sail/login")
-                        .loginProcessingUrl("/loginProc")
-                        .permitAll()
-                );
-
-//        http
-//                .sessionManagement((auth) -> auth
-//                        .maximumSessions(1)
-//                        .maxSessionsPreventsLogin(false)
-//                )
-//                .sessionFixation().none();
-
-        return http.build();
+        return configuration.getAuthenticationManager();
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+
+        http
+                .csrf((auth) -> auth.disable());
+
+        http
+                .formLogin((auth) -> auth.disable());
+
+        http
+                .httpBasic((auth) -> auth.disable());
+
+        http
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/login", "/", "/signup").permitAll()
+                        .requestMatchers("/admin").hasRole("OWNER")
+                        .requestMatchers("/reissue").permitAll()
+                        .anyRequest().authenticated());
+
+        //JWTFilter 등록
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+
+        //필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
+        http
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
+
+        http
+                .sessionManagement((session) -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        return http.build();
     }
 }
