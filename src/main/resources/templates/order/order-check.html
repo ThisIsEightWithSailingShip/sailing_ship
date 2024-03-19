@@ -52,7 +52,7 @@
                     <p class="order-info" th:text="${orderMenu.menu.menuName}"></p> : <p class="order-info" th:text="${orderMenu.menu.price}"></p>
                 </div>
                 <input id="orderCompleteBtn" type="submit" value="배달 완료"
-                       th:attr="data-orderId=${orderCheck.orderId}"
+                       th:attr="data-orderId=${orderCheck.orderId}, disabled=${orderCheck.status != 0}"
                        onclick="completeOrder(this.getAttribute('data-orderId'), this)">
             </div>
         </div>
