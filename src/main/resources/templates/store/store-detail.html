@@ -261,11 +261,10 @@
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('주문 처리 중 오류가 발생했습니다.');
+                    throw new Error('장바구니에 담기에 실패하였습니다');
                 }
                 // 주문 성공 시 알림창 표시
-                window.alert('주문이 성공적으로 처리되었습니다.');
-                console.log('주문이 성공적으로 처리되었습니다.');
+                window.alert('결제 페이지로 이동합니다');
 
                 window.location.href = response.url;
             })
