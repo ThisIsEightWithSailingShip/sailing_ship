@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderRequestDto {
+public class OrderBeforePayRequestDto {
     private List<OrderMenuRequestDto> menus;
     private Long totalPrice;
     private Long storeId;

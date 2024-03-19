@@ -252,7 +252,7 @@
         const orderData = exportOrderData(totalPrice); // 주문 정보 및 총 가격을 JSON으로 내보냅니다.
 
         // fetch를 사용하여 POST 요청을 보냅니다.
-        fetch('/sail/order', {
+        fetch('/sail/cart', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -267,12 +267,7 @@
                 window.alert('주문이 성공적으로 처리되었습니다.');
                 console.log('주문이 성공적으로 처리되었습니다.');
 
-                // HTML 응답 처리
-                return response.text(); // HTML 응답을 텍스트로 변환하여 반환
-            })
-            .then(html => {
-                // HTML을 DOM에 삽입하거나 다른 방식으로 표시
-                document.body.innerHTML = html;
+                window.location.href = response.url;
             })
             .catch(error => {
                 console.error(error.message);
@@ -281,7 +276,6 @@
                 // 오류 처리 로직을 구현합니다.
             });
     }
-
     // 총 가격을 계산하는 함수
     function calculateTotalPrice() {
         let totalPrice = 0;
