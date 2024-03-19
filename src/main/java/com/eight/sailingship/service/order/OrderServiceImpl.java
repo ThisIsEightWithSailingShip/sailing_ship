@@ -97,4 +97,11 @@ public class OrderServiceImpl implements OrderService{
         Store store = storeRepository.findById(storeId).orElseThrow();
         return orderRepository.findByStore(store);
     }
+
+    // 배달 완료 처리
+    @Override
+    public void completeOrderCheck(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow();
+        order.setStatus(StatusEnum.DELIVERY_COMPLETE);
+    }
 }
