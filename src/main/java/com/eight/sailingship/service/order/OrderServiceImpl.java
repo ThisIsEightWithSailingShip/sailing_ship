@@ -100,8 +100,11 @@ public class OrderServiceImpl implements OrderService{
 
     // 배달 완료 처리
     @Override
+    @Transactional
     public void completeOrderCheck(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow();
-        order.setStatus(StatusEnum.DELIVERY_COMPLETE);
+        order.deliveryComplete();
+
+        System.out.println(order.getStatus());
     }
 }

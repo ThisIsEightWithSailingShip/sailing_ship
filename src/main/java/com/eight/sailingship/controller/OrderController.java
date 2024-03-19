@@ -65,6 +65,8 @@ public class OrderController {
     @PutMapping("/sail/store/order-complete")
     public ResponseEntity<String> updateOrderStatus(@RequestBody OrderCheckRequestDto orderCheckRequestDto) {
         System.out.println(orderCheckRequestDto.getOrderId());
+        orderService.completeOrderCheck(orderCheckRequestDto.getOrderId());
+
         return ResponseEntity.ok("Order status updated successfully"); // Put 매핑은 리다이렉팅 허용 x
     }
 }
