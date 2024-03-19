@@ -2,7 +2,6 @@ package com.eight.sailingship.controller;
 
 import com.eight.sailingship.dto.customer.CustomerDto;
 import com.eight.sailingship.service.customer.CustomerService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +17,16 @@ public class CustomerController {
 
         this.customerService = customerService;
     }
+    @GetMapping("/admin")
+    public String adminP() {
+
+        return "admin";
+    }
+    @GetMapping("/test2")
+    public String admin2P() {
+
+        return "test2";
+    }
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody CustomerDto customerDto) {
@@ -30,12 +39,12 @@ public class CustomerController {
         }
     }
 
-    @GetMapping("/login")
+    @GetMapping("/sail/login")
     public String login(){
         return "login";
     }
 
-    @GetMapping("/signup")
+    @GetMapping("/sail/signup")
     public String showSignupPage() {
         return "signup";
     }

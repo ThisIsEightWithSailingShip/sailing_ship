@@ -11,18 +11,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final CustomerRepository CustomerRepository;
+    private final CustomerRepository customerRepository;
 
-    public CustomUserDetailsService(CustomerRepository CustomerRepository) {
+    public CustomUserDetailsService(CustomerRepository customerRepository) {
 
-        this.CustomerRepository = CustomerRepository;
+        this.customerRepository = customerRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         //DB에서 조회
-        Customer customerData = CustomerRepository.findByEmail(email);
+        Customer customerData = customerRepository.findByEmail(email);
 
         if (customerData != null) {
 

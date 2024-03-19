@@ -12,9 +12,9 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public CustomerService(CustomerRepository CustomerRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public CustomerService(CustomerRepository customerRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
 
-        this.customerRepository = CustomerRepository;
+        this.customerRepository = customerRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -50,6 +50,5 @@ public class CustomerService {
         data.setRole(role);
 
         customerRepository.save(data);
-
     }
 }
