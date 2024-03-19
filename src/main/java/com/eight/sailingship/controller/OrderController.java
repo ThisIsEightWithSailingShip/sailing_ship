@@ -53,7 +53,7 @@ public class OrderController {
     }
 
     // 사장 입장 주문 확인 페이지 불러오기
-    @GetMapping("/sail/store/order-check")
+    @GetMapping("/sail/order/check")
     public String getOrderCheckList(Model model) { // 인증 객체 메소드 파라미터로 추가 필요
         List<Order> orderCheckList = orderService.getOrderCheckList(1L);
         model.addAttribute("orderCheckList", orderCheckList);
@@ -62,7 +62,7 @@ public class OrderController {
     }
 
     // 사장 입장 주문 완료 버튼
-    @PutMapping("/sail/store/order-complete")
+    @PutMapping("/sail/order/complete")
     public ResponseEntity<String> updateOrderStatus(@RequestBody OrderCheckRequestDto orderCheckRequestDto) {
         System.out.println(orderCheckRequestDto.getOrderId());
         orderService.completeOrderCheck(orderCheckRequestDto.getOrderId());
