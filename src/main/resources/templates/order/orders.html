@@ -37,21 +37,20 @@
         <br>
         <span th:text="${'Status: ' + (order.status.toString() == 'PAY_COMPLETE' ? '결제 완료' : (order.status.toString() == 'COOKING' ? '조리 중' : (order.status.toString() == 'DELIVERY_COMPLETE' ? '배달 완료' : '주문 미완료'))) }"></span>
         <!-- 결제가 정상적으로 이루어지지 않았을 경우 주문하기 버튼 표시 -->
-        <button class="order-button" th:if="${order.status.toString() == 'JUST_IN_CART'}" onclick="sendOrderId(${order.orderId})">결제하기</button>
+        <button class="order-button" th:if="${order.status.toString() == 'JUST_IN_CART'}" th:onclick="'sendOrderId(' + ${order.orderId} + ')'" onclick="sendOrderId(${order.orderId})">결제하기</button>
+
     </div>
 </div>
 
 <script>
     // 주문하기 버튼 클릭 시 orderId를 JSON 형식으로 서버로 보내는 함수
     function sendOrderId(orderId) {
-        const data = { orderId: orderId }; // JSON 데이터 생성
-        const url = '/sail/order'; // 데이터를 보낼 URL
+        const url = `/sail/cart`; // URL에 orderId를 추가하여 GET 요청을 수행
         const options = {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data) // JSON 데이터 문자열로 변환하여 body에 설정
+            }
         };
 
         // Fetch API를 사용하여 서버로 데이터를 보냄
@@ -60,17 +59,15 @@
                 if (!response.ok) {
                     throw new Error('주문 처리 중 오류가 발생했습니다.');
                 }
-                return response.json(); // JSON 형식으로 응답을 파싱하여 반환
-            })
-            .then(data => {
-                console.log('주문이 성공적으로 처리되었습니다.', data);
-                // 여기에서 필요한 추가적인 처리를 수행할 수 있습니다.
+                // 서버로부터 아무런 응답을 받지 않고 종료
+                return;
             })
             .catch(error => {
                 console.error('주문 처리 중 오류가 발생했습니다.', error);
                 // 오류 발생 시 처리할 내용을 여기에 추가합니다.
             });
     }
+
 </script>
 
 </body>
