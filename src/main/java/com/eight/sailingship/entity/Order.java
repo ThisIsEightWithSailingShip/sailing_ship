@@ -37,10 +37,11 @@ public class Order extends OrderTimeStamped{
     @JoinColumn(name = "store_id")
     private Store store;
 
-    public Order(OrderRequestDto orderRequestDto, Store store) {
+    public Order(OrderRequestDto orderRequestDto, Store store, Customer customer) {
         this.status = 0;
         this.totalPrice = orderRequestDto.getTotalPrice();
         this.orderMenuList = new ArrayList<>();
+        this.customer = customer;
         this.store = store;
     }
 
