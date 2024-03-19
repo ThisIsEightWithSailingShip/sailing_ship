@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,10 @@ public class OrderServiceImpl implements OrderService{
     @Override
     @Transactional
     public void makeCart(OrderBeforePayRequestDto orderBeforePayRequestDto) {
+        Optional<Order> justInCart = orderRepository.findByStatus(StatusEnum.JUST_IN_CART);
+        if(justInCart.isPresent()){
+            throw new IllegalArgumentException("이미 주문중인 장바구니가 있습니다");
+        }
         Store store = storeRepository.findById(orderBeforePayRequestDto.getStoreId()).orElseThrow(() ->
                 new NullPointerException("해당하는 매장이 없습니다"));
         Order order = new Order(orderBeforePayRequestDto,store);
@@ -38,7 +43,9 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public OrderResponseDto getNotPayOrder() {
-        Order order = orderRepository.findByStatus(StatusEnum.JUST_IN_CART).orElseThrow();
+        Order order = orderRepository.findByStatus(StatusEnum.JUST_IN_CART).orElseThrow(
+                ()-> new IllegalArgumentException("결제할 주문이 없습니다")
+        );
         List<OrderMenuResponseDto> orderMenusResponseDto = getOrderMenusResponseDto(order);
         System.out.println(order.getOrderId());
         return new OrderResponseDto(orderMenusResponseDto,order);

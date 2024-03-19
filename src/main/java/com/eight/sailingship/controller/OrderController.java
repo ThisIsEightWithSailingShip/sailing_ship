@@ -4,6 +4,7 @@ import com.eight.sailingship.dto.Order.*;
 import com.eight.sailingship.entity.Order;
 import com.eight.sailingship.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +18,19 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    //장바구니에 물품 담기
     @PostMapping("/sail/cart")
-    public String makeCart(@RequestBody OrderBeforePayRequestDto orderBeforePayRequestDto) {
-        orderService.makeCart(orderBeforePayRequestDto);
-        return "redirect:/sail/cart";
+    public ResponseEntity<?> makeCart(@RequestBody OrderBeforePayRequestDto orderBeforePayRequestDto) {
+        try {
+            orderService.makeCart(orderBeforePayRequestDto);
+            return ResponseEntity.ok("주문이 성공적으로 처리되었습니다.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당하는 매장 또는 메뉴가 존재하지 않습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류로 인해 주문을 처리할 수 없습니다.");
+        }
     }
 
     @GetMapping("/sail/cart")
