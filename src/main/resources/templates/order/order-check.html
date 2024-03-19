@@ -51,17 +51,19 @@
                 <div th:each="orderMenu :${orderCheck.orderMenuList}" class="order-information">
                     <p class="order-info" th:text="${orderMenu.menu.menuName}"></p> : <p class="order-info" th:text="${orderMenu.menu.price}"></p>
                 </div>
-                <input id="orderCompleteBtn" type="submit" value="배송 완료"
+                <input id="orderCompleteBtn" type="submit" value="배달 완료"
                        th:attr="data-orderId=${orderCheck.orderId}"
-                       onclick="completeOrder(this.getAttribute('data-orderId'))">
+                       onclick="completeOrder(this.getAttribute('data-orderId'), this)">
             </div>
         </div>
     </div>
 </main>
 <script th:inline="javascript">
-    function completeOrder(orderId) {
-        console.log(orderId)
+    function completeOrder(orderId, button) {
+        console.log(orderId);
         if (orderId) {
+            button.disabled = true; // 버튼 비활성화
+            button.classList.add("disabled"); // 버튼에 disabled 클래스 추가
             fetch('/sail/store/order-complete', {
                 method: 'PUT',
                 headers: {
@@ -84,6 +86,7 @@
         }
     }
 </script>
+
 </body>
 </html>
 

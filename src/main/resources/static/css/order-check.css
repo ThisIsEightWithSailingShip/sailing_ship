@@ -72,3 +72,8 @@
     background-color: #20a2a2;
 }
 
+#orderCompleteBtn:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
