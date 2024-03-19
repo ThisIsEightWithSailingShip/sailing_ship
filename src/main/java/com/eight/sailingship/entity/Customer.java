@@ -38,11 +38,11 @@ public class Customer {
     @Column(name = "account")
     private Integer account;
 
-    @Column(name = "is_owner", nullable = true)
-    private Boolean isOwner;
-
+//    @Column(name = "is_owner", nullable = true)
+//    private Boolean isOwner;
+//
     @OneToOne
-    @JoinColumn(name = "store_id") // 외래 키로 사용될 필드명
+    @JoinColumn(name = "store_id", unique = true)
     private Store store;
 
    @OneToMany(mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
