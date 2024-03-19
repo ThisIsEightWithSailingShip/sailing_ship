@@ -3,7 +3,6 @@ package com.eight.sailingship.service.order;
 import com.eight.sailingship.dto.Order.*;
 import com.eight.sailingship.entity.*;
 import com.eight.sailingship.repository.MenuRepository;
-import com.eight.sailingship.repository.OrderMenusRepository;
 import com.eight.sailingship.repository.OrderRepository;
 import com.eight.sailingship.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -89,5 +88,13 @@ public class OrderServiceImpl implements OrderService{
             orderMenus.add(new OrderMenuResponseDto(orderMenu.getMenu(),orderMenu.getQuantity()));
         });
         return orderMenus;
+
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Order> getOrderCheckList(Long storeId) {
+        Store store = storeRepository.findById(storeId).orElseThrow();
+        return orderRepository.findByStore(store);
     }
 }
