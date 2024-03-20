@@ -44,11 +44,12 @@ public class Order extends OrderTimeStamped{
     @JoinColumn(name = "store_id")
     private Store store;
 
-    public Order(OrderBeforePayRequestDto orderBeforePayRequestDto, Store store) {
+    public Order(OrderBeforePayRequestDto orderBeforePayRequestDto, Store store, Customer customer) {
         this.status = StatusEnum.JUST_IN_CART;
         this.totalPrice = orderBeforePayRequestDto.getTotalPrice();
         this.orderMenuList = new ArrayList<>();
         this.store = store;
+        this.customer = customer;
     }
 
     public void addOrderMenuList(OrderMenu orderMenu) {

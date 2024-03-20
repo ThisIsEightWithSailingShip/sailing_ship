@@ -266,9 +266,9 @@
       })
               .then(response => {
                 if (response.ok) {
-                  const accessToken = response.headers.get("access");
-                  if (accessToken) {
-                    localStorage.setItem("accessToken", accessToken);
+                  // const accessToken = response.headers.get("Authorization");
+                  if (1) {
+                    // localStorage.setItem("accessToken", accessToken);
                     window.location.href = "/";
                   } else {
                     throw new Error('로그인 성공하지만 엑세스 토큰을 받지 못함');

@@ -30,6 +30,7 @@ public class CustomerController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody CustomerDto customerDto) {
+        System.out.println("come");
         try {
             System.out.println(customerDto.getEmail());
             customerService.signup(customerDto);
