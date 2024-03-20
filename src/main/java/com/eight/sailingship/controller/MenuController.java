@@ -41,7 +41,7 @@ public class MenuController {
 
     @GetMapping("/sail/menu/{id}") // 바꾸는 창을 띄워주고 -> 메뉴 보여주는 창 -> 따라서 getmapping 이용. 조회 목적.
     public String editMenu(@PathVariable Long id, Model model) {
-        Long storeId = 2L; // 나중에authorization 써서, 실제 storeId를 넘겨줘야함.
+        Long storeId = 1L; // 나중에authorization 써서, 실제 storeId를 넘겨줘야함.
         Menu menu = menuService.editMenu(id, storeId);
         model.addAttribute("menu", menu);
         return "menu/editMenu";
