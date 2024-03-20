@@ -4,6 +4,7 @@ import com.eight.sailingship.dto.Order.OrderAfterPayRequestDto;
 import com.eight.sailingship.dto.Order.OrderBeforePayRequestDto;
 import com.eight.sailingship.dto.Order.OrderDeleteRequestDto;
 import com.eight.sailingship.dto.Order.OrderResponseDto;
+import com.eight.sailingship.dto.customer.CustomUserDetails;
 import com.eight.sailingship.entity.Order;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface OrderService {
 
     List<OrderResponseDto> getOrderList();
 
-    void makeCart(OrderBeforePayRequestDto orderBeforePayRequestDto);
+    void makeCart(OrderBeforePayRequestDto orderBeforePayRequestDto, CustomUserDetails userDetails);
 
     OrderResponseDto getNotPayOrder();
 

@@ -1,7 +1,9 @@
 package com.eight.sailingship.service.order;
 
 import com.eight.sailingship.dto.Order.*;
+import com.eight.sailingship.dto.customer.CustomUserDetails;
 import com.eight.sailingship.entity.*;
+import com.eight.sailingship.repository.CustomerRepository;
 import com.eight.sailingship.repository.MenuRepository;
 import com.eight.sailingship.repository.OrderRepository;
 import com.eight.sailingship.repository.StoreRepository;
@@ -19,18 +21,22 @@ public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
+    private final CustomerRepository customerRepository;
 
 
     @Override
     @Transactional
-    public void makeCart(OrderBeforePayRequestDto orderBeforePayRequestDto) {
-        Optional<Order> justInCart = orderRepository.findByStatus(StatusEnum.JUST_IN_CART);
+    public void makeCart(OrderBeforePayRequestDto orderBeforePayRequestDto, CustomUserDetails userDetails) {
+
+        System.out.println(userDetails.getUsername());
+        Customer customer = customerRepository.findByEmail(userDetails.getUsername());
+        Optional<Order> justInCart = orderRepository.findByCustomerAndStatus(customer,StatusEnum.JUST_IN_CART);
         if(justInCart.isPresent()){
             throw new IllegalArgumentException("이미 주문중인 장바구니가 있습니다");
         }
         Store store = storeRepository.findById(orderBeforePayRequestDto.getStoreId()).orElseThrow(() ->
                 new NullPointerException("해당하는 매장이 없습니다"));
-        Order order = new Order(orderBeforePayRequestDto,store);
+        Order order = new Order(orderBeforePayRequestDto,store,customer);
         List<OrderMenuRequestDto> orderMenus = orderBeforePayRequestDto.getMenus();
         for (OrderMenuRequestDto orderMenu : orderMenus) {
             Menu menu = menuRepository.findById(orderMenu.getMenuId()).orElseThrow(() ->
@@ -63,16 +69,16 @@ public class OrderServiceImpl implements OrderService{
     @Override
     @Transactional
     public void save(OrderBeforePayRequestDto orderBeforePayRequestDto) {
-        Store store = storeRepository.findById(orderBeforePayRequestDto.getStoreId()).orElseThrow(() ->
-                new NullPointerException("해당하는 매장이 없습니다"));
-        Order order = new Order(orderBeforePayRequestDto,store);
-        List<OrderMenuRequestDto> orderMenus = orderBeforePayRequestDto.getMenus();
-        for (OrderMenuRequestDto orderMenu : orderMenus) {
-            Menu menu = menuRepository.findById(orderMenu.getMenuId()).orElseThrow(() ->
-                    new NullPointerException("해당 하는 메뉴가 존재하지 않습니다"));
-           order.addOrderMenuList(new OrderMenu(menu,orderMenu.getQuantity()));
-        }
-        orderRepository.save(order);
+//        Store store = storeRepository.findById(orderBeforePayRequestDto.getStoreId()).orElseThrow(() ->
+//                new NullPointerException("해당하는 매장이 없습니다"));
+//        Order order = new Order(orderBeforePayRequestDto,store, customer);
+//        List<OrderMenuRequestDto> orderMenus = orderBeforePayRequestDto.getMenus();
+//        for (OrderMenuRequestDto orderMenu : orderMenus) {
+//            Menu menu = menuRepository.findById(orderMenu.getMenuId()).orElseThrow(() ->
+//                    new NullPointerException("해당 하는 메뉴가 존재하지 않습니다"));
+//           order.addOrderMenuList(new OrderMenu(menu,orderMenu.getQuantity()));
+//        }
+//        orderRepository.save(order);
     }
 
     @Override
