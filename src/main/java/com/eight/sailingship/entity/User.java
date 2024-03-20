@@ -7,14 +7,14 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Table(name = "customers")
+@Table(name = "users")
 @Getter
 @Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "customer_id")
-    private Long customerId;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(name = "email")
     private String email;

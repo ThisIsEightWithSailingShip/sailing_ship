@@ -1,6 +1,6 @@
 package com.eight.sailingship.service.order;
 
-import com.eight.sailingship.dto.Order.*;
+import com.eight.sailingship.dto.order.*;
 import com.eight.sailingship.entity.*;
 import com.eight.sailingship.repository.UserRepository;
 import com.eight.sailingship.repository.MenuRepository;

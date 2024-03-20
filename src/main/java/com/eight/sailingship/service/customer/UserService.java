@@ -8,6 +8,7 @@ import com.eight.sailingship.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,8 +17,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public void signup(UserSignUpRequestDto userSignUpRequestDto) {
 // 이메일과 비밀번호가 null 또는 빈 문자열인 경우 예외 발생
+
+        System.err.println(userSignUpRequestDto.getEmail());
+
+
         if (userSignUpRequestDto.getEmail() == null || userSignUpRequestDto.getEmail().isEmpty() ||
                 userSignUpRequestDto.getPassword() == null || userSignUpRequestDto.getPassword().isEmpty()) {
             throw new IllegalArgumentException("Email and password cannot be null or empty");
@@ -29,24 +35,24 @@ public class UserService {
             throw new IllegalArgumentException("User with this email already exists");
         }
 
-        User data = new User();
+        User user = new User();
 
-        data.setEmail(userSignUpRequestDto.getEmail());
-        data.setPassword(passwordEncoder.encode(userSignUpRequestDto.getPassword()));
-        data.setNickname(userSignUpRequestDto.getNickname());
-        data.setAddress(userSignUpRequestDto.getAddress());
-        data.setPhone(userSignUpRequestDto.getPhone());
+        user.setEmail(userSignUpRequestDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userSignUpRequestDto.getPassword()));
+        user.setNickname(userSignUpRequestDto.getNickname());
+        user.setAddress(userSignUpRequestDto.getAddress());
+        user.setPhone(userSignUpRequestDto.getPhone());
 
         RoleEnum role;
         if (userSignUpRequestDto.getRole().equals("사장님")) {
             role = RoleEnum.OWNER;
-            data.setAccount(0);
+            user.setAccount(0);
         } else {
             role = RoleEnum.CUSTOMER;
-            data.setAccount(1000000);
+            user.setAccount(1000000);
         }
-        data.setRole(role);
+        user.setRole(role);
 
-        userRepository.save(data);
+        userRepository.save(user);
     }
 }

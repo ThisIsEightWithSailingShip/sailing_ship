@@ -17,18 +17,24 @@ public class UserController {
 
         this.userService = userService;
     }
-    @GetMapping("/admin")
-    public String adminP() {
+//    @GetMapping("/admin")
+//    public String adminP() {
+//
+//        return "admin";
+//    }
+//    @GetMapping("/test")
+//    public String admin2P() {
+//
+//        return "test";
+//    }
 
-        return "admin";
+
+    @GetMapping("/sail/login")
+    public String login(){
+        return "login";
     }
-    @GetMapping("/test")
-    public String admin2P() {
 
-        return "test";
-    }
-
-    @PostMapping("/signup")
+    @PostMapping("/sail/signup")
     public ResponseEntity<String> signup(@RequestBody UserSignUpRequestDto userSignUpRequestDto) {
         System.out.println("come");
         try {
@@ -38,11 +44,6 @@ public class UserController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
-
-    @GetMapping("/sail/login")
-    public String login(){
-        return "login";
     }
 
     @GetMapping("/sail/signup")

@@ -1,7 +1,7 @@
 package com.eight.sailingship.entity;
 
-import com.eight.sailingship.dto.Order.OrderAfterPayRequestDto;
-import com.eight.sailingship.dto.Order.OrderBeforePayRequestDto;
+import com.eight.sailingship.dto.order.OrderAfterPayRequestDto;
+import com.eight.sailingship.dto.order.OrderBeforePayRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

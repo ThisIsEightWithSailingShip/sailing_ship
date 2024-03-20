@@ -66,7 +66,8 @@ public class WebSecurityConfig {
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Swagger UI 접근 허용
                                 .requestMatchers("/").permitAll()
-                                .requestMatchers("/sail/signup").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/sail/signup").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/sail/signup").permitAll()
 //                                .requestMatchers("/api/products/{productId}").permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/api/products").permitAll()
 //                                .requestMatchers(HttpMethod.POST, "/api/products").hasRole("ADMIN") // 1차 권한방어

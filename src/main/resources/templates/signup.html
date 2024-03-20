@@ -260,7 +260,7 @@
 <script>
   document.getElementById("signupForm").addEventListener("submit", function (event) {
     event.preventDefault(); // 기본 동작 중지
-    var formData = {
+    const formData = {
       email: document.getElementById("email").value,
       password: document.getElementById("password").value,
       nickname: document.getElementById("nickname").value,
@@ -269,7 +269,9 @@
       role: document.getElementById("role").value
     };
 
-    fetch("/signup", { // 서버에 POST 요청 보내기
+    console.log(formData)
+
+    fetch("/sail/signup", { // 서버에 POST 요청 보내기
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -277,6 +279,7 @@
       body: JSON.stringify(formData)
     })
             .then(response => {
+              console.log(response)
               if (response.status === 200) {
                 // 회원가입 성공 시 알림창 표시
                 alert("회원가입 성공!");

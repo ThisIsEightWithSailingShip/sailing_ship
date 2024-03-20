@@ -1,7 +1,7 @@
 package com.eight.sailingship.controller;
 
 import com.eight.sailingship.auth.user.UserDetailsImpl;
-import com.eight.sailingship.dto.Order.*;
+import com.eight.sailingship.dto.order.*;
 import com.eight.sailingship.entity.Order;
 import com.eight.sailingship.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
