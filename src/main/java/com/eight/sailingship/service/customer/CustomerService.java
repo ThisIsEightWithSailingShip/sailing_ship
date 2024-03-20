@@ -3,18 +3,19 @@ package com.eight.sailingship.service.customer;
 
 import com.eight.sailingship.dto.customer.CustomerDto;
 import com.eight.sailingship.entity.Customer;
+import com.eight.sailingship.repository.CustomerRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CustomerService {
 
-    private final com.eight.sailingship.repository.CustomerRepository CustomerRepository;
+    private final CustomerRepository customerRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public CustomerService(CustomerRepository CustomerRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public CustomerService(CustomerRepository customerRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
 
-        this.CustomerRepository = CustomerRepository;
+        this.customerRepository = customerRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -26,7 +27,7 @@ public class CustomerService {
         }
 
         // 이메일이 이미 존재하는지 확인
-        boolean isUser = CustomerRepository.existsByEmail(customerDto.getEmail());
+        boolean isUser = customerRepository.existsByEmail(customerDto.getEmail());
         if (isUser) {
             throw new IllegalArgumentException("User with this email already exists");
         }
@@ -49,6 +50,6 @@ public class CustomerService {
         }
         data.setRole(role);
 
-        CustomerRepository.save(data);
+        customerRepository.save(data);
     }
 }

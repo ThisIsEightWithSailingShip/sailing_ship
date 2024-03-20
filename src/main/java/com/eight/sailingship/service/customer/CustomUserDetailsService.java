@@ -2,6 +2,8 @@ package com.eight.sailingship.service.customer;
 
 import com.eight.sailingship.dto.customer.CustomUserDetails;
 import com.eight.sailingship.entity.Customer;
+import com.eight.sailingship.repository.CustomerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,19 +11,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
+    private final CustomerRepository customerRepository;
 
-    private final com.eight.sailingship.repository.CustomerRepository CustomerRepository;
+    public CustomUserDetailsService(CustomerRepository customerRepository) {
 
-    public CustomUserDetailsService(CustomerRepository CustomerRepository) {
-
-        this.CustomerRepository = CustomerRepository;
+        this.customerRepository = customerRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         //DB에서 조회
-        Customer customerData = CustomerRepository.findByEmail(email);
+        Customer customerData = customerRepository.findByEmail(email);
 
         if (customerData != null) {
 
