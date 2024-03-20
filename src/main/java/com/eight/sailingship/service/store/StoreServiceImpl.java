@@ -1,9 +1,11 @@
 package com.eight.sailingship.service.store;
 
 import com.eight.sailingship.dto.store.StoreRequestDto;
+import com.eight.sailingship.entity.Customer;
 import com.eight.sailingship.entity.Menu;
 import com.eight.sailingship.entity.Store;
 import com.eight.sailingship.entity.StoreEnum;
+import com.eight.sailingship.repository.CustomerRepository;
 import com.eight.sailingship.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import java.util.List;
 public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
+    private final CustomerRepository customerRepository;
 
     // 매장 전체 페이지 조회
     @Override
@@ -84,5 +87,31 @@ public class StoreServiceImpl implements StoreService {
         findStore.setPhone(requestDto.getPhone());
         findStore.setCategory(storeEnum);
         findStore.setStoreName(requestDto.getStoreName());
+    }
+
+    @Override
+    @Transactional
+    public Store createStore(StoreRequestDto requestDto, String ownerEmail) {
+    // category 값이 null인 경우 기본값 설정
+        String categoryStr = requestDto.getCategory() == null ? "ETC" : requestDto.getCategory().toUpperCase();
+        StoreEnum category = StoreEnum.valueOf(categoryStr);
+
+        Store store = new Store();
+        store.setAddress(requestDto.getAddress());
+        store.setPhone(requestDto.getPhone());
+        store.setCategory(category);
+        store.setStoreName(requestDto.getStoreName());
+        store.setOwnerName(requestDto.getOwnerName());
+
+        Store savedStore = storeRepository.save(store);
+
+        Customer owner = customerRepository.findByEmail(ownerEmail);
+        if (owner == null) {
+            throw new RuntimeException("Owner not found with email: " + ownerEmail);
+        }
+        owner.setStore(savedStore);
+        customerRepository.save(owner);
+
+        return savedStore;
     }
 }

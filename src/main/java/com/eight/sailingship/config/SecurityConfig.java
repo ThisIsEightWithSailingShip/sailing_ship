@@ -5,6 +5,7 @@ import com.eight.sailingship.jwt.JWTFilter;
 import com.eight.sailingship.jwt.JWTUtil;
 import com.eight.sailingship.jwt.LoginFilter;
 import com.eight.sailingship.repository.RefreshRepository;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -59,9 +60,9 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/**", "/signup").permitAll()
-                        .requestMatchers("/login", "/addmin", "/", "/signup","/sail/signup","/sail/login","/test","sail/**").permitAll()
-                        .requestMatchers("/admin").hasRole("OWNER")
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                        .requestMatchers("/login", "/", "/signup","/sail/signup","/sail/login","/test","sail/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("OWNER")
                         .requestMatchers("/reissue").permitAll()
                         .anyRequest().authenticated());
 

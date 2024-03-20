@@ -4,6 +4,8 @@ import com.eight.sailingship.dto.store.StoreRequestDto;
 import com.eight.sailingship.entity.Store;
 import com.eight.sailingship.service.store.StoreService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +45,16 @@ public class StoreController {
 
         storeService.updateStore(1L, requestDto);
         return "redirect:/sail/store";
+    }
+
+    // 매장 생성
+    @PostMapping("/sail/store")
+    public String createStore(@ModelAttribute StoreRequestDto requestDto) {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String ownerEmail = ((UserDetails)principal).getUsername();
+
+        storeService.createStore(requestDto, ownerEmail);
+        return "redirect:/";
     }
 }

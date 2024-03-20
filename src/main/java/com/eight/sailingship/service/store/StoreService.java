@@ -16,4 +16,7 @@ public interface StoreService {
 
     // 매장 정보 수정
     void updateStore(Long storeId, StoreRequestDto requestDto);
+
+    //매장 생성
+    Store createStore(StoreRequestDto requestDto, String ownerEmail);
 }
