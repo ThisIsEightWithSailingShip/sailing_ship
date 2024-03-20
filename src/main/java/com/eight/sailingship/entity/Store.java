@@ -16,15 +16,6 @@ public class Store {
     @Column(name = "store_id")
     private long storeId;
 
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "role")
-    private RoleEnum role;
-
     @Column(name = "address")
     private String address;
 
@@ -40,8 +31,12 @@ public class Store {
     @Column(name = "owner_name")
     private String ownerName;
 
+    @OneToOne(mappedBy = "store", cascade = CascadeType.ALL)
+    private Customer owner;
+
     @OneToMany(mappedBy = "store", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<Menu> menuList;
+
 
     public void addMenuList(Menu menu) {
         this.menuList.add(menu);
