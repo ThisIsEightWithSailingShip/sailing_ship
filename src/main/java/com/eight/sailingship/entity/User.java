@@ -3,7 +3,6 @@ package com.eight.sailingship.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.mapping.ToOne;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ import java.util.List;
 @Table(name = "customers")
 @Getter
 @Setter
-public class Customer {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
@@ -46,12 +45,12 @@ public class Customer {
     @JoinColumn(name = "store_id", unique = true)
     private Store store;
 
-   @OneToMany(mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+   @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
      private List<Order> orderList;
 
     public void addOrderList(Order order) {
         this.orderList.add(order);
-        order.setCustomer(this);
+        order.setUser(this);
     }
 
 }

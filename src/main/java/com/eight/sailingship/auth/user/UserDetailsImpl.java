@@ -1,7 +1,9 @@
-package com.eight.sailingship.security;
+package com.eight.sailingship.auth.user;
 
-import com.eight.sailingship.entity.Customer;
 import com.eight.sailingship.entity.RoleEnum;
+import com.eight.sailingship.entity.User;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,34 +11,28 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Getter
+@RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
-    private final Customer customer;
-
-    public UserDetailsImpl(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Customer getUser() {
-        return customer;
-    }
+    private final User user;
 
     @Override
     public String getPassword() {
-        return customer.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return customer.getEmail();
+        return user.getEmail();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        RoleEnum roleEnum = customer.getRole();
-        String authority = roleEnum.getRole();
+        RoleEnum roleEnum = user.getRole();
+        String role = roleEnum.getRole();
 
-        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);
+        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(role);
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(simpleGrantedAuthority);
 

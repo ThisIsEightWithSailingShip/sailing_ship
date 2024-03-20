@@ -1,7 +1,7 @@
 package com.eight.sailingship.controller;
 
-import com.eight.sailingship.dto.customer.CustomerDto;
-import com.eight.sailingship.service.customer.CustomerService;
+import com.eight.sailingship.dto.user.UserSignUpRequestDto;
+import com.eight.sailingship.service.customer.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
-public class CustomerController {
+public class UserController {
 
-    private final CustomerService customerService;
+    private final UserService userService;
 
-    public CustomerController(CustomerService customerService) {
+    public UserController(UserService userService) {
 
-        this.customerService = customerService;
+        this.userService = userService;
     }
     @GetMapping("/admin")
     public String adminP() {
@@ -29,11 +29,11 @@ public class CustomerController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody CustomerDto customerDto) {
+    public ResponseEntity<String> signup(@RequestBody UserSignUpRequestDto userSignUpRequestDto) {
         System.out.println("come");
         try {
-            System.out.println(customerDto.getEmail());
-            customerService.signup(customerDto);
+            System.out.println(userSignUpRequestDto.getEmail());
+            userService.signup(userSignUpRequestDto);
             return ResponseEntity.ok("회원가입 성공!");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

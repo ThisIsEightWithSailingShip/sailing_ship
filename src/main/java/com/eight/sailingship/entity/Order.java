@@ -25,8 +25,8 @@ public class Order extends OrderTimeStamped{
     private StatusEnum status;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column
     private Long totalPrice;
@@ -44,12 +44,12 @@ public class Order extends OrderTimeStamped{
     @JoinColumn(name = "store_id")
     private Store store;
 
-    public Order(OrderBeforePayRequestDto orderBeforePayRequestDto, Store store, Customer customer) {
+    public Order(OrderBeforePayRequestDto orderBeforePayRequestDto, Store store, User user) {
         this.status = StatusEnum.JUST_IN_CART;
         this.totalPrice = orderBeforePayRequestDto.getTotalPrice();
         this.orderMenuList = new ArrayList<>();
         this.store = store;
-        this.customer = customer;
+        this.user = user;
     }
 
     public void addOrderMenuList(OrderMenu orderMenu) {

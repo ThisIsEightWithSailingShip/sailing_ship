@@ -187,7 +187,7 @@
 
     .login-form button {
       padding: 10px;
-      background-color: #007bff;
+      background-color: teal;
       color: #fff;
       border: none;
       border-radius: 5px;
@@ -196,7 +196,7 @@
     }
 
     .login-form button:hover {
-      background-color: #0056b3;
+      background-color: #2cb6b6;
     }
 
     .login-form p {
@@ -206,7 +206,7 @@
     }
 
     .login-form a {
-      color: #007bff;
+      color: teal;
       text-decoration: none;
     }
 
@@ -284,7 +284,7 @@
               } else {
                 // 회원가입 실패 시 알림창 표시
                 alert("회원가입 실패. 입력 정보를 확인해주세요.");
-                console.error("회원가입 실패:", response.statusText);
+                console.error("회원가입 실패:", response.message);
               }
             })
             .catch(error => {

@@ -1,7 +1,7 @@
-package com.eight.sailingship.security;
+package com.eight.sailingship.auth.user;
 
-import com.eight.sailingship.entity.Customer;
-import com.eight.sailingship.repository.CustomerRepository;
+import com.eight.sailingship.entity.User;
+import com.eight.sailingship.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,14 +12,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final CustomerRepository customerRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        System.out.println("come my");
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new NullPointerException("Not Found " + email));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("조회하려는 " + email + "이 없습니다."));
 
-        return new UserDetailsImpl(customer);
+        return new UserDetailsImpl(user);
     }
 }
