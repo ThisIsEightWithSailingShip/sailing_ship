@@ -3,21 +3,21 @@ package com.eight.sailingship.service.customer;
 
 import com.eight.sailingship.dto.customer.CustomerDto;
 import com.eight.sailingship.entity.Customer;
+import com.eight.sailingship.entity.RoleEnum;
 import com.eight.sailingship.repository.CustomerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CustomerService {
 
     private final com.eight.sailingship.repository.CustomerRepository customerRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public CustomerService(CustomerRepository customerRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
 
-        this.customerRepository = customerRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
 
     public void signup(CustomerDto customerDto) {
 // 이메일과 비밀번호가 null 또는 빈 문자열인 경우 예외 발생
@@ -35,17 +35,17 @@ public class CustomerService {
         Customer data = new Customer();
 
         data.setEmail(customerDto.getEmail());
-        data.setPassword(bCryptPasswordEncoder.encode(customerDto.getPassword()));
+        data.setPassword(passwordEncoder.encode(customerDto.getPassword()));
         data.setNickname(customerDto.getNickname());
         data.setAddress(customerDto.getAddress());
         data.setPhone(customerDto.getPhone());
 
-        String role;
-        if (customerDto.getRole().contains("사장")) {
-            role = "ROLE_OWNER";
+        RoleEnum role;
+        if (customerDto.getRole()== RoleEnum.OWNER) {
+            role = RoleEnum.OWNER;
             data.setAccount(0);
         } else {
-            role = "ROLE_CUSTOMER";
+            role = RoleEnum.CUSTOMER;
             data.setAccount(1000000);
         }
         data.setRole(role);

@@ -24,7 +24,8 @@ public class Customer {
     private String password;
 
     @Column(name = "role")
-    private String role;
+//    @Enumerated(EnumType.STRING)
+    private RoleEnum role;
 
     @Column(name = "nickname")
     private String nickname;
