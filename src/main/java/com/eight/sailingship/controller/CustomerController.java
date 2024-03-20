@@ -22,10 +22,10 @@ public class CustomerController {
 
         return "admin";
     }
-    @GetMapping("/test2")
+    @GetMapping("/test")
     public String admin2P() {
 
-        return "test2";
+        return "test";
     }
 
     @PostMapping("/signup")
