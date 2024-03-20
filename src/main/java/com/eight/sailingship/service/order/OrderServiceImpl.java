@@ -1,7 +1,6 @@
 package com.eight.sailingship.service.order;
 
 import com.eight.sailingship.dto.Order.*;
-import com.eight.sailingship.dto.customer.CustomUserDetails;
 import com.eight.sailingship.entity.*;
 import com.eight.sailingship.repository.CustomerRepository;
 import com.eight.sailingship.repository.MenuRepository;
@@ -26,10 +25,10 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     @Transactional
-    public void makeCart(OrderBeforePayRequestDto orderBeforePayRequestDto, CustomUserDetails userDetails) {
+    public void makeCart(OrderBeforePayRequestDto orderBeforePayRequestDto, Customer userDetails) {
 
-        System.out.println(userDetails.getUsername());
-        Customer customer = customerRepository.findByEmail(userDetails.getUsername());
+        System.out.println(userDetails.getEmail());
+        Customer customer = customerRepository.findByEmail(userDetails.getEmail()).orElseThrow();
         Optional<Order> justInCart = orderRepository.findByCustomerAndStatus(customer,StatusEnum.JUST_IN_CART);
         if(justInCart.isPresent()){
             throw new IllegalArgumentException("이미 주문중인 장바구니가 있습니다");

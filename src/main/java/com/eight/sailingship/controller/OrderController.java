@@ -3,6 +3,7 @@ package com.eight.sailingship.controller;
 import com.eight.sailingship.dto.Order.*;
 import com.eight.sailingship.dto.customer.CustomUserDetails;
 import com.eight.sailingship.entity.Order;
+import com.eight.sailingship.security.UserDetailsImpl;
 import com.eight.sailingship.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,9 +24,9 @@ public class OrderController {
     //장바구니에 물품 담기
     @PostMapping("/sail/cart")  // 예외처리 완료
     public ResponseEntity<?> makeCart(@RequestBody OrderBeforePayRequestDto orderBeforePayRequestDto,
-                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
+                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
-            orderService.makeCart(orderBeforePayRequestDto,userDetails);
+            orderService.makeCart(orderBeforePayRequestDto,userDetails.getUser());
             return ResponseEntity.ok("주문이 성공적으로 처리되었습니다.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
