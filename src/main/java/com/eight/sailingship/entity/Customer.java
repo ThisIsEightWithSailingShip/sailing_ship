@@ -3,6 +3,7 @@ package com.eight.sailingship.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.mapping.ToOne;
 
 import java.util.List;
 
@@ -37,6 +38,13 @@ public class Customer {
     @Column(name = "account")
     private Integer account;
 
+//    @Column(name = "is_owner", nullable = true)
+//    private Boolean isOwner;
+//
+    @OneToOne
+    @JoinColumn(name = "store_id", unique = true)
+    private Store store;
+
    @OneToMany(mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
      private List<Order> orderList;
 
@@ -44,5 +52,6 @@ public class Customer {
         this.orderList.add(order);
         order.setCustomer(this);
     }
+
 }
 
