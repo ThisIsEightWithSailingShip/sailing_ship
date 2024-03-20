@@ -2,6 +2,7 @@ package com.eight.sailingship.service.order;
 
 import com.eight.sailingship.dto.Order.OrderAfterPayRequestDto;
 import com.eight.sailingship.dto.Order.OrderBeforePayRequestDto;
+import com.eight.sailingship.dto.Order.OrderDeleteRequestDto;
 import com.eight.sailingship.dto.Order.OrderResponseDto;
 import com.eight.sailingship.entity.Order;
 
@@ -21,4 +22,6 @@ public interface OrderService {
     List<Order> getOrderCheckList(Long storeId);
 
     void completeOrderCheck(Long orderId);
+
+    void deleteOrder(OrderDeleteRequestDto orderDeleteRequestDto);
 }

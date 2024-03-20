@@ -1,17 +1,14 @@
 package com.eight.sailingship.controller;
 
-import com.eight.sailingship.dto.Order.OrderAfterPayRequestDto;
-import com.eight.sailingship.dto.Order.OrderBeforePayRequestDto;
-import com.eight.sailingship.dto.Order.OrderCheckRequestDto;
-import com.eight.sailingship.dto.Order.OrderResponseDto;
+import com.eight.sailingship.dto.Order.*;
 import com.eight.sailingship.entity.Order;
 import com.eight.sailingship.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -21,14 +18,22 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping("/sail/cart")
-    public String makeCart(@RequestBody OrderBeforePayRequestDto orderBeforePayRequestDto, RedirectAttributes redirectAttributes) {
-        orderService.makeCart(orderBeforePayRequestDto);
-        redirectAttributes.addFlashAttribute("message", "주문이 성공적으로 처리되었습니다.");
-        return "redirect:/sail/cart";
+    //장바구니에 물품 담기
+    @PostMapping("/sail/cart")  // 예외처리 완료
+    public ResponseEntity<?> makeCart(@RequestBody OrderBeforePayRequestDto orderBeforePayRequestDto) {
+        try {
+            orderService.makeCart(orderBeforePayRequestDto);
+            return ResponseEntity.ok("주문이 성공적으로 처리되었습니다.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당하는 매장 또는 메뉴가 존재하지 않습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류로 인해 주문을 처리할 수 없습니다.");
+        }
     }
 
-    @GetMapping("/sail/cart")
+    @GetMapping("/sail/cart")   // 예외 처리 완료
     public String getNotPayOrder(Model model) {
         OrderResponseDto orderResponseDto = orderService.getNotPayOrder();
         model.addAttribute("cart",orderResponseDto);
@@ -36,12 +41,9 @@ public class OrderController {
     }
 
     @PatchMapping("/sail/order")
-    public String saveOrder(@RequestBody OrderAfterPayRequestDto orderAfterPayRequestDto){
-        System.out.println(orderAfterPayRequestDto.getMessageToDriver());
-        System.out.println(orderAfterPayRequestDto.getOrderId());
+    public ResponseEntity<Void> saveOrder(@RequestBody OrderAfterPayRequestDto orderAfterPayRequestDto){
         orderService.saveOrder(orderAfterPayRequestDto);
-
-        return "success";
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/sail/order")
@@ -51,6 +53,14 @@ public class OrderController {
 
         return "order/orders";
     }
+
+    @DeleteMapping("/sail/order")
+    public ResponseEntity<Void> deleteOrder(@RequestBody OrderDeleteRequestDto orderDeleteRequestDto) {
+        orderService.deleteOrder(orderDeleteRequestDto);
+        return ResponseEntity.ok().build();
+    }
+
+
 
     // 사장 입장 주문 확인 페이지 불러오기
     @GetMapping("/sail/order/check")
