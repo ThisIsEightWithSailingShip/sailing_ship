@@ -49,7 +49,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 return;
             }
         }
-        System.out.println("okook");
         filterChain.doFilter(req, res);
     }
 

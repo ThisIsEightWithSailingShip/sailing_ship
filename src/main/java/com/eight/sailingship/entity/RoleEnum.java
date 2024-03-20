@@ -13,6 +13,8 @@ public enum RoleEnum {
         this.role = role;
     }
 
+    public String getAuthority() { return this.role; }
+
     public static class Role {
         // 권한 이름 규칙은 "ROLE_"로 시작해야 함
         public static final String OWNER = "ROLE_OWNER";

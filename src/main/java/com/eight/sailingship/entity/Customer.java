@@ -24,7 +24,7 @@ public class Customer {
     private String password;
 
     @Column(name = "role")
-//    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private RoleEnum role;
 
     @Column(name = "nickname")
@@ -46,7 +46,7 @@ public class Customer {
     @JoinColumn(name = "store_id", unique = true)
     private Store store;
 
-   @OneToMany(mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
      private List<Order> orderList;
 
     public void addOrderList(Order order) {

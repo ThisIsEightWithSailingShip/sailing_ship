@@ -2,9 +2,13 @@ package com.eight.sailingship.controller;
 
 import com.eight.sailingship.dto.menu.MenuRequestDto;
 import com.eight.sailingship.entity.Menu;
+import com.eight.sailingship.security.UserDetailsImpl;
 import com.eight.sailingship.service.menu.MenuServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +27,15 @@ public class MenuController {
     }
 
     // 나중에 authorization 필요
+    @Secured("ROLE_OWNER")
     @PostMapping("/sail/menu")//새로운 메뉴를 추가해주는 api. 따라서 postmapping 이용.
-    public String createMenu(@ModelAttribute MenuRequestDto requestDto) {
-        menuService.createMenu(requestDto);
+    public String createMenu(@ModelAttribute MenuRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        menuService.createMenu(requestDto, userDetails);
         return "redirect:/sail/listmenu";
     }
 
     //나중에 authorization 필요
+    @Secured("ROLE_OWNER")
     @GetMapping("/sail/listmenu") // owner만 접슨할 수 있도록 authorization해야함.
     public String listMenu(Model model) {
         List<Menu> menus = menuService.listMenu();

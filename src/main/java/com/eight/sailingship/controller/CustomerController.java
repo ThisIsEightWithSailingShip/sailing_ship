@@ -5,6 +5,7 @@ import com.eight.sailingship.service.customer.CustomerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -28,11 +29,10 @@ public class CustomerController {
         return "test";
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/sail/signup")
     public ResponseEntity<String> signup(@RequestBody CustomerDto customerDto) {
         System.out.println("come");
         try {
-            System.out.println(customerDto.getEmail());
             customerService.signup(customerDto);
             return ResponseEntity.ok("회원가입 성공!");
         } catch (IllegalArgumentException e) {

@@ -5,6 +5,7 @@ import com.eight.sailingship.entity.Menu;
 import com.eight.sailingship.entity.Store;
 import com.eight.sailingship.repository.MenuRepository;
 import com.eight.sailingship.repository.StoreRepository;
+import com.eight.sailingship.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,14 +22,18 @@ public class MenuServiceImpl implements MenuService {
     private final StoreRepository storeRepository;
 
     @Transactional
-    public void createMenu(MenuRequestDto requestDto) {
-        Store store = storeRepository.findById(1L).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 상점 번호 입니다."));
+    public void createMenu(MenuRequestDto requestDto, UserDetailsImpl userDetails) {
+        Store store = storeRepository.findById(userDetails.getUser().getStore().getStoreId()).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 상점 번호 입니다."));
         //***** 나중에 userdetailsimpl을 통해서 값 받아와서 넣어줘야함. @AuthenticationPrincipal UserDetailsImpl userDetails
         Menu menu = new Menu();
         menu.setMenuName(requestDto.getMenuName());
+        System.out.println(requestDto.getMenuName());
         menu.setIntroduce(requestDto.getIntroduce());
+        System.out.println(requestDto.getIntroduce());
         menu.setPrice(requestDto.getPrice());
+        System.out.println(requestDto.getPrice());
         menu.setMenuCategory(requestDto.getMenuCategory());
+        System.out.println(requestDto.getMenuCategory());
         menu.setStore(store);
 
         menuRepository.save(menu);
