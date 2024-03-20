@@ -1,6 +1,5 @@
 package com.eight.sailingship.service.customer;
 
-
 import com.eight.sailingship.dto.customer.CustomerDto;
 import com.eight.sailingship.entity.Customer;
 import com.eight.sailingship.repository.CustomerRepository;
@@ -14,6 +13,7 @@ public class CustomerService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public CustomerService(CustomerRepository customerRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+
         this.customerRepository = customerRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
