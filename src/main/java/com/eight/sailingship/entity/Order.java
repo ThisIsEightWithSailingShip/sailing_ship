@@ -62,5 +62,7 @@ public class Order extends OrderTimeStamped{
         this.status = StatusEnum.PAY_COMPLETE;
     }
 
-
+    public void deliveryComplete() {
+        this.status = StatusEnum.DELIVERY_COMPLETE;
+    }
 }

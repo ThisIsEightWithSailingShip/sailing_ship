@@ -39,7 +39,9 @@
         <div class="order-container">
             <!-- 주문 확인 카드 -->
 <!--            주문자 주소, 주문자 닉네임, 주문자 전화번호, 주문 메뉴 리스트, 주문 상태 변환하는 버튼-->
-            <div class="order-card" th:each="orderCheck : ${orderCheckList}" th:attr="storeId = ${orderCheck.store.storeId}">
+            <div class="order-card"
+                 th:each="orderCheck : ${orderCheckList}"
+                 th:attr="storeId = ${orderCheck.store.storeId}">
                 <h4 th:text="${orderCheck.customer.nickname}" class="order-nickname">
                     닉네임
                 </h4>
@@ -51,18 +53,22 @@
                 <div th:each="orderMenu :${orderCheck.orderMenuList}" class="order-information">
                     <p class="order-info" th:text="${orderMenu.menu.menuName}"></p> : <p class="order-info" th:text="${orderMenu.menu.price}"></p>
                 </div>
-                <input id="orderCompleteBtn" type="submit" value="배송 완료"
+                <input id="orderCompleteBtn" type="submit" value="배달 완료"
                        th:attr="data-orderId=${orderCheck.orderId}"
-                       onclick="completeOrder(this.getAttribute('data-orderId'))">
+                       onclick="completeOrder(this.getAttribute('data-orderId'), this)">
+
+<!--                해결책 : 결제 완료된 놈들만 불러오게 한다.-->
             </div>
         </div>
     </div>
 </main>
 <script th:inline="javascript">
-    function completeOrder(orderId) {
-        console.log(orderId)
+    function completeOrder(orderId, button) {
+        console.log(orderId);
         if (orderId) {
-            fetch('/sail/store/order-complete', {
+            button.disabled = true; // 버튼 비활성화
+            button.classList.add("disabled"); // 버튼에 disabled 클래스 추가
+            fetch('/sail/order/complete', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -84,6 +90,7 @@
         }
     }
 </script>
+
 </body>
 </html>
 

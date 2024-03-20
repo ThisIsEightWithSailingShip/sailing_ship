@@ -21,5 +21,7 @@ public interface OrderService {
     // 매장 id 기반 해당 주문들 전부 조회
     List<Order> getOrderCheckList(Long storeId);
 
+    void completeOrderCheck(Long orderId);
+
     void deleteOrder(OrderDeleteRequestDto orderDeleteRequestDto);
 }

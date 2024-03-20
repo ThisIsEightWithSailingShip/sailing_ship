@@ -104,7 +104,17 @@ public class OrderServiceImpl implements OrderService{
     @Transactional(readOnly = true)
     public List<Order> getOrderCheckList(Long storeId) {
         Store store = storeRepository.findById(storeId).orElseThrow();
-        return orderRepository.findByStore(store);
+        return orderRepository.findByStoreAndStatus(store, StatusEnum.PAY_COMPLETE);
+    }
+
+    // 배달 완료 처리
+    @Override
+    @Transactional
+    public void completeOrderCheck(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow();
+        order.deliveryComplete();
+
+        System.out.println(order.getStatus());
     }
 
     @Override
