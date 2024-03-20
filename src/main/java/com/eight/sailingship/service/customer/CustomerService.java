@@ -1,5 +1,6 @@
 package com.eight.sailingship.service.customer;
 
+
 import com.eight.sailingship.dto.customer.CustomerDto;
 import com.eight.sailingship.entity.Customer;
 import com.eight.sailingship.repository.CustomerRepository;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerService {
 
-    private final CustomerRepository customerRepository;
+    private final com.eight.sailingship.repository.CustomerRepository customerRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public CustomerService(CustomerRepository customerRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {

@@ -59,6 +59,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/login", "/**", "/signup").permitAll()
                         .requestMatchers("/login", "/addmin", "/", "/signup","/sail/signup","/sail/login","/test","sail/**").permitAll()
                         .requestMatchers("/admin").hasRole("OWNER")
                         .requestMatchers("/reissue").permitAll()
