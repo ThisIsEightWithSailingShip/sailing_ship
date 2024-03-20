@@ -19,7 +19,7 @@ public class OrderController {
     private final OrderService orderService;
 
     //장바구니에 물품 담기
-    @PostMapping("/sail/cart")
+    @PostMapping("/sail/cart")  // 예외처리 완료
     public ResponseEntity<?> makeCart(@RequestBody OrderBeforePayRequestDto orderBeforePayRequestDto) {
         try {
             orderService.makeCart(orderBeforePayRequestDto);
@@ -33,7 +33,7 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/sail/cart")
+    @GetMapping("/sail/cart")   // 예외 처리 완료
     public String getNotPayOrder(Model model) {
         OrderResponseDto orderResponseDto = orderService.getNotPayOrder();
         model.addAttribute("cart",orderResponseDto);

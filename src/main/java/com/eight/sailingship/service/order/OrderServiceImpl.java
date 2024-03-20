@@ -54,7 +54,9 @@ public class OrderServiceImpl implements OrderService{
     @Override
     @Transactional
     public void saveOrder(OrderAfterPayRequestDto orderAfterPayRequestDto) {
-        Order order = orderRepository.findById(orderAfterPayRequestDto.getOrderId()).orElseThrow();
+        Order order = orderRepository.findById(orderAfterPayRequestDto.getOrderId()).orElseThrow(
+                ()->new NullPointerException("해당하는 주문이 없습니다")
+        );
         order.pay_complete(orderAfterPayRequestDto);
     }
 
