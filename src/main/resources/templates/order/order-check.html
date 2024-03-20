@@ -42,13 +42,13 @@
             <div class="order-card"
                  th:each="orderCheck : ${orderCheckList}"
                  th:attr="storeId = ${orderCheck.store.storeId}">
-                <h4 th:text="${orderCheck.customer.nickname}" class="order-nickname">
+                <h4 th:text="${orderCheck.user.nickname}" class="order-nickname">
                     닉네임
                 </h4>
-                <h2 th:text="${orderCheck.customer.address}" class="order-address">
+                <h2 th:text="${orderCheck.user.address}" class="order-address">
                     주소
                 </h2>
-                <p th:text="${orderCheck.customer.phone}" class="order-info">주문자 전화번호</p>
+                <p th:text="${orderCheck.user.phone}" class="order-info">주문자 전화번호</p>
                 <p th:text="${orderCheck.totalPrice}" class="order-info">결제 금액</p>
                 <div th:each="orderMenu :${orderCheck.orderMenuList}" class="order-information">
                     <p class="order-info" th:text="${orderMenu.menu.menuName}"></p> : <p class="order-info" th:text="${orderMenu.menu.price}"></p>
@@ -63,6 +63,12 @@
     </div>
 </main>
 <script th:inline="javascript">
+    import { checkTokenExpirationAndHandle } from "../../static/js/authModule"
+
+    document.addEventListener("DOMContentLoaded", function() {
+        checkTokenExpirationAndHandle();
+    });
+
     function completeOrder(orderId, button) {
         console.log(orderId);
         if (orderId) {
