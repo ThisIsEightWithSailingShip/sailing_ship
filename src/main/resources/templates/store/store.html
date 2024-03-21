@@ -292,19 +292,18 @@
       body: JSON.stringify(formData)
     })
             .then(response => {
-              console.log(response)
-              if (response.status === 200) {
-                // 회원가입 성공 시 알림창 표시
-                alert("매장생성 성공!");
-                window.location.href = "/"; // 홈페이지로 이동
-              } else {
-                // 회원가입 실패 시 알림창 표시
-                alert("사장님이 아니거나 이미 매장을 보유하고 있습니다. 확인해주세요.");
-                console.error("매장생성 실패:", response.message);
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
               }
+              return response.json(); // 여기에서 응답을 JSON으로 파싱합니다.
+            })
+            .then(data => {
+              // 파싱된 데이터에서 storeId를 사용하여 리디렉션합니다.
+              alert("매장생성 성공!");
+              window.location.href = `/sail/store/${data.storeId}`; // 성공 시 매장 상세 페이지로 리디렉션
             })
             .catch(error => {
-              // 오류 발생 시 알림창 표시
+              // 오류 발생 시 처리
               alert("오류 발생. 다시 시도해주세요.");
               console.error("오류 발생:", error);
             });

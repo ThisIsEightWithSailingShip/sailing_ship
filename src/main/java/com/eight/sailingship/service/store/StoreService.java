@@ -22,4 +22,7 @@ public interface StoreService {
 
     boolean checkIfUserHasStore(String userEmail);
 
+    Long findStoreIdByUserEmail(String userEmail);
+
+
 }

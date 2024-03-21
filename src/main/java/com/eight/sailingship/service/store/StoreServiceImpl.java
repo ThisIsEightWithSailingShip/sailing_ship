@@ -95,7 +95,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     @Transactional
     public Store createStore(StoreRequestDto requestDto, String ownerEmail) {
-        // category 값이 null인 경우 기본값 설정
+
         String categoryStr = requestDto.getCategory() == null ? "ETC" : requestDto.getCategory().toUpperCase();
         StoreEnum category = StoreEnum.valueOf(categoryStr);
 
@@ -106,12 +106,12 @@ public class StoreServiceImpl implements StoreService {
         store.setStoreName(requestDto.getStoreName());
         store.setOwnerName(requestDto.getOwnerName());
 
-        // Check if the owner already has a store
+        // 이미 매장을 소유한 유저인지 확인하기 위해 이메이을 불러옴.
         Optional<User> ownerOptional = userRepository.findByEmail(ownerEmail);
         User owner = ownerOptional.orElseThrow(() -> new RuntimeException("Owner not found with email: " + ownerEmail));
 
         if (owner.getStore() != null) {
-            // If the user already has a store, throw an exception
+            // 매장을 소유하고 있는 유저인지 확인.
             throw new IllegalStateException("User already has a store assigned. Cannot create another.");
         }
 
@@ -130,6 +130,13 @@ public class StoreServiceImpl implements StoreService {
             return user.getStore() != null;
         }
         return false;
+    }
+
+    public Long findStoreIdByUserEmail(String userEmail) {
+        return userRepository.findByEmail(userEmail)
+                .map(User::getStore)
+                .map(Store::getStoreId)
+                .orElseThrow(() -> new RuntimeException("No store found for user."));
     }
 
 

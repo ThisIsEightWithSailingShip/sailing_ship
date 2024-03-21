@@ -5,6 +5,8 @@ import com.eight.sailingship.entity.Store;
 import com.eight.sailingship.entity.StoreEnum;
 import com.eight.sailingship.service.store.StoreService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -52,15 +56,6 @@ public class StoreController {
         return "redirect:/sail/store";
     }
 
-    // 매장 생성
-    @PostMapping("/sail/store")
-    @PreAuthorize("hasRole('OWNER')")
-    public String createStore(@RequestBody StoreRequestDto requestDto) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String ownerEmail = ((UserDetails) principal).getUsername();
-        storeService.createStore(requestDto, ownerEmail);
-        return "redirect:/";
-    }
     @GetMapping("/sail/store")
     public String showCreateStoreForm(Model model) {
         var categories = Arrays.stream(StoreEnum.values())
@@ -77,12 +72,27 @@ public class StoreController {
         String userEmail = ((UserDetails) principal).getUsername();
 
         boolean hasStore = storeService.checkIfUserHasStore(userEmail);
-
         if (hasStore) {
-            return "redirect:/"; // 메인 페이지로 리디렉션
+            Long storeId = storeService.findStoreIdByUserEmail(userEmail);
+            return "redirect:/sail/store/" + storeId;
         } else {
-            return "redirect:/sail/store"; // 매장 생성 페이지로 리디렉션
+            return "redirect:/sail/store";
         }
     }
+
+// 매장 생성
+    @PostMapping("/sail/store")
+    @Secured("ROLE_OWNER")
+    public ResponseEntity<?> createStore(@RequestBody StoreRequestDto requestDto) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String ownerEmail = ((UserDetails) principal).getUsername();
+        Store createdStore = storeService.createStore(requestDto, ownerEmail);
+        // 생성된 매장의 ID를 JSON 형태로 반환
+        Map<String, Long> response = new HashMap<>();
+        response.put("storeId", createdStore.getStoreId());
+        return ResponseEntity.ok(response);
+    }
+
+
 
 }
