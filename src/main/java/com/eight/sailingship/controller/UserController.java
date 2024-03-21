@@ -23,7 +23,7 @@ public class UserController {
 
     @GetMapping("/sail/login")
     public String login(){
-        return "login";
+        return "user/login";
     }
 
     @PostMapping("/sail/signup")
@@ -40,7 +40,7 @@ public class UserController {
 
     @GetMapping("/sail/signup")
     public String showSignupPage() {
-        return "signup";
+        return "user/signup";
     }
 
     // 회원 인증 정보 받기
