@@ -11,8 +11,8 @@ public interface MenuService {
 
     void createMenu(MenuRequestDto requestDto, UserDetailsImpl userDetails);
 
-    List<Menu> listMenu();
-    Menu editMenu(Long menuId, Long storeId);
+    List<Menu> listMenu(UserDetailsImpl userDetails);
+    Menu editMenu(Long menuId, UserDetailsImpl userDetails);
     void editSaveMenu(MenuRequestDto requestDto, Long id);
-    ResponseEntity<String> deleteMenu(Long menuId, Long storeId);
+    ResponseEntity<String> deleteMenu(Long menuId, UserDetailsImpl userDetails);
 }

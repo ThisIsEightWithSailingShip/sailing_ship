@@ -39,17 +39,17 @@ public class MenuServiceImpl implements MenuService {
         menuRepository.save(menu);
     }
     @Transactional(readOnly = true)
-    public List<Menu> listMenu() {
-        return menuRepository.findByStore_StoreId(1L);
+    public List<Menu> listMenu(UserDetailsImpl userDetails) {
+        return menuRepository.findByStore_StoreId(userDetails.getUser().getStore().getStoreId());
         // ***** 나중에 @AuthenticationPrincipal 이후 변경해 줘야함.
 
     }
 
     @Transactional
-    public Menu editMenu(Long menuId, Long storeId) {
+    public Menu editMenu(Long menuId, UserDetailsImpl userDetails) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 메뉴 번호 입니다."));
         Long menuOwnerId = menu.getStore().getStoreId();
-        if(storeId != menuOwnerId) {
+        if(userDetails.getUser().getStore().getStoreId() != menuOwnerId) {
             throw new IllegalArgumentException("매장이 사장님의 소유가 아닙니다.");
         }
         return menu;
@@ -63,10 +63,10 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Transactional
-    public ResponseEntity<String> deleteMenu(Long menuId, Long storeId) {
+    public ResponseEntity<String> deleteMenu(Long menuId, UserDetailsImpl userDetails) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 메뉴 번호 입니다."));
         Long menuOwnerId = menu.getStore().getStoreId();
-        if(storeId != menuOwnerId) {
+        if(userDetails.getUser().getStore().getStoreId() != menuOwnerId) {
             return ResponseEntity.badRequest().body("매장이 사장님의 소유가 아닙니다.");
         }
         menuRepository.delete(menu);
