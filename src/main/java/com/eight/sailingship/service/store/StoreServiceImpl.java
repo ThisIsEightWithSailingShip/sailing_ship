@@ -1,5 +1,6 @@
 package com.eight.sailingship.service.store;
 
+import com.eight.sailingship.dto.menu.MenuRequestDto;
 import com.eight.sailingship.dto.store.StoreRequestDto;
 import com.eight.sailingship.entity.Customer;
 import com.eight.sailingship.entity.Menu;
@@ -106,6 +107,7 @@ public class StoreServiceImpl implements StoreService {
         Store savedStore = storeRepository.save(store);
 
         Customer owner = customerRepository.findByEmail(ownerEmail);
+
         if (owner == null) {
             throw new RuntimeException("Owner not found with email: " + ownerEmail);
         }

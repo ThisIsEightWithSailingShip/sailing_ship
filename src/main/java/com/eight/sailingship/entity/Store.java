@@ -42,4 +42,5 @@ public class Store {
         this.menuList.add(menu);
         menu.setStore(this);
     }
+
 }
