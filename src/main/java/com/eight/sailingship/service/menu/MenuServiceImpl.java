@@ -1,11 +1,11 @@
 package com.eight.sailingship.service.menu;
 
+import com.eight.sailingship.auth.user.UserDetailsImpl;
 import com.eight.sailingship.dto.menu.MenuRequestDto;
 import com.eight.sailingship.entity.Menu;
 import com.eight.sailingship.entity.Store;
 import com.eight.sailingship.repository.MenuRepository;
 import com.eight.sailingship.repository.StoreRepository;
-import com.eight.sailingship.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

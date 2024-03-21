@@ -71,6 +71,7 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/sail/signup").permitAll()
                                 .requestMatchers("/sail/login").permitAll()
                                 .requestMatchers("/sail/user/login").permitAll()
+                                .requestMatchers("/sail/image").permitAll() // 잠시 이미지 구현을 위해 permitall****
 //                                .requestMatchers("/api/products/{productId}").permitAll()
 //                                .requestMatchers(HttpMethod.GET, "/api/products").permitAll()
 //                                .requestMatchers(HttpMethod.POST, "/api/products").hasRole("ADMIN") // 1차 권한방어

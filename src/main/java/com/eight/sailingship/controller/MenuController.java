@@ -1,13 +1,13 @@
 package com.eight.sailingship.controller;
 
+import com.eight.sailingship.auth.user.UserDetailsImpl;
 import com.eight.sailingship.dto.menu.MenuRequestDto;
 import com.eight.sailingship.entity.Menu;
-import com.eight.sailingship.security.UserDetailsImpl;
 import com.eight.sailingship.service.menu.MenuServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

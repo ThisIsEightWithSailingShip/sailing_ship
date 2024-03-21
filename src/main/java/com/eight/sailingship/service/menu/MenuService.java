@@ -1,8 +1,8 @@
 package com.eight.sailingship.service.menu;
 
+import com.eight.sailingship.auth.user.UserDetailsImpl;
 import com.eight.sailingship.dto.menu.MenuRequestDto;
 import com.eight.sailingship.entity.Menu;
-import com.eight.sailingship.security.UserDetailsImpl;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
