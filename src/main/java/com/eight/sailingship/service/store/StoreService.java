@@ -12,10 +12,10 @@ public interface StoreService {
     // 특정 매장 페이지 조회
     String getStore(Model model, Long storeId);
 
-    Store getUpdateStore(Long storeId);
+    Store getUpdateStore(Long storeId, String ownerEmail);
 
     // 매장 정보 수정
-    void updateStore(Long storeId, StoreRequestDto requestDto);
+    void updateStore(Long storeId, StoreRequestDto requestDto, String ownerEmail);
 
     //매장 생성
     Store createStore(StoreRequestDto requestDto, String ownerEmail);

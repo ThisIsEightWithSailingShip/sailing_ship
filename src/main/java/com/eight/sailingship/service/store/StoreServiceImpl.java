@@ -49,48 +49,39 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Transactional
-    public Store getUpdateStore(Long storeId) {
+    public Store getUpdateStore(Long storeId, String ownerEmail) {
         return storeRepository.findById(storeId).orElseThrow();
     }
 
 
     @Override
     @Transactional
-    public void updateStore(Long storeId, StoreRequestDto requestDto) {
-        // storeId 일치 여부
-        System.out.println(requestDto.getAddress());
-        System.out.println(requestDto.getCategory());
-        System.out.println(requestDto.getStoreName());
-        System.out.println(requestDto.getPhone());
+    public void updateStore(Long storeId, StoreRequestDto requestDto, String ownerEmail) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new IllegalArgumentException("Store not found with id: " + storeId));
 
-        Store findStore = storeRepository.findById(storeId).orElseThrow(); // 인증객체 UserDetails에서 매장 아이디 추출 필요
-        System.out.println(findStore.getStoreId());
 
-        String roleString = requestDto.getCategory();
+        User owner = userRepository.findByEmail(ownerEmail)
+                .orElseThrow(() -> new RuntimeException("Owner not found with email: " + ownerEmail));
 
-        StoreEnum storeEnum;
-        if (roleString.equalsIgnoreCase("korea")) {
-            storeEnum = StoreEnum.KOREA;
-        } else if (roleString.equalsIgnoreCase("japan")) {
-            storeEnum = StoreEnum.JAPAN;
-        } else if (roleString.equalsIgnoreCase("china")) {
-            storeEnum = StoreEnum.CHINA;
-        } else {
-            storeEnum = StoreEnum.ETC;
+        if (!store.getOwner().equals(owner)) {
+            throw new IllegalStateException("User does not have permission to update this store.");
         }
 
-        if (requestDto.getAddress() == null) {
-            throw new NullPointerException();
-        }
-        if (requestDto.getStoreName() == null) {
-            throw new NullPointerException();
-        }
 
-        findStore.setAddress(requestDto.getAddress());
-        findStore.setPhone(requestDto.getPhone());
-        findStore.setCategory(storeEnum);
-        findStore.setStoreName(requestDto.getStoreName());
+        String categoryStr = requestDto.getCategory() == null ? "ETC" : requestDto.getCategory().toUpperCase();
+        StoreEnum category = StoreEnum.valueOf(categoryStr);
+
+
+        store.setAddress(requestDto.getAddress());
+        store.setPhone(requestDto.getPhone());
+        store.setCategory(category);
+        store.setStoreName(requestDto.getStoreName());
+        store.setOwnerName(requestDto.getOwnerName());
+
+        storeRepository.save(store);
     }
+
 
     @Override
     @Transactional
