@@ -191,6 +191,30 @@
     .login-form a:hover {
       text-decoration: underline;
     }
+
+    #introduce {
+      color: teal;
+      margin-top: 15px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+
+    #toLink {
+      margin-left: 7px;
+      font-weight: 600;
+
+      text-decoration: none; /* 밑줄 제거 */
+      color: black; /* 기본 텍스트 색상 상속 */
+      background-color: transparent; /* 배경색 제거 */
+      border: none; /* 테두리 제거 */
+      cursor: pointer; /* 포인터 커서로 변경 */
+    }
+
+    #toLink:hover {
+      color: gray;
+    }
+
   </style>
 </head>
 <body>
@@ -229,7 +253,7 @@
         <input type="password" id="password" name="password" placeholder="비밀번호">
         <button type="submit" id="loginBtn">로그인</button>
       </form>
-      <p>계정이 없으신가요? <a href="/sail/signup">회원가입</a></p>
+      <p id="introduce">계정이 없으신가요? <a id="toLink" href="/sail/signup"> 회원가입</a></p>
     </div>
     <!-- 로그인 페이지 끝 -->
   </div>
