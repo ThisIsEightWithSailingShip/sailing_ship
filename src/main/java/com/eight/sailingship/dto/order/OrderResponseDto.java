@@ -1,4 +1,4 @@
-package com.eight.sailingship.dto.Order;
+package com.eight.sailingship.dto.order;
 
 import com.eight.sailingship.entity.Order;
 import com.eight.sailingship.entity.StatusEnum;

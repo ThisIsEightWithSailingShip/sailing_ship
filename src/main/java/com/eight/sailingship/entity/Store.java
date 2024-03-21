@@ -32,7 +32,7 @@ public class Store {
     private String ownerName;
 
     @OneToOne(mappedBy = "store", cascade = CascadeType.ALL)
-    private Customer owner;
+    private User owner;
 
     @OneToMany(mappedBy = "store", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<Menu> menuList;

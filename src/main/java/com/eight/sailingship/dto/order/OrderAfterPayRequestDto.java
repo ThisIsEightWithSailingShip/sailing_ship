@@ -1,4 +1,4 @@
-package com.eight.sailingship.dto.Order;
+package com.eight.sailingship.dto.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderCheckRequestDto {
+public class OrderAfterPayRequestDto {
     private Long orderId;
+    private String messageToStore;
+    private String messageToDriver;
 }
