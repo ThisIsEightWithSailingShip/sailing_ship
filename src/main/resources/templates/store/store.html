@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sailor_Hang_Hae</title>
+  <title>Create Store - Sailor Hang Hae</title>
   <link rel="stylesheet" th:href="@{/css/style.css}" />
 
   <style>
+
     .header {
       position: fixed;
       top: 0;
@@ -112,14 +113,35 @@
     }
 
     body {
+      /* background-image: url("/images/delivery.jpg");
+    background-size: cover;
+    background-repeat: no-repeat; */
       background-color: aliceblue;
       padding: 8rem;
       background-attachment: fixed;
     }
 
+    /* body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+    } */
+
+    /* html {
+    height: 100%;
+    } */
+
     * {
       box-sizing: border-box;
     }
+
+
+
 
 
 
@@ -134,7 +156,7 @@
       height: 100vh;
     }
 
-    .login-container {
+    .signup-container {
       background-color: #fff;
       padding: 40px;
       border-radius: 10px;
@@ -143,19 +165,19 @@
       width: 100%;
     }
 
-    .login-container h2 {
+    .signup-container h2 {
       margin-top: 0;
       margin-bottom: 20px;
       text-align: center;
       color: #333;
     }
 
-    .login-form {
+    .signup-form {
       display: flex;
       flex-direction: column;
     }
 
-    .login-form input {
+    .signup-form input {
       padding: 10px;
       margin-bottom: 10px;
       border: 1px solid #ccc;
@@ -163,7 +185,7 @@
       font-size: 16px;
     }
 
-    .login-form button {
+    .signup-form button {
       padding: 10px;
       background-color: teal;
       color: #fff;
@@ -173,22 +195,22 @@
       font-size: 16px;
     }
 
-    .login-form button:hover {
-      background-color: #35cccc;
+    .signup-form button:hover {
+      background-color: #2cb6b6;
     }
 
-    .login-form p {
+    .signup-form p {
       margin-top: 10px;
       font-size: 14px;
       text-align: center;
     }
 
-    .login-form a {
+    .signup-form a {
       color: teal;
       text-decoration: none;
     }
 
-    .login-form a:hover {
+    .signup-form a:hover {
       text-decoration: underline;
     }
   </style>
@@ -201,19 +223,14 @@
   </div>
   <div class="header-center">
     <form class="input-form">
-      <input
-              class="input"
-              type="search"
-              id="searchQuery"
-              placeholder="주변 맛집을 검색해 보세요"
-      />
+      <input class="input" type="search" id="searchQuery" placeholder="주변 맛집을 검색해 보세요"/>
       <button class="input-button">검색</button>
     </form>
   </div>
   <div class="header-right">
     <nav class="menu">
-      <span class="menu-button">SIGN UP</span>
-      <span class="menu-button">SIGN IN</span>
+      <a class="menu-button" href="/signup">SIGN UP</a>
+      <a class="menu-button" href="/login">SIGN IN</a>
     </nav>
   </div>
 </header>
@@ -221,32 +238,48 @@
 <!-- main -->
 <main>
   <div class="main-background">
-    <!-- 로그인 페이지 -->
-    <div class="login-container">
-      <h2>로그인</h2>
-      <form class="login-form" id="loginForm" method="post">
-        <input type="text" id="email" name="email" placeholder="이메일">
-        <input type="password" id="password" name="password" placeholder="비밀번호">
-        <button type="submit" id="loginBtn">로그인</button>
+    <!-- 회원가입 페이지 -->
+    <div class="signup-container">
+      <h2>회원가입</h2>
+      <form id="createStoreForm">
+        <input type="text" id="storeName" name="storeName" placeholder="가게명">
+        <input type="text" id="ownerName" name="ownerName" placeholder="사장이름">
+        <input type="text" id="address" name="address" placeholder="매장주소">
+        <input type="text" id="phone" name="phone" placeholder="전화번호">
+<!--        <input type="text" id="role" name="role" placeholder="사장님이라면 사장님이라고 입력해주세요">-->
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select id="category" name="category">
+            <option th:each="category : ${categories}"
+                    th:value="${category.key}"
+                    th:text="${category.value}">Category</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <button type="submit">매장 생성</button>
+        </div>
       </form>
-      <p>계정이 없으신가요? <a href="/sail/signup">회원가입</a></p>
     </div>
-    <!-- 로그인 페이지 끝 -->
+    <!-- 회원가입 페이지 끝 -->
   </div>
 </main>
 
 <!-- JavaScript 코드 추가 -->
 <script>
-  document.getElementById("loginForm").addEventListener("submit", function (event) {
-    event.preventDefault(); // 기본 동작 중지
+  document.getElementById("createStoreForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
     const formData = {
-      email: document.getElementById("email").value,
-      password: document.getElementById("password").value,
+      storeName: document.getElementById("storeName").value,
+      ownerName: document.getElementById("ownerName").value,
+      address: document.getElementById("address").value,
+      phone: document.getElementById("phone").value,
+      category: document.getElementById("category").value,
     };
 
     console.log(formData)
 
-    fetch("/sail/user/login", { // 서버에 POST 요청 보내기
+    fetch("/sail/store", { // 서버에 POST 요청 보내기
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -256,13 +289,13 @@
             .then(response => {
               console.log(response)
               if (response.status === 200) {
-                // 로그인 성공 시 알림창 표시
-                alert("로그인 성공!");
+                // 회원가입 성공 시 알림창 표시
+                alert("매장생성 성공!");
                 window.location.href = "/"; // 홈페이지로 이동
               } else {
                 // 회원가입 실패 시 알림창 표시
-                alert("로그인 실패. 입력 정보를 확인해주세요.");
-                console.error("로그인 실패:", response.message);
+                alert("사장님이 아니거나 이미 매장을 보유하고 있습니다. 확인해주세요.");
+                console.error("매장생성 실패:", response.message);
               }
             })
             .catch(error => {
@@ -272,5 +305,6 @@
             });
   });
 </script>
+
 </body>
 </html>

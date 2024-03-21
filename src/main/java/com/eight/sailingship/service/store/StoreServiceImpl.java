@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -94,7 +95,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     @Transactional
     public Store createStore(StoreRequestDto requestDto, String ownerEmail) {
-    // category 값이 null인 경우 기본값 설정
+        // category 값이 null인 경우 기본값 설정
         String categoryStr = requestDto.getCategory() == null ? "ETC" : requestDto.getCategory().toUpperCase();
         StoreEnum category = StoreEnum.valueOf(categoryStr);
 
@@ -105,16 +106,21 @@ public class StoreServiceImpl implements StoreService {
         store.setStoreName(requestDto.getStoreName());
         store.setOwnerName(requestDto.getOwnerName());
 
-        Store savedStore = storeRepository.save(store);
+        // Check if the owner already has a store
+        Optional<User> ownerOptional = userRepository.findByEmail(ownerEmail);
+        User owner = ownerOptional.orElseThrow(() -> new RuntimeException("Owner not found with email: " + ownerEmail));
 
-        User owner = userRepository.findByEmail(ownerEmail);
-
-        if (owner == null) {
-            throw new RuntimeException("Owner not found with email: " + ownerEmail);
+        if (owner.getStore() != null) {
+            // If the user already has a store, throw an exception
+            throw new IllegalStateException("User already has a store assigned. Cannot create another.");
         }
+
+        Store savedStore = storeRepository.save(store);
         owner.setStore(savedStore);
         userRepository.save(owner);
 
         return savedStore;
     }
+
+
 }

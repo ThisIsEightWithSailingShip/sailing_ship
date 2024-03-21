@@ -2,13 +2,18 @@ package com.eight.sailingship.controller;
 
 import com.eight.sailingship.dto.store.StoreRequestDto;
 import com.eight.sailingship.entity.Store;
+import com.eight.sailingship.entity.StoreEnum;
 import com.eight.sailingship.service.store.StoreService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -49,12 +54,21 @@ public class StoreController {
 
     // 매장 생성
     @PostMapping("/sail/store")
-    public String createStore(@ModelAttribute StoreRequestDto requestDto) {
-
+    @PreAuthorize("hasRole('OWNER')")
+    public String createStore(@RequestBody StoreRequestDto requestDto) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String ownerEmail = ((UserDetails)principal).getUsername();
-
+        String ownerEmail = ((UserDetails) principal).getUsername();
         storeService.createStore(requestDto, ownerEmail);
         return "redirect:/";
     }
+    @GetMapping("/sail/store")
+    public String showCreateStoreForm(Model model) {
+        var categories = Arrays.stream(StoreEnum.values())
+                .collect(Collectors.toMap(Enum::name, e -> e.getRole()));
+
+        model.addAttribute("categories", categories);
+
+        return "store/store";
+    }
+
 }

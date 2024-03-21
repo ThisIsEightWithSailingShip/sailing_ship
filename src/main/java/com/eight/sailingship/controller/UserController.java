@@ -15,17 +15,6 @@ public class UserController {
 
     private final UserService userService;
 
-//    @GetMapping("/admin")
-//    public String adminP() {
-//
-//        return "admin";
-//    }
-//    @GetMapping("/test")
-//    public String admin2P() {
-//
-//        return "test";
-//    }
-
 
     @GetMapping("/sail/login")
     public String login(){
