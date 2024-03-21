@@ -2,6 +2,7 @@ package com.eight.sailingship.controller;
 
 import com.eight.sailingship.dto.user.UserSignUpRequestDto;
 import com.eight.sailingship.service.customer.UserService;
+import com.eight.sailingship.service.customer.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
