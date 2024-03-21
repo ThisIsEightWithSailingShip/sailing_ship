@@ -3,19 +3,18 @@ package com.eight.sailingship.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.mapping.ToOne;
 
 import java.util.List;
 
 @Entity
-@Table(name = "customers")
+@Table(name = "users")
 @Getter
 @Setter
-public class Customer {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "customer_id")
-    private Long customerId;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(name = "email")
     private String email;
@@ -24,7 +23,8 @@ public class Customer {
     private String password;
 
     @Column(name = "role")
-    private String role;
+//    @Enumerated(EnumType.STRING)
+    private RoleEnum role;
 
     @Column(name = "nickname")
     private String nickname;
@@ -45,12 +45,12 @@ public class Customer {
     @JoinColumn(name = "store_id", unique = true)
     private Store store;
 
-   @OneToMany(mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+   @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
      private List<Order> orderList;
 
     public void addOrderList(Order order) {
         this.orderList.add(order);
-        order.setCustomer(this);
+        order.setUser(this);
     }
 
 }

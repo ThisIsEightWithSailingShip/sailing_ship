@@ -1,8 +1,6 @@
 package com.eight.sailingship.config;
 
-
-import com.eight.sailingship.jwt.JWTFilter;
-import com.eight.sailingship.jwt.JWTUtil;
+import com.eight.sailingship.auth.jwt.JwtUtil;
 import com.eight.sailingship.jwt.LoginFilter;
 import com.eight.sailingship.repository.RefreshRepository;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -23,9 +21,9 @@ public class SecurityConfig {
 
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
     private final AuthenticationConfiguration authenticationConfiguration;
-    private final JWTUtil jwtUtil;
+    private final JwtUtil jwtUtil;
     private final RefreshRepository refreshRepository;
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshRepository refreshRepository) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JwtUtil jwtUtil, RefreshRepository refreshRepository) {
 
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;

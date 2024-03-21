@@ -1,13 +1,14 @@
 package com.eight.sailingship.service.store;
 
-import com.eight.sailingship.dto.menu.MenuRequestDto;
+
 import com.eight.sailingship.dto.store.StoreRequestDto;
-import com.eight.sailingship.entity.Customer;
+
 import com.eight.sailingship.entity.Menu;
 import com.eight.sailingship.entity.Store;
 import com.eight.sailingship.entity.StoreEnum;
-import com.eight.sailingship.repository.CustomerRepository;
+import com.eight.sailingship.entity.User;
 import com.eight.sailingship.repository.StoreRepository;
+import com.eight.sailingship.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +22,7 @@ import java.util.List;
 public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
-    private final CustomerRepository customerRepository;
+    private final UserRepository userRepository;
 
     // 매장 전체 페이지 조회
     @Override
@@ -106,13 +107,13 @@ public class StoreServiceImpl implements StoreService {
 
         Store savedStore = storeRepository.save(store);
 
-        Customer owner = customerRepository.findByEmail(ownerEmail);
+        User owner = userRepository.findByEmail(ownerEmail);
 
         if (owner == null) {
             throw new RuntimeException("Owner not found with email: " + ownerEmail);
         }
         owner.setStore(savedStore);
-        customerRepository.save(owner);
+        userRepository.save(owner);
 
         return savedStore;
     }

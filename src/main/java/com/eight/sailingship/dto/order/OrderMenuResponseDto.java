@@ -1,10 +1,9 @@
-package com.eight.sailingship.dto.Order;
+package com.eight.sailingship.dto.order;
 
 
 import com.eight.sailingship.entity.Menu;
 import com.eight.sailingship.entity.OrderMenu;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class OrderMenuResponseDto {

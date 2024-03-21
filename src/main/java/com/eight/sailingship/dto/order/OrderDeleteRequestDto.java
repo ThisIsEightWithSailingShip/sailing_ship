@@ -1,4 +1,4 @@
-package com.eight.sailingship.dto.Order;
+package com.eight.sailingship.dto.order;
 
 public class OrderDeleteRequestDto {
     private long orderId;
