@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Store - Sailor Hang Hae</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+
+  <style>
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 9rem;
+      color: white;
+      background-color: teal;
+      opacity: 0.85;
+      /* background-color: teal; */
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      z-index: 3;
+    }
+
+    .header-left {
+      display: flex;
+      justify-content: center;
+      width: 25em;
+    }
+
+    .header-center {
+      width: 50em;
+      display: flex;
+      justify-content: center;
+    }
+
+    .header-right {
+      width: 25em;
+      display: flex;
+      justify-content: center;
+    }
+
+    .input {
+      width: 15rem;
+      height: 2rem;
+      border-radius: 5px;
+    }
+
+    .input-button {
+      height: 2rem;
+    }
+
+    .input-button:hover {
+      cursor: pointer;
+    }
+
+    .input-button:active {
+      cursor: grab;
+    }
+
+    .menu-button {
+      transition: transform 0.3s ease;
+    }
+
+    .menu-button:hover {
+      transform: scale(1.1);
+      cursor: pointer;
+    }
+
+    .menu-button:active {
+      transform: scale(0.9);
+      cursor: grab;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: row;
+      width: 10rem;
+      justify-content: space-around;
+    }
+
+    .logo {
+      width: 6rem;
+      height: 6rem;
+      z-index: 20;
+    }
+
+    h1,
+    p {
+      margin: 0;
+      color: black;
+    }
+
+    main {
+      padding: 1rem;
+      position: relative;
+      margin-top: 2rem;
+    }
+
+    .main-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      z-index: 2;
+    }
+
+    body {
+      /* background-image: url("/images/delivery.jpg");
+    background-size: cover;
+    background-repeat: no-repeat; */
+      background-color: aliceblue;
+      padding: 8rem;
+      background-attachment: fixed;
+    }
+
+    /* body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+    } */
+
+    /* html {
+    height: 100%;
+    } */
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+
+
+
+
+
+
+
+
+    .main-background {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .signup-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .signup-container h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #333;
+    }
+
+    .signup-form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .signup-form input {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .signup-form button {
+      padding: 10px;
+      background-color: teal;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .signup-form button:hover {
+      background-color: #2cb6b6;
+    }
+
+    .signup-form p {
+      margin-top: 10px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .signup-form a {
+      color: teal;
+      text-decoration: none;
+    }
+
+    .signup-form a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<!-- header -->
+<header class="header">
+  <div class="header-left">
+    <img th:src="@{/images/logo.png}" class="logo" />
+  </div>
+  <div class="header-center">
+    <form class="input-form">
+      <input class="input" type="search" id="searchQuery" placeholder="주변 맛집을 검색해 보세요"/>
+      <button class="input-button">검색</button>
+    </form>
+  </div>
+  <div class="header-right">
+    <a href="/sail/signup" class="menu-button" id="signup-btn">SIGN UP</a>
+    <a href="/sail/login" class="menu-button" id="signin-btn">SIGN IN</a>
+    <a class="menu-button" id="owner-btn1" style="display: none;">주문 정보</a>
+    <a href="/owner-btn2" class="menu-button" id="owner-btn2" style="display: none;">매장 정보</a>
+    <a href="/your-link-url" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
+    <a class="menu-button" id="logout-btn" style="display: none;" href="javascript:logout()">LOGOUT</a>
+  </div>
+
+
+
+</header>
+
+<!-- main -->
+<main>
+  <div class="main-background">
+    <!-- 매장생성 페이지 -->
+    <div class="signup-container">
+      <h2>매장생성</h2>
+      <form class="signup-form" id="createStoreForm">
+        <input type="text" id="storeName" name="storeName" placeholder="가게명">
+        <input type="text" id="ownerName" name="ownerName" placeholder="사장이름">
+        <input type="text" id="address" name="address" placeholder="매장주소">
+        <input type="text" id="phone" name="phone" placeholder="전화번호">
+        <div class="form-group">
+          <label for="category">카테고리</label>
+          <select id="category" name="category">
+            <option th:each="category : ${categories}"
+                    th:value="${category.key}"
+                    th:text="${category.value}">카테고리</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <button type="submit">매장 생성</button>
+        </div>
+      </form>
+    </div>
+    <!-- 매장생성 페이지 끝 -->
+  </div>
+</main>
+<script src="/js/authModule.js"></script>
+<!-- JavaScript 코드 추가 -->
+<script>
+  document.getElementById("createStoreForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const formData = {
+      storeName: document.getElementById("storeName").value,
+      ownerName: document.getElementById("ownerName").value,
+      address: document.getElementById("address").value,
+      phone: document.getElementById("phone").value,
+      category: document.getElementById("category").value,
+    };
+
+    console.log(formData)
+
+    fetch("/sail/store", { // 서버에 POST 요청 보내기
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json(); // 여기에서 응답을 JSON으로 파싱합니다.
+            })
+            .then(data => {
+              // 파싱된 데이터에서 storeId를 사용하여 리디렉션합니다.
+              alert("매장생성 성공!");
+              window.location.href = `/sail/store/${data.storeId}`; // 성공 시 매장 상세 페이지로 리디렉션
+            })
+            .catch(error => {
+              // 오류 발생 시 처리
+              alert("오류 발생. 다시 시도해주세요.");
+              console.error("오류 발생:", error);
+            });
+  });
+</script>
+
+</body>
+</html>
