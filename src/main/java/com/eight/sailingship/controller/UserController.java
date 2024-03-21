@@ -61,8 +61,10 @@ public class UserController {
     public UserInfoDto getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         String email = userDetails.getUser().getEmail();
         RoleEnum role = userDetails.getUser().getRole();
-        boolean isAdmin = (role == RoleEnum.OWNER);
+        boolean isOwner = (role == RoleEnum.OWNER);
 
-        return new UserInfoDto(email, isAdmin);
+        System.out.println(email + ", " + role + ", " + isOwner);
+
+        return new UserInfoDto(email, isOwner);
     }
 }
