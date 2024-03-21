@@ -19,4 +19,7 @@ public interface StoreService {
 
     //매장 생성
     Store createStore(StoreRequestDto requestDto, String ownerEmail);
+
+    boolean checkIfUserHasStore(String userEmail);
+
 }

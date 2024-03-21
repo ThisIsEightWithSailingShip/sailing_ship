@@ -228,11 +228,16 @@
     </form>
   </div>
   <div class="header-right">
-    <nav class="menu">
-      <a class="menu-button" href="/signup">SIGN UP</a>
-      <a class="menu-button" href="/login">SIGN IN</a>
-    </nav>
+    <a href="/sail/signup" class="menu-button" id="signup-btn">SIGN UP</a>
+    <a href="/sail/login" class="menu-button" id="signin-btn">SIGN IN</a>
+    <a class="menu-button" id="owner-btn1" style="display: none;">주문 정보</a>
+    <a href="/owner-btn2" class="menu-button" id="owner-btn2" style="display: none;">매장 정보</a>
+    <a href="/your-link-url" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
+    <a class="menu-button" id="logout-btn" style="display: none;" href="javascript:logout()">LOGOUT</a>
   </div>
+
+
+
 </header>
 
 <!-- main -->
@@ -241,18 +246,18 @@
     <!-- 회원가입 페이지 -->
     <div class="signup-container">
       <h2>회원가입</h2>
-      <form id="createStoreForm">
+      <form class="signup-form" id="createStoreForm">
         <input type="text" id="storeName" name="storeName" placeholder="가게명">
         <input type="text" id="ownerName" name="ownerName" placeholder="사장이름">
         <input type="text" id="address" name="address" placeholder="매장주소">
         <input type="text" id="phone" name="phone" placeholder="전화번호">
 <!--        <input type="text" id="role" name="role" placeholder="사장님이라면 사장님이라고 입력해주세요">-->
         <div class="form-group">
-          <label for="category">Category</label>
+          <label for="category">카테고리</label>
           <select id="category" name="category">
             <option th:each="category : ${categories}"
                     th:value="${category.key}"
-                    th:text="${category.value}">Category</option>
+                    th:text="${category.value}">카테고리</option>
           </select>
         </div>
         <div class="form-group">
@@ -263,7 +268,7 @@
     <!-- 회원가입 페이지 끝 -->
   </div>
 </main>
-
+<script src="/js/authModule.js"></script>
 <!-- JavaScript 코드 추가 -->
 <script>
   document.getElementById("createStoreForm").addEventListener("submit", function(event) {

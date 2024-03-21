@@ -122,5 +122,16 @@ public class StoreServiceImpl implements StoreService {
         return savedStore;
     }
 
+    @Override
+    public boolean checkIfUserHasStore(String userEmail) {
+        Optional<User> userOptional = userRepository.findByEmail(userEmail);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return user.getStore() != null;
+        }
+        return false;
+    }
+
+
 
 }

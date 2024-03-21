@@ -71,4 +71,18 @@ public class StoreController {
         return "store/store";
     }
 
+    @GetMapping("/owner-btn2")
+    public String redirectToAppropriatePage() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userEmail = ((UserDetails) principal).getUsername();
+
+        boolean hasStore = storeService.checkIfUserHasStore(userEmail);
+
+        if (hasStore) {
+            return "redirect:/"; // 메인 페이지로 리디렉션
+        } else {
+            return "redirect:/sail/store"; // 매장 생성 페이지로 리디렉션
+        }
+    }
+
 }
