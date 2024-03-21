@@ -5,7 +5,6 @@ import com.eight.sailingship.dto.user.UserInfoDto;
 import com.eight.sailingship.dto.user.UserSignUpRequestDto;
 import com.eight.sailingship.entity.RoleEnum;
 import com.eight.sailingship.service.customer.UserService;
-import com.eight.sailingship.service.customer.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

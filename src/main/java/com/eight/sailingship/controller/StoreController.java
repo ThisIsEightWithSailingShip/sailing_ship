@@ -7,7 +7,6 @@ import com.eight.sailingship.service.store.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -82,7 +81,7 @@ public class StoreController {
 
         model.addAttribute("categories", categories);
 
-        return "store/store";
+        return "store-create";
     }
 
     @GetMapping("/owner-btn2")
