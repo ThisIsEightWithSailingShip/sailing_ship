@@ -59,8 +59,13 @@ public class UserController {
     @GetMapping("/sail/authInfo")
     @ResponseBody
     public UserInfoDto getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        String email = userDetails.getUser().getEmail();
+        if (userDetails == null) {
+            return new UserInfoDto(false, false);
+        }
+
+        String emailData = userDetails.getUser().getEmail();
         RoleEnum role = userDetails.getUser().getRole();
+        boolean email = true;
         boolean isOwner = (role == RoleEnum.OWNER);
 
         System.out.println(email + ", " + role + ", " + isOwner);
