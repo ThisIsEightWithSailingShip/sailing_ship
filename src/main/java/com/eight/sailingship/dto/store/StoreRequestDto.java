@@ -10,4 +10,5 @@ public class StoreRequestDto {
     private String phone;
     private String category;
     private String storeName;
+    private String ownerName;
 }
