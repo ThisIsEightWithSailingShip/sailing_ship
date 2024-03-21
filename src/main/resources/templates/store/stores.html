@@ -25,10 +25,12 @@
         </form>
       </div>
       <div class="header-right">
-        <nav class="menu">
-          <span class="menu-button">SIGN UP</span>
-          <span class="menu-button">SIGN IN</span>
-        </nav>
+          <a href="/sail/signup" class="menu-button" id="signup-btn">SIGN UP</a>
+          <a href="/sail/login" class="menu-button" id="signin-btn">SIGN IN</a>
+          <a class="menu-button" id="owner-btn1" style="display: none;">주문 정보</a>
+          <a class="menu-button" id="owner-btn2" style="display: none;">매장 정보</a>
+          <a href="/your-link-url" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
+          <a class="menu-button" id="logout-btn" style="display: none;" href="javascript:logout()">LOGOUT</a>
       </div>
     </header>
 
@@ -50,5 +52,6 @@
       </div>
     </main>
     <script src="/js/stores.js"></script>
+    <script src="/js/authModule.js"></script>
   </body>
 </html>

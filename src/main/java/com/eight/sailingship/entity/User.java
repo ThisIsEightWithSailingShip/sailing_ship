@@ -1,7 +1,9 @@
 package com.eight.sailingship.entity;
 
+import com.eight.sailingship.dto.user.UserSignUpRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @Setter
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,8 +48,18 @@ public class User {
     @JoinColumn(name = "store_id", unique = true)
     private Store store;
 
-   @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-     private List<Order> orderList;
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private List<Order> orderList;
+
+    public User(UserSignUpRequestDto requestDto, String encodedPassword, RoleEnum role) {
+        this.email = requestDto.getEmail();
+        this.password = encodedPassword;
+        this.role = role;
+        this.nickname = requestDto.getNickname();
+        this.address = requestDto.getAddress();
+        this.phone = requestDto.getPhone();
+        this.account = role == RoleEnum.CUSTOMER ? 1000000 : 0;
+    }
 
     public void addOrderList(Order order) {
         this.orderList.add(order);
