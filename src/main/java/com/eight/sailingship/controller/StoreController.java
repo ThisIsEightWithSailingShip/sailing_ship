@@ -7,7 +7,6 @@ import com.eight.sailingship.service.store.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -56,6 +56,7 @@ public class StoreController {
     @PutMapping("/sail/store/update/{storeId}")
     public String updateStore(@PathVariable Long storeId, @ModelAttribute StoreRequestDto requestDto, Principal principal) {
         String ownerEmail = principal.getName();
+        //AuthenticationPrincipal 어노테이션 수정
         storeService.updateStore(storeId, requestDto, ownerEmail);
         return "redirect:/sail/store/" + storeId;
     }
@@ -66,6 +67,7 @@ public class StoreController {
     @Secured("ROLE_OWNER")
     public ResponseEntity<?> createStore(@RequestBody StoreRequestDto requestDto) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //AuthenticationPrincipal 어노테이션 수정
         String ownerEmail = ((UserDetails) principal).getUsername();
         Store createdStore = storeService.createStore(requestDto, ownerEmail);
         // 생성된 매장의 ID를 JSON 형태로 반환
@@ -77,17 +79,21 @@ public class StoreController {
     @GetMapping("/sail/store")
     @Secured("ROLE_OWNER")
     public String showCreateStoreForm(Model model) {
-        var categories = Arrays.stream(StoreEnum.values())
-                .collect(Collectors.toMap(Enum::name, e -> e.getRole()));
+        //var categories = Arrays.stream(StoreEnum.values())
+          //      .collect(Collectors.toMap(Enum::name, e -> e.getRole()));
+        //리스트로 수정
+        List<String> categoriesList = Arrays.stream(StoreEnum.values())
+                .map(Enum::name)
+                .collect(Collectors.toList());
+        model.addAttribute("categoriesList", categoriesList);
 
-        model.addAttribute("categories", categories);
-
-        return "store/store";
+        return "store-create";
     }
 
     @GetMapping("/owner-btn2")
     public String redirectToAppropriatePage() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //AuthenticationPrincipal 어노테이션 수정
         String userEmail = ((UserDetails) principal).getUsername();
 
         boolean hasStore = storeService.checkIfUserHasStore(userEmail);
