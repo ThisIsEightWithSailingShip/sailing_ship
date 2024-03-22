@@ -177,12 +177,30 @@
       flex-direction: column;
     }
 
+    .auth-tab {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
     .signup-form input {
       padding: 10px;
       margin-bottom: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
       font-size: 16px;
+    }
+
+    .email {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .authBtn {
+      height: 40px;
     }
 
     .signup-form button {
@@ -266,7 +284,14 @@
     <div class="signup-container">
       <h2>회원가입</h2>
       <form class="signup-form" id="signupForm" method="post">
-        <input type="email" id="email" name="email" placeholder="이메일">
+        <div class="auth-tab">
+          <input type="email" class="email" name="email" placeholder="이메일">
+          <button class="authBtn">인증번호 발급</button>
+        </div>
+        <div class="auth-tab">
+          <input type="text" class="email" name="authNum" placeholder="인증번호">
+          <button class="authBtn">인증번호 확인</button>
+        </div>
         <input type="password" id="password" name="password" placeholder="비밀번호">
         <input type="text" id="nickname" name="nickname" placeholder="닉네임">
         <input type="text" id="address" name="address" placeholder="주소">
