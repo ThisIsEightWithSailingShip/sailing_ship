@@ -107,7 +107,7 @@ public class StoreController {
             Long storeId = storeService.findStoreIdByUserEmail(userEmail);
             return "redirect:/sail/store/" + storeId;
         } else {
-            return "redirect:/sail/store";
+            return "redirect:/sail/store-create";
         }
     }
 
