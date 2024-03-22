@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.eight.sailingship.constants.order.Messages.*;
+
 @Controller
 @RequiredArgsConstructor
 public class OrderController {
@@ -27,13 +29,13 @@ public class OrderController {
                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             orderService.createOrder(orderBeforePayRequestDto, userDetails.getUser());
-            return ResponseEntity.ok("주문이 성공적으로 처리되었습니다.");
+            return ResponseEntity.ok(COMPLETE_ORDER);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (NullPointerException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당하는 매장 또는 메뉴가 존재하지 않습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(NOT_FOUND_STORE_OR_MENU);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류로 인해 주문을 처리할 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(SERVER_ERROR);
         }
     }
 
@@ -54,12 +56,11 @@ public class OrderController {
             orderService.processOrderPayment(orderAfterPayRequestDto, userDetails);
             return ResponseEntity.ok().build();
         }catch (BalanceInsufficientException e){
-            System.out.println("잔액부족");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류로 인해 주문을 처리할 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(SERVER_ERROR);
         }
 
     }
@@ -83,7 +84,7 @@ public class OrderController {
         }catch (IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류로 인해 주문을 처리할 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(SERVER_ERROR);
         }
 
     }
