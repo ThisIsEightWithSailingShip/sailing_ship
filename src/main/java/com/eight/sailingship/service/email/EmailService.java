@@ -11,9 +11,12 @@ import java.util.Random;
 
 @Service
 public class EmailService {
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
     private int authNumber;
+
+    public EmailService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
 
     //임의의 6자리 양수를 반환합니다.
     public void makeRandomNumber() {
@@ -34,7 +37,7 @@ public class EmailService {
         String toMail = email;
         String title = "회원 가입 인증 이메일 입니다."; // 이메일 제목
         String content =
-                "나의 APP을 방문해주셔서 감사합니다." + 	//html 형식으로 작성 !
+                "돛단배달의 민족에 가입해주셔서 감사합니다." + 	//html 형식으로 작성 !
                         "<br><br>" +
                         "인증 번호는 " + authNumber + "입니다." +
                         "<br>" +
@@ -61,5 +64,18 @@ public class EmailService {
 
 
     }
+
+    // 검증 로직
+//    public boolean CheckAuthNum(String email,String authNum){
+//        if(redisUtil.getData(authNum)==null){
+//            return false;
+//        }
+//        else if(redisUtil.getData(authNum).equals(email)){
+//            return true;
+//        }
+//        else{
+//            return false;
+//        }
+//    }
 
 }

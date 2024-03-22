@@ -67,6 +67,7 @@ public class WebSecurityConfig {
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Swagger UI 접근 허용
                                 .requestMatchers("/").permitAll()
+                                .requestMatchers("/sail/user/email-verify").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/sail/signup").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/sail/signup").permitAll()
                                 .requestMatchers("/sail/login").permitAll()
