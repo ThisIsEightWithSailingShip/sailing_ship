@@ -135,6 +135,15 @@
                 // 오류 발생 시 처리할 내용을 여기에 추가합니다.
             });
     }
+
+    const params = new URLSearchParams(window.location.search);
+    const message = params.get('message');
+
+    // 메시지가 존재하는 경우 알림창 표시
+    if (message) {
+        alert(message);
+    }
+
 </script>
 
 </body>
