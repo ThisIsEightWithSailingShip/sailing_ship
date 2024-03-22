@@ -37,8 +37,9 @@ public class ImageController {
     //@AuthenticationPrincipal UserDetailsImpl userDetails 이거 넣어서 추후에 처리.
     @PostMapping("/image")
     public ResponseEntity<ImageUploadResponse> saveImage(@RequestParam(value = "image") MultipartFile images,
-                                                         @RequestParam(value = "item_itemId") Long itemId
+                                                         @RequestParam(value = "menu_menuId") Long menuId,
+                                                         @AuthenticationPrincipal UserDetailsImpl userDetails
     ) throws IOException {
-        return imageService.saveImage(images, itemId, 1L);
+        return imageService.saveMenuImage(images, menuId, userDetails);
     }
 }
