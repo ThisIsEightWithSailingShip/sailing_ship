@@ -1,5 +1,6 @@
 package com.eight.sailingship.service.email;
 
+import com.eight.sailingship.service.redis.RedisUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,12 @@ import java.util.Random;
 @Service
 public class EmailService {
     private final JavaMailSender mailSender;
+    private final RedisUtil redisUtil;
     private int authNumber;
 
-    public EmailService(JavaMailSender mailSender) {
+    public EmailService(JavaMailSender mailSender, RedisUtil redisUtil) {
         this.mailSender = mailSender;
+        this.redisUtil = redisUtil;
     }
 
     //임의의 6자리 양수를 반환합니다.
@@ -66,16 +69,11 @@ public class EmailService {
     }
 
     // 검증 로직
-//    public boolean CheckAuthNum(String email,String authNum){
-//        if(redisUtil.getData(authNum)==null){
-//            return false;
-//        }
-//        else if(redisUtil.getData(authNum).equals(email)){
-//            return true;
-//        }
-//        else{
-//            return false;
-//        }
-//    }
+    public boolean CheckAuthNum(String email,String authNum){
+        if(redisUtil.getData(authNum) == null){
+            return false;
+        }
+        else return redisUtil.getData(authNum).equals(email);
+    }
 
 }
