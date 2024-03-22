@@ -285,12 +285,12 @@
       <h2>회원가입</h2>
       <form class="signup-form" id="signupForm" method="post">
         <div class="auth-tab">
-          <input type="email" class="email" name="email" placeholder="이메일">
-          <button class="authBtn">인증번호 발급</button>
+          <input type="email" id="email" class="email" name="email" placeholder="이메일">
+          <button type="button" class="authBtn" onclick="sendAuthCode()">인증번호 발급</button>
         </div>
         <div class="auth-tab">
-          <input type="text" class="email" name="authNum" placeholder="인증번호">
-          <button class="authBtn">인증번호 확인</button>
+          <input type="text" id="authNum" class="email" name="authNum" placeholder="인증번호">
+          <button type="button" class="authBtn">인증번호 확인</button>
         </div>
         <input type="password" id="password" name="password" placeholder="비밀번호">
         <input type="text" id="nickname" name="nickname" placeholder="닉네임">
@@ -345,6 +345,31 @@
               console.error("오류 발생:", error);
             });
   });
+
+  function sendAuthCode() {
+    const email = document.getElementById("email").value;
+
+    fetch("/sail/user/email-verify", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email: email })
+    })
+            .then(response => {
+              if (response.status === 200) {
+                console.log(response.body)
+                alert("인증번호를 이메일로 전송했습니다.");
+              } else {
+                alert("인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+                console.error("인증번호 전송 실패:", response.message);
+              }
+            })
+            .catch(error => {
+              alert("오류 발생. 다시 시도해주세요.");
+              console.error("오류 발생:", error);
+            });
+  }
 </script>
 
 </body>
