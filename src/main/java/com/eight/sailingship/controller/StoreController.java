@@ -8,13 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -42,14 +40,16 @@ public class StoreController {
     // 매장 수정 페이지 조회
     @GetMapping("/sail/store/update/{storeId}")
     public String updateStore(@PathVariable Long storeId, Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        //String ownerEmail = principal.getName();
+
         String ownerEmail = userDetails.getUsername();
         Store store = storeService.getUpdateStore(storeId, ownerEmail);
         model.addAttribute("store", store);
 
-        var categories = Arrays.stream(StoreEnum.values())
-                .collect(Collectors.toMap(Enum::name, e -> e.getRole()));
-        model.addAttribute("categories", categories);
+        List<String> categoriesList = Arrays.stream(StoreEnum.values())
+                .map(Enum::name)
+                .collect(Collectors.toList());
+
+        model.addAttribute("categoriesList", categoriesList);
 
         return "store/store-update";
     }
@@ -67,10 +67,8 @@ public class StoreController {
     @PostMapping("/sail/store")
     @Secured("ROLE_OWNER")
     public ResponseEntity<?> createStore(@RequestBody StoreRequestDto requestDto, @AuthenticationPrincipal UserDetails userDetails) {
-        //Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        //AuthenticationPrincipal 어노테이션 수정
         String ownerEmail = userDetails.getUsername();
+
         Store createdStore = storeService.createStore(requestDto, ownerEmail);
         // 생성된 매장의 ID를 JSON 형태로 반환
         Map<String, Long> response = new HashMap<>();
@@ -81,25 +79,19 @@ public class StoreController {
     @GetMapping("/sail/store")
     @Secured("ROLE_OWNER")
     public String showCreateStoreForm(Model model) {
-        //var categories = Arrays.stream(StoreEnum.values())
-          //      .collect(Collectors.toMap(Enum::name, e -> e.getRole()));
-
-        //리스트로 수정
         List<String> categoriesList = Arrays.stream(StoreEnum.values())
                 .map(Enum::name)
                 .collect(Collectors.toList());
+
         model.addAttribute("categoriesList", categoriesList);
 
-        return "store-create";
+
+        return "store/store";
     }
 
     @GetMapping("/owner-btn2")
     public String redirectToAppropriatePage(@AuthenticationPrincipal UserDetails userDetails) {
 
-        //Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //String userEmail = ((UserDetails) principal).getUsername();
-
-        //AuthenticationPrincipal 어노테이션 수정
         String userEmail = userDetails.getUsername();
 
         boolean hasStore = storeService.checkIfUserHasStore(userEmail);
@@ -107,7 +99,7 @@ public class StoreController {
             Long storeId = storeService.findStoreIdByUserEmail(userEmail);
             return "redirect:/sail/store/" + storeId;
         } else {
-            return "redirect:/sail/store-create";
+            return "redirect:/sail/store";
         }
     }
 
