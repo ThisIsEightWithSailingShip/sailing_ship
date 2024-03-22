@@ -90,13 +90,19 @@
         <a href="/owner-btn2" class="menu-button" id="owner-btn2" style="display: none;">매장 정보</a>
         <a href="/your-link-url" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
         <a class="menu-button" id="logout-btn" style="display: none;" href="javascript:logout()">LOGOUT</a>
-
     </div>
 </header>
 
 <!-- main -->
 <!-- 매장 이미지 -->
-<img class="store-image" th:src="@{/images/logo.png}" alt="매장 이미지">
+<div>
+    <h3>Store Images</h3>
+    <div>
+        <th:block th:each="image : ${images}">
+            <img th:src="@{${image.url}}" alt="Store Image"/>
+        </th:block>
+    </div>
+</div>
 
 <main>
     <!-- 매장 정보 -->
