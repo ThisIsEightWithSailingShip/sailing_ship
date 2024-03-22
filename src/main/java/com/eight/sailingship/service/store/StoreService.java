@@ -24,5 +24,4 @@ public interface StoreService {
 
     Long findStoreIdByUserEmail(String userEmail);
 
-
 }
