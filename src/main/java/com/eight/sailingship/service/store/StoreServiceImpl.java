@@ -77,7 +77,7 @@ public class StoreServiceImpl implements StoreService {
         store.setPhone(requestDto.getPhone());
         store.setCategory(category);
         store.setStoreName(requestDto.getStoreName());
-        store.setOwnerName(requestDto.getOwnerName());
+        store.setOwnerName(store.getOwnerName());
 
         storeRepository.save(store);
     }

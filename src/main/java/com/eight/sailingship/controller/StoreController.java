@@ -86,7 +86,7 @@ public class StoreController {
         model.addAttribute("categoriesList", categoriesList);
 
 
-        return "store/store";
+        return "store/store-create";
     }
 
     @GetMapping("/owner-btn2")
