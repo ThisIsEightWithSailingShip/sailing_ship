@@ -28,6 +28,7 @@ public class StoreController {
     // 전체 매장 페이지 조회(메인페이지)
     @GetMapping("/")
     public String getStores(Model model) {
+
         return storeService.getStores(model);
     }
 

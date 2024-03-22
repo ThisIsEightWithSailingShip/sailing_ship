@@ -1,5 +1,6 @@
 package com.eight.sailingship.service.order;
 
+import com.eight.sailingship.auth.user.UserDetailsImpl;
 import com.eight.sailingship.dto.order.*;
 import com.eight.sailingship.entity.*;
 import com.eight.sailingship.repository.UserRepository;
@@ -27,7 +28,6 @@ public class OrderServiceImpl implements OrderService{
     @Transactional
     public void makeCart(OrderBeforePayRequestDto orderBeforePayRequestDto, User userDetails) {
 
-        System.out.println(userDetails.getEmail());
         User user = userRepository.findByEmail(userDetails.getEmail()).orElseThrow();
         Optional<Order> justInCart = orderRepository.findByUserAndStatus(user,StatusEnum.JUST_IN_CART);
         if(justInCart.isPresent()){
@@ -47,42 +47,33 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public OrderResponseDto getNotPayOrder() {
-        Order order = orderRepository.findByStatus(StatusEnum.JUST_IN_CART).orElseThrow(
-                ()-> new IllegalArgumentException("결제할 주문이 없습니다")
-        );
+    public OrderResponseDto getNotPayOrder(User userDetails) {
+        User user = userRepository.findByEmail(userDetails.getEmail()).orElseThrow();
+        Order order = orderRepository.findByUserAndStatus(user,StatusEnum.JUST_IN_CART).orElseThrow(()->
+                new NullPointerException("결제 가능한 주문이 존재하지 않습니다"));
         List<OrderMenuResponseDto> orderMenusResponseDto = getOrderMenusResponseDto(order);
-        System.out.println(order.getOrderId());
         return new OrderResponseDto(orderMenusResponseDto,order);
     }
 
     @Override
     @Transactional
-    public void saveOrder(OrderAfterPayRequestDto orderAfterPayRequestDto) {
+    public void saveOrder(OrderAfterPayRequestDto orderAfterPayRequestDto, UserDetailsImpl user) {
         Order order = orderRepository.findById(orderAfterPayRequestDto.getOrderId()).orElseThrow(
                 ()->new NullPointerException("해당하는 주문이 없습니다")
         );
-        order.pay_complete(orderAfterPayRequestDto);
+        if(order.getUser().getUserId().equals(user.getUser().getUserId())) {
+            order.pay_complete(orderAfterPayRequestDto);
+            return;
+        }
+
+        throw new IllegalArgumentException("회원과 일치하지 않는 주문입니다");
+
     }
 
     @Override
-    @Transactional
-    public void save(OrderBeforePayRequestDto orderBeforePayRequestDto) {
-//        Store store = storeRepository.findById(orderBeforePayRequestDto.getStoreId()).orElseThrow(() ->
-//                new NullPointerException("해당하는 매장이 없습니다"));
-//        Order order = new Order(orderBeforePayRequestDto,store, customer);
-//        List<OrderMenuRequestDto> orderMenus = orderBeforePayRequestDto.getMenus();
-//        for (OrderMenuRequestDto orderMenu : orderMenus) {
-//            Menu menu = menuRepository.findById(orderMenu.getMenuId()).orElseThrow(() ->
-//                    new NullPointerException("해당 하는 메뉴가 존재하지 않습니다"));
-//           order.addOrderMenuList(new OrderMenu(menu,orderMenu.getQuantity()));
-//        }
-//        orderRepository.save(order);
-    }
-
-    @Override
-    public List<OrderResponseDto> getOrderList() {
-        List<Order> customerOrders = orderRepository.findAllByOrderByOrderDateDesc(); //orderRepository.findByCustomer();
+    public List<OrderResponseDto> getOrderList(User userDetails) {
+        User user = userRepository.findByEmail(userDetails.getEmail()).orElseThrow();
+        List<Order> customerOrders = orderRepository.findByUser(user); //orderRepository.findByCustomer();
         List<OrderResponseDto> orderResponseDtoList = new ArrayList<>();
         for (Order customerOrder : customerOrders) {
             List<OrderMenuResponseDto> orderMenus = getOrderMenusResponseDto(customerOrder);
@@ -123,10 +114,18 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public void deleteOrder(OrderDeleteRequestDto orderDeleteRequestDto) {
+    public void deleteOrder(OrderDeleteRequestDto orderDeleteRequestDto, UserDetailsImpl userDetails) {
         Order order = orderRepository.findById(orderDeleteRequestDto.getOrderId()).orElseThrow(() ->
                 new NullPointerException("해당하는 주문이 없습니다"));
 
-        orderRepository.delete(order);
+        User user = userDetails.getUser();
+
+        if(order.getUser().getUserId().equals(user.getUserId())){
+            orderRepository.delete(order);
+            return;
+        }
+
+        throw new IllegalArgumentException("회원과 일치하지 않는 주문입니다");
+
     }
 }
