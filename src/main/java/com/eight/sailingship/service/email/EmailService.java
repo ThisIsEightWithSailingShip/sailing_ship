@@ -8,6 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Random;
 
 @Service
@@ -22,20 +23,23 @@ public class EmailService {
     }
 
     //임의의 6자리 양수를 반환합니다.
-    public void makeRandomNumber() {
+    public int makeRandomNumber() {
         Random r = new Random();
         StringBuilder randomNumber = new StringBuilder();
         for(int i = 0; i < 6; i++) {
             randomNumber.append(Integer.toString(r.nextInt(10)));
         }
 
-        authNumber = Integer.parseInt(randomNumber.toString());
+        this.authNumber = Integer.parseInt(randomNumber.toString());
+        return authNumber;
     }
 
 
     //mail을 어디서 보내는지, 어디로 보내는지 , 인증 번호를 html 형식으로 어떻게 보내는지 작성합니다.
     public String joinEmail(String email) {
         makeRandomNumber();
+        String authNum = String.valueOf(authNumber);
+        redisUtil.setDataExpire(email, authNum, 1800000);
         String setFrom = "dionisos198@naver.com"; // email-config에 설정한 자신의 이메일 주소를 입력
         String toMail = email;
         String title = "회원 가입 인증 이메일 입니다."; // 이메일 제목
@@ -69,11 +73,13 @@ public class EmailService {
     }
 
     // 검증 로직
-    public boolean CheckAuthNum(String email,String authNum){
-        if(redisUtil.getData(authNum) == null){
+    public boolean checkAuthNum(String email,String authNum){
+        System.out.println(redisUtil.getData(email));
+
+        if(redisUtil.getData(email) == null){
             return false;
         }
-        else return redisUtil.getData(authNum).equals(email);
+        else return redisUtil.getData(email).equals(authNum);
     }
 
 }
