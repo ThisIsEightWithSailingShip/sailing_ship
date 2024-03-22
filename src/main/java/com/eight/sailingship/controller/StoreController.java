@@ -7,15 +7,15 @@ import com.eight.sailingship.service.store.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -40,33 +40,53 @@ public class StoreController {
 
     // 매장 수정 페이지 조회
     @GetMapping("/sail/store/update/{storeId}")
-    public String updateStore(@PathVariable Long storeId, Model model, Principal principal) {
-        String ownerEmail = principal.getName();
+    public String updateStore(@PathVariable Long storeId, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+
+        String ownerEmail = userDetails.getUsername();
         Store store = storeService.getUpdateStore(storeId, ownerEmail);
+
+        //수정시 해당 사장의 매장인지 확인하는 작업 필요한데...
+
+
         model.addAttribute("store", store);
 
-        var categories = Arrays.stream(StoreEnum.values())
-                .collect(Collectors.toMap(Enum::name, e -> e.getRole()));
-        model.addAttribute("categories", categories);
+//        List<String> categoriesList = Arrays.stream(StoreEnum.values())
+//                .map(Enum::name)
+//                .collect(Collectors.toList());
+//
+//        model.addAttribute("categoriesList", categoriesList);
 
         return "store/store-update";
     }
 
     // 수정 처리
     @PutMapping("/sail/store/update/{storeId}")
-    public String updateStore(@PathVariable Long storeId, @ModelAttribute StoreRequestDto requestDto, Principal principal) {
-        String ownerEmail = principal.getName();
+    public String updateStore(@PathVariable Long storeId, @ModelAttribute StoreRequestDto requestDto, @AuthenticationPrincipal UserDetails userDetails) {
+        String ownerEmail = userDetails.getUsername();
         storeService.updateStore(storeId, requestDto, ownerEmail);
         return "redirect:/sail/store/" + storeId;
     }
 
 
     // 매장 생성
+    @GetMapping("/sail/store")
+    @Secured("ROLE_OWNER")
+    public String showCreateStoreForm(Model model) {
+        List<String> categoriesList = Arrays.stream(StoreEnum.values())
+                .map(Enum::name)
+                .collect(Collectors.toList());
+
+        model.addAttribute("categoriesList", categoriesList);
+
+
+        return "store/store-create";
+    }
+
     @PostMapping("/sail/store")
     @Secured("ROLE_OWNER")
-    public ResponseEntity<?> createStore(@RequestBody StoreRequestDto requestDto) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String ownerEmail = ((UserDetails) principal).getUsername();
+    public ResponseEntity<?> createStore(@RequestBody StoreRequestDto requestDto, @AuthenticationPrincipal UserDetails userDetails) {
+        String ownerEmail = userDetails.getUsername();
+
         Store createdStore = storeService.createStore(requestDto, ownerEmail);
         // 생성된 매장의 ID를 JSON 형태로 반환
         Map<String, Long> response = new HashMap<>();
@@ -74,21 +94,10 @@ public class StoreController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/sail/store")
-    @Secured("ROLE_OWNER")
-    public String showCreateStoreForm(Model model) {
-        var categories = Arrays.stream(StoreEnum.values())
-                .collect(Collectors.toMap(Enum::name, e -> e.getRole()));
-
-        model.addAttribute("categories", categories);
-
-        return "store-create";
-    }
-
     @GetMapping("/owner-btn2")
-    public String redirectToAppropriatePage() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String userEmail = ((UserDetails) principal).getUsername();
+    public String redirectToAppropriatePage(@AuthenticationPrincipal UserDetails userDetails) {
+
+        String userEmail = userDetails.getUsername();
 
         boolean hasStore = storeService.checkIfUserHasStore(userEmail);
         if (hasStore) {

@@ -90,6 +90,7 @@
         <a href="/owner-btn2" class="menu-button" id="owner-btn2" style="display: none;">매장 정보</a>
         <a href="/your-link-url" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
         <a class="menu-button" id="logout-btn" style="display: none;" href="javascript:logout()">LOGOUT</a>
+
     </div>
 </header>
 
@@ -104,7 +105,10 @@
         <h2><span th:text="${store.storeName}">매장 이름</span></h2>
         <p><strong>위치:</strong> <span th:text="${store.address}">매장 주소</span></p>
         <p><strong>전화번호:</strong> <span th:text="${store.phone}">매장 전화번호</span></p>
+        <button onclick="location.href='/sail/store/update/' + document.getElementById('storeId').value">매장 수정</button>
     </div>
+
+
 
     <!-- 카테고리 버튼 -->
     <div class="category-buttons">
