@@ -14,15 +14,15 @@ public interface OrderService {
 
     List<OrderResponseDto> getOrderList(User userDetails);
 
-    void makeCart(OrderBeforePayRequestDto orderBeforePayRequestDto, User userDetails);
+    void createOrder(OrderBeforePayRequestDto orderBeforePayRequestDto, User userDetails);
 
     OrderResponseDto getNotPayOrder(User user);
 
-    void saveOrder(OrderAfterPayRequestDto orderAfterPayRequestDto, UserDetailsImpl user);
+    void processOrderPayment(OrderAfterPayRequestDto orderAfterPayRequestDto, UserDetailsImpl user);
     // 매장 id 기반 해당 주문들 전부 조회
     List<Order> getOrderCheckList(Long storeId);
 
     void completeOrderCheck(Long orderId);
 
-    void deleteOrder(OrderDeleteRequestDto orderDeleteRequestDto, UserDetailsImpl userDetails);
+    void cancelOrder(OrderDeleteRequestDto orderDeleteRequestDto, UserDetailsImpl userDetails);
 }
