@@ -71,6 +71,18 @@
         .add-menu-button:hover {
             background-color: #0056b3;
         }
+
+        .card {
+            /* 기존 카드 스타일링 유지 */
+            position: relative; /* 이미지 위치 조정을 위해 필요할 수 있음 */
+            overflow: hidden; /* 카드 사이즈를 넘어가는 이미지 부분을 숨김 */
+        }
+
+        .card img {
+            width: 100%; /* 카드 너비에 맞게 이미지 너비 조정 */
+            max-height: 200px; /* 이미지 최대 높이 설정, 필요에 따라 조절 */
+            object-fit: cover; /* 이미지 비율을 유지하면서 카드 영역을 완전히 덮도록 조정 */
+        }
     </style>
 
 </head>
@@ -103,6 +115,11 @@
             <p th:text="${menu.introduce}">Introduction</p>
             <p><span>Price: $</span><span th:text="${menu.price}"></span></p>
             <p><span>Category: </span><span th:text="${menu.menuCategory}"></span></p>
+
+            <!-- 이미지 출력 부분 -->
+            <div th:each="image : ${images}">
+                <img th:if="${image.menu.menuId == menu.menuId}" th:src="@{${image.imageUrl}}" alt="Menu Image"/>
+            </div>
 
             <div class="card-actions" th:if="${owner}">
                 <a th:href="@{/sail/menu/{id}(id=${menu.menuId})}">✏️</a>

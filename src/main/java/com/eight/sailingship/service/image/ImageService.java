@@ -64,4 +64,20 @@ public class ImageService {
         return ResponseEntity.ok(response);
 
     }
+
+    public List<ImagePhoto> listImage(UserDetailsImpl userDetails) {
+        return imageRepository.findByStore_StoreId(userDetails.getUser().getStore().getStoreId());
+    }
+
+    public void editImageMenu(MultipartFile images, Long menuId, UserDetailsImpl userDetails) throws IOException {
+        if (!images.isEmpty()) {
+            ImagePhoto imagePhoto = imageRepository.findByStore_StoreIdAndMenu_MenuId(userDetails.getUser().getStore().getStoreId(), menuId);
+            Menu menu = menuRepository.findById(menuId).get();
+
+            String storedFileName = s3Uploader.upload(images, "image");
+            imagePhoto.setImageUrl(storedFileName);
+
+            imageRepository.save(imagePhoto);
+        }
+    }
 }
