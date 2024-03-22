@@ -40,7 +40,7 @@ public class EmailService {
         makeRandomNumber();
         String authNum = String.valueOf(authNumber);
         redisUtil.setDataExpire(email, authNum, 1800000);
-        String setFrom = "dionisos198@naver.com"; // email-config에 설정한 자신의 이메일 주소를 입력
+        String setFrom = "chickenchobab@gmail.com"; // email-config에 설정한 자신의 이메일 주소를 입력
         String toMail = email;
         String title = "회원 가입 인증 이메일 입니다."; // 이메일 제목
         String content =
