@@ -16,4 +16,13 @@ public class ImagePhoto {
 
     @Column
     private String imageUrl;
+
+    @ManyToOne
+    @JoinColumn(name="store_storeId")
+    private Store store;
+
+    @OneToOne
+    @JoinColumn(name = "menu_menuId")
+    private Menu menu;
+
 }

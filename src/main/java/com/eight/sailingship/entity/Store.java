@@ -37,6 +37,10 @@ public class Store {
     @OneToMany(mappedBy = "store", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<Menu> menuList;
 
+    @OneToMany(mappedBy = "store")
+    private List<ImagePhoto> imagePhotos;
+
+
 
     public void addMenuList(Menu menu) {
         this.menuList.add(menu);
