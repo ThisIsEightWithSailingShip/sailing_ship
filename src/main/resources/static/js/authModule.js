@@ -30,7 +30,7 @@ function updateHeader(authInfo) {
     console.log("사장님 여부 : " + isOwner)
 
     // 로그인 상태에 따라 헤더 업데이트
-    if (email !== null) {
+    if (email) {
         // 로그인 상태인 경우
         document.getElementById('signup-btn').style.display = 'none';
         document.getElementById('signin-btn').style.display = 'none';

@@ -7,7 +7,6 @@
   <link rel="stylesheet" th:href="@{/css/style.css}" />
 
   <style>
-
     .header {
       position: fixed;
       top: 0;
@@ -113,35 +112,14 @@
     }
 
     body {
-      /* background-image: url("/images/delivery.jpg");
-    background-size: cover;
-    background-repeat: no-repeat; */
       background-color: aliceblue;
       padding: 8rem;
       background-attachment: fixed;
     }
 
-    /* body::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
-    z-index: 1;
-    } */
-
-    /* html {
-    height: 100%;
-    } */
-
     * {
       box-sizing: border-box;
     }
-
-
-
 
 
 
@@ -156,7 +134,7 @@
       height: 100vh;
     }
 
-    .signup-container {
+    .login-container {
       background-color: #fff;
       padding: 40px;
       border-radius: 10px;
@@ -165,19 +143,19 @@
       width: 100%;
     }
 
-    .signup-container h2 {
+    .login-container h2 {
       margin-top: 0;
       margin-bottom: 20px;
       text-align: center;
       color: #333;
     }
 
-    .signup-form {
+    .login-form {
       display: flex;
       flex-direction: column;
     }
 
-    .signup-form input {
+    .login-form input {
       padding: 10px;
       margin-bottom: 10px;
       border: 1px solid #ccc;
@@ -185,7 +163,7 @@
       font-size: 16px;
     }
 
-    .signup-form button {
+    .login-form button {
       padding: 10px;
       background-color: teal;
       color: #fff;
@@ -195,24 +173,48 @@
       font-size: 16px;
     }
 
-    .signup-form button:hover {
-      background-color: #2cb6b6;
+    .login-form button:hover {
+      background-color: #35cccc;
     }
 
-    .signup-form p {
+    .login-form p {
       margin-top: 10px;
       font-size: 14px;
       text-align: center;
     }
 
-    .signup-form a {
+    .login-form a {
       color: teal;
       text-decoration: none;
     }
 
-    .signup-form a:hover {
+    .login-form a:hover {
       text-decoration: underline;
     }
+
+    #introduce {
+      color: teal;
+      margin-top: 15px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+
+    #toLink {
+      margin-left: 7px;
+      font-weight: 600;
+
+      text-decoration: none; /* 밑줄 제거 */
+      color: black; /* 기본 텍스트 색상 상속 */
+      background-color: transparent; /* 배경색 제거 */
+      border: none; /* 테두리 제거 */
+      cursor: pointer; /* 포인터 커서로 변경 */
+    }
+
+    #toLink:hover {
+      color: gray;
+    }
+
   </style>
 </head>
 <body>
@@ -223,14 +225,19 @@
   </div>
   <div class="header-center">
     <form class="input-form">
-      <input class="input" type="search" id="searchQuery" placeholder="주변 맛집을 검색해 보세요"/>
+      <input
+              class="input"
+              type="search"
+              id="searchQuery"
+              placeholder="주변 맛집을 검색해 보세요"
+      />
       <button class="input-button">검색</button>
     </form>
   </div>
   <div class="header-right">
     <nav class="menu">
-      <a class="menu-button" href="/signup">SIGN UP</a>
-      <a class="menu-button" href="/login">SIGN IN</a>
+      <a class="menu-button" href="/sail/signup">SIGN UP</a>
+      <a class="menu-button" href="/sail/login">SIGN IN</a>
     </nav>
   </div>
 </header>
@@ -238,40 +245,32 @@
 <!-- main -->
 <main>
   <div class="main-background">
-    <!-- 회원가입 페이지 -->
-    <div class="signup-container">
-      <h2>회원가입</h2>
-      <form class="signup-form" id="signupForm" method="post">
-        <input type="email" id="email" name="email" placeholder="이메일">
+    <!-- 로그인 페이지 -->
+    <div class="login-container">
+      <h2>로그인</h2>
+      <form class="login-form" id="loginForm" method="post">
+        <input type="text" id="email" name="email" placeholder="이메일">
         <input type="password" id="password" name="password" placeholder="비밀번호">
-        <input type="text" id="nickname" name="nickname" placeholder="닉네임">
-        <input type="text" id="address" name="address" placeholder="주소">
-        <input type="text" id="phone" name="phone" placeholder="전화번호">
-        <input type="text" id="role" name="role" placeholder="사장님이라면 사장님이라고 입력해주세요">
-        <button type="submit" id="signupBtn">가입하기</button>
+        <button type="submit" id="loginBtn">로그인</button>
       </form>
-      <p>이미 계정이 있으신가요? <a href="/sail/login">로그인</a></p>
+      <p id="introduce">계정이 없으신가요? <a id="toLink" href="/sail/signup"> 회원가입</a></p>
     </div>
-    <!-- 회원가입 페이지 끝 -->
+    <!-- 로그인 페이지 끝 -->
   </div>
 </main>
 
 <!-- JavaScript 코드 추가 -->
 <script>
-  document.getElementById("signupForm").addEventListener("submit", function (event) {
+  document.getElementById("loginForm").addEventListener("submit", function (event) {
     event.preventDefault(); // 기본 동작 중지
     const formData = {
       email: document.getElementById("email").value,
       password: document.getElementById("password").value,
-      nickname: document.getElementById("nickname").value,
-      address: document.getElementById("address").value,
-      phone: document.getElementById("phone").value,
-      role: document.getElementById("role").value
     };
 
     console.log(formData)
 
-    fetch("/sail/signup", { // 서버에 POST 요청 보내기
+    fetch("/sail/user/login", { // 서버에 POST 요청 보내기
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -281,13 +280,13 @@
             .then(response => {
               console.log(response)
               if (response.status === 200) {
-                // 회원가입 성공 시 알림창 표시
-                alert("회원가입 성공!");
+                // 로그인 성공 시 알림창 표시
+                alert("로그인 성공!");
                 window.location.href = "/"; // 홈페이지로 이동
               } else {
                 // 회원가입 실패 시 알림창 표시
-                alert("회원가입 실패. 입력 정보를 확인해주세요.");
-                console.error("회원가입 실패:", response.message);
+                alert("로그인 실패. 입력 정보를 확인해주세요.");
+                console.error("로그인 실패:", response.message);
               }
             })
             .catch(error => {
@@ -297,6 +296,5 @@
             });
   });
 </script>
-
 </body>
 </html>
