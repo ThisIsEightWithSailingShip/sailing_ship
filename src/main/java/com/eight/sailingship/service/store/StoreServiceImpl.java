@@ -130,6 +130,4 @@ public class StoreServiceImpl implements StoreService {
                 .orElseThrow(() -> new RuntimeException("No store found for user."));
     }
 
-
-
 }

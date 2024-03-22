@@ -43,13 +43,17 @@ public class StoreController {
 
         String ownerEmail = userDetails.getUsername();
         Store store = storeService.getUpdateStore(storeId, ownerEmail);
+
+        //수정시 해당 사장의 매장인지 확인하는 작업 필요한데...
+
+
         model.addAttribute("store", store);
 
-        List<String> categoriesList = Arrays.stream(StoreEnum.values())
-                .map(Enum::name)
-                .collect(Collectors.toList());
-
-        model.addAttribute("categoriesList", categoriesList);
+//        List<String> categoriesList = Arrays.stream(StoreEnum.values())
+//                .map(Enum::name)
+//                .collect(Collectors.toList());
+//
+//        model.addAttribute("categoriesList", categoriesList);
 
         return "store/store-update";
     }
@@ -64,18 +68,6 @@ public class StoreController {
 
 
     // 매장 생성
-    @PostMapping("/sail/store")
-    @Secured("ROLE_OWNER")
-    public ResponseEntity<?> createStore(@RequestBody StoreRequestDto requestDto, @AuthenticationPrincipal UserDetails userDetails) {
-        String ownerEmail = userDetails.getUsername();
-
-        Store createdStore = storeService.createStore(requestDto, ownerEmail);
-        // 생성된 매장의 ID를 JSON 형태로 반환
-        Map<String, Long> response = new HashMap<>();
-        response.put("storeId", createdStore.getStoreId());
-        return ResponseEntity.ok(response);
-    }
-
     @GetMapping("/sail/store")
     @Secured("ROLE_OWNER")
     public String showCreateStoreForm(Model model) {
@@ -87,6 +79,18 @@ public class StoreController {
 
 
         return "store/store-create";
+    }
+
+    @PostMapping("/sail/store")
+    @Secured("ROLE_OWNER")
+    public ResponseEntity<?> createStore(@RequestBody StoreRequestDto requestDto, @AuthenticationPrincipal UserDetails userDetails) {
+        String ownerEmail = userDetails.getUsername();
+
+        Store createdStore = storeService.createStore(requestDto, ownerEmail);
+        // 생성된 매장의 ID를 JSON 형태로 반환
+        Map<String, Long> response = new HashMap<>();
+        response.put("storeId", createdStore.getStoreId());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/owner-btn2")
