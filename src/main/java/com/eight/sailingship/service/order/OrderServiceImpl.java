@@ -114,7 +114,8 @@ public class OrderServiceImpl implements OrderService{
     //  -------------------------------private method-------------------------------
 
     private User getUser(User userDetails) {
-        User user = userRepository.findByEmail(userDetails.getEmail()).orElseThrow();
+        User user = userRepository.findById(userDetails.getUserId()).orElseThrow(()->
+                new NullPointerException("일치하지 않는 회원입니다"));
         return user;
     }
 

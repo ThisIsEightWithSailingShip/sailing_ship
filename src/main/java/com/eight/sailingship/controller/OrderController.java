@@ -4,7 +4,6 @@ import com.eight.sailingship.auth.user.UserDetailsImpl;
 import com.eight.sailingship.dto.order.*;
 import com.eight.sailingship.entity.Order;
 import com.eight.sailingship.error.order.BalanceInsufficientException;
-import com.eight.sailingship.repository.OrderRepository;
 import com.eight.sailingship.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +20,6 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
-    private final OrderRepository orderRepository;
 
     //장바구니에 물품 담기
     @PostMapping("/sail/cart")  // 예외처리 완료
@@ -69,18 +67,25 @@ public class OrderController {
     // 전체 주문 내역 확인
     @GetMapping("/sail/order")
     public String getOrderList(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<OrderResponseDto> orderList = orderService.getOrderList(userDetails.getUser());
-        model.addAttribute("orders", orderList);
+            List<OrderResponseDto> orderList = orderService.getOrderList(userDetails.getUser());
+            model.addAttribute("orders", orderList);
 
-        return "order/orders";
+            return "order/orders";
     }
 
     // 주문 취소
     @DeleteMapping("/sail/order")
-    public ResponseEntity<Void> deleteOrder(@RequestBody OrderDeleteRequestDto orderDeleteRequestDto,
+    public ResponseEntity<?> deleteOrder(@RequestBody OrderDeleteRequestDto orderDeleteRequestDto,
                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        orderService.cancelOrder(orderDeleteRequestDto,userDetails);
-        return ResponseEntity.ok().build();
+        try {
+            orderService.cancelOrder(orderDeleteRequestDto,userDetails);
+            return ResponseEntity.ok().build();
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류로 인해 주문을 처리할 수 없습니다.");
+        }
+
     }
 
 
