@@ -5,7 +5,6 @@ import com.eight.sailingship.dto.user.UserInfoDto;
 import com.eight.sailingship.dto.user.UserSignUpRequestDto;
 import com.eight.sailingship.entity.RoleEnum;
 import com.eight.sailingship.service.customer.UserService;
-import com.eight.sailingship.service.customer.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,7 +23,7 @@ public class UserController {
 
     @GetMapping("/sail/login")
     public String login(){
-        return "login";
+        return "user/login";
     }
 
     @PostMapping("/sail/signup")
@@ -41,15 +40,20 @@ public class UserController {
 
     @GetMapping("/sail/signup")
     public String showSignupPage() {
-        return "signup";
+        return "user/signup";
     }
 
     // 회원 인증 정보 받기
     @GetMapping("/sail/authInfo")
     @ResponseBody
     public UserInfoDto getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        String email = userDetails.getUser().getEmail();
+        if (userDetails == null) {
+            return new UserInfoDto(false, false);
+        }
+
+        String emailData = userDetails.getUser().getEmail();
         RoleEnum role = userDetails.getUser().getRole();
+        boolean email = true;
         boolean isOwner = (role == RoleEnum.OWNER);
 
         System.out.println(email + ", " + role + ", " + isOwner);
