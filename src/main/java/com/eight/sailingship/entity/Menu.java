@@ -36,6 +36,9 @@ public class Menu {
     @OneToMany(mappedBy = "menu", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<OrderMenu> orderMenuList;
 
+    @OneToOne(mappedBy = "menu")
+    private ImagePhoto imagePhoto;
+
     public void update(MenuRequestDto requestDto) {
         this.menuName = requestDto.getMenuName();
         this.introduce = requestDto.getIntroduce();

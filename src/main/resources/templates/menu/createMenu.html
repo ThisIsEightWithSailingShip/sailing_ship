@@ -73,7 +73,7 @@
 <!-- Form Section -->
 <main>
     <div class="form-container">
-        <form action="/sail/menu" method="post">
+        <form action="/sail/menu" method="post" enctype="multipart/form-data">
             <label for="menuName">메뉴 이름:</label>
             <input type="text" id="menuName" name="menuName">
 
@@ -85,6 +85,10 @@
 
             <label for="menuCategory">카테고리:</label>
             <input type="text" id="menuCategory" name="menuCategory">
+
+            <!-- 이미지 파일을 선택하기 위한 input 필드 추가 -->
+            <label for="image">이미지 업로드:</label>
+            <input type="file" id="image" name="image" accept="image/jpeg">
 
             <input type="submit" value="Submit">
         </form>
