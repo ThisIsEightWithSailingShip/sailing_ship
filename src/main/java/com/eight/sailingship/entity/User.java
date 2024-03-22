@@ -1,6 +1,7 @@
 package com.eight.sailingship.entity;
 
 import com.eight.sailingship.dto.user.UserSignUpRequestDto;
+import com.eight.sailingship.error.order.BalanceInsufficientException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,7 +40,7 @@ public class User {
     private String phone;
 
     @Column(name = "account")
-    private Integer account;
+    private Long account;
 
 //    @Column(name = "is_owner", nullable = true)
 //    private Boolean isOwner;
@@ -58,7 +59,7 @@ public class User {
         this.nickname = requestDto.getNickname();
         this.address = requestDto.getAddress();
         this.phone = requestDto.getPhone();
-        this.account = role == RoleEnum.CUSTOMER ? 1000000 : 0;
+        this.account = role == RoleEnum.CUSTOMER ? 1000000L : 0;
     }
 
     public void addOrderList(Order order) {
@@ -66,5 +67,12 @@ public class User {
         order.setUser(this);
     }
 
+    public void execPay(Long totalPrice) {
+        if(account>=totalPrice){
+            account -= totalPrice;
+            return;
+        }
+        throw new BalanceInsufficientException("계좌의 잔액이 부족합니다");
+    }
 }
 

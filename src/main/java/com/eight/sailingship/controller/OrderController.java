@@ -3,6 +3,8 @@ package com.eight.sailingship.controller;
 import com.eight.sailingship.auth.user.UserDetailsImpl;
 import com.eight.sailingship.dto.order.*;
 import com.eight.sailingship.entity.Order;
+import com.eight.sailingship.error.order.BalanceInsufficientException;
+import com.eight.sailingship.repository.OrderRepository;
 import com.eight.sailingship.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,13 +21,14 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final OrderRepository orderRepository;
 
     //장바구니에 물품 담기
     @PostMapping("/sail/cart")  // 예외처리 완료
-    public ResponseEntity<?> makeCart(@RequestBody OrderBeforePayRequestDto orderBeforePayRequestDto,
+    public ResponseEntity<?> createOrder(@RequestBody OrderBeforePayRequestDto orderBeforePayRequestDto,
                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
-            orderService.makeCart(orderBeforePayRequestDto,userDetails.getUser());
+            orderService.createOrder(orderBeforePayRequestDto, userDetails.getUser());
             return ResponseEntity.ok("주문이 성공적으로 처리되었습니다.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -36,33 +39,49 @@ public class OrderController {
         }
     }
 
+    // 결제하지 않은 주문 확인
     @GetMapping("/sail/cart")   // 예외 처리 완료
-    public String getNotPayOrder(Model model) {
-        OrderResponseDto orderResponseDto = orderService.getNotPayOrder();
-        model.addAttribute("cart",orderResponseDto);
+    public String getNotPayOrder(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        OrderResponseDto orderResponseDto = orderService.getNotPayOrder(userDetails.getUser());
+        model.addAttribute("cart", orderResponseDto);
         return "order/pay-form";
     }
 
+    // 결제
     @PatchMapping("/sail/order")
-    public ResponseEntity<Void> saveOrder(@RequestBody OrderAfterPayRequestDto orderAfterPayRequestDto){
-        orderService.saveOrder(orderAfterPayRequestDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> saveOrder(@RequestBody OrderAfterPayRequestDto orderAfterPayRequestDto,
+                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        try {
+            orderService.processOrderPayment(orderAfterPayRequestDto, userDetails);
+            return ResponseEntity.ok().build();
+        }catch (BalanceInsufficientException e){
+            System.out.println("잔액부족");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류로 인해 주문을 처리할 수 없습니다.");
+        }
+
     }
 
+    // 전체 주문 내역 확인
     @GetMapping("/sail/order")
-    public String getOrderList(Model model) {
-        List<OrderResponseDto> orderList = orderService.getOrderList();
-        model.addAttribute("orders",orderList);
+    public String getOrderList(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<OrderResponseDto> orderList = orderService.getOrderList(userDetails.getUser());
+        model.addAttribute("orders", orderList);
 
         return "order/orders";
     }
 
+    // 주문 취소
     @DeleteMapping("/sail/order")
-    public ResponseEntity<Void> deleteOrder(@RequestBody OrderDeleteRequestDto orderDeleteRequestDto) {
-        orderService.deleteOrder(orderDeleteRequestDto);
+    public ResponseEntity<Void> deleteOrder(@RequestBody OrderDeleteRequestDto orderDeleteRequestDto,
+                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        orderService.cancelOrder(orderDeleteRequestDto,userDetails);
         return ResponseEntity.ok().build();
     }
-
 
 
     // 사장 입장 주문 확인 페이지 불러오기
