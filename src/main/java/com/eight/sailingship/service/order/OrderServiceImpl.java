@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.eight.sailingship.constants.order.Messages.*;
+
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
@@ -54,15 +56,14 @@ public class OrderServiceImpl implements OrderService{
         Long orderUserId = order.getUser().getUserId(); // 주문서의 주인 User id
         Long userId = user.getUser().getUserId();   // 현재 로그인된 계정의 User id
 
-        User findUser = userRepository.findById(userId).orElseThrow(() ->
-                new NullPointerException("해당하는 계정이 없습니다"));
+        User findUser = getUser(user.getUser());
 
         if(orderUserId.equals(userId)) {    // 계정이 일치하면 결제 진행
             processPayment(orderAfterPayRequestDto, findUser, order);
             return;
         }
 
-        throw new IllegalArgumentException("회원과 일치하지 않는 주문입니다");
+        throw new IllegalArgumentException(NOT_MATCH_ORDER_BY_USER);
 
     }
 
@@ -107,54 +108,55 @@ public class OrderServiceImpl implements OrderService{
             return;
         }
 
-        throw new IllegalArgumentException("회원과 일치하지 않는 주문입니다");
+        throw new IllegalArgumentException(NOT_MATCH_ORDER);
 
     }
 
     //  -------------------------------private method-------------------------------
 
     private User getUser(User userDetails) {
-        User user = userRepository.findByEmail(userDetails.getEmail()).orElseThrow();
+        User user = userRepository.findById(userDetails.getUserId()).orElseThrow(()->
+                new NullPointerException(NOT_AVAILABLE_USER));
         return user;
     }
 
     private void hasActiveOrder(User user) {
         Optional<Order> justInCart = orderRepository.findByUserAndStatus(user,StatusEnum.JUST_IN_CART);
         if(justInCart.isPresent()){
-            throw new IllegalArgumentException("이미 주문중인 장바구니가 있습니다");
+            throw new IllegalArgumentException(ALREADY_HAS_ORDER);
         }
     }
 
     private Store getStore(OrderBeforePayRequestDto orderBeforePayRequestDto) {
         Store store = storeRepository.findById(orderBeforePayRequestDto.getStoreId()).orElseThrow(() ->
-                new NullPointerException("해당하는 매장이 없습니다"));
+                new NullPointerException(NOT_MATCH_STORE));
         return store;
     }
 
     private void addOrderMenusInOrder(List<OrderMenuRequestDto> orderMenus, Order order) {
         for (OrderMenuRequestDto orderMenu : orderMenus) {
             Menu menu = menuRepository.findById(orderMenu.getMenuId()).orElseThrow(() ->
-                    new NullPointerException("해당 하는 메뉴가 존재하지 않습니다"));
+                    new NullPointerException(NOT_MATCH_MENU));
             order.addOrderMenuList(new OrderMenu(menu,orderMenu.getQuantity()));
         }
     }
 
     private Order getOrder(OrderAfterPayRequestDto orderAfterPayRequestDto) {
         Order order = orderRepository.findById(orderAfterPayRequestDto.getOrderId()).orElseThrow(
-                ()->new NullPointerException("해당하는 주문이 없습니다")
+                ()->new NullPointerException(NOT_MATCH_ORDER)
         );
         return order;
     }
 
     private Order getOrder(OrderDeleteRequestDto orderDeleteRequestDto) {
         Order order = orderRepository.findById(orderDeleteRequestDto.getOrderId()).orElseThrow(() ->
-                new NullPointerException("해당하는 주문이 없습니다"));
+                new NullPointerException(NOT_MATCH_ORDER));
         return order;
     }
 
     private Order getNotPayOrderByUser(User user) {
         Order order = orderRepository.findByUserAndStatus(user,StatusEnum.JUST_IN_CART).orElseThrow(()->
-                new NullPointerException("결제 가능한 주문이 존재하지 않습니다"));
+                new NullPointerException(NOT_HAS_PAYABLE_ORDER));
         return order;
     }
 
