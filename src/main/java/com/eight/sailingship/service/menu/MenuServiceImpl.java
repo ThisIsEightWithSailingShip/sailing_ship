@@ -35,6 +35,7 @@ public class MenuServiceImpl implements MenuService {
         String storedFileName = s3Uploader.upload(images, "image");
 
         Menu menu = new Menu(requestDto, store, storedFileName);
+        menuRepository.save(menu);
     }
 
     @Transactional(readOnly = true)
@@ -55,9 +56,15 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Transactional
-    public void editSaveMenu(MenuRequestDto requestDto, Long id) {
+    public void editSaveMenu(MenuRequestDto requestDto, Long id, MultipartFile images) throws IOException {
         Menu menu = menuRepository.findById(id).get();
-        menu.update(requestDto);
+        if (!images.isEmpty()) {
+            String storedFileName = s3Uploader.upload(images, "image");
+            menu.update(requestDto, storedFileName);
+        } else {
+            menu.update(requestDto);
+        }
+
         menuRepository.save(menu);
     }
 

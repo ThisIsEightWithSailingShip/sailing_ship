@@ -54,11 +54,9 @@ public class MenuController {
     @Secured("ROLE_OWNER")
     @GetMapping("/sail/listmenu") // 메뉴 조회
     public String listMenu(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<ImagePhoto> images = imageService.listImage(userDetails);
         List<Menu> menus = menuService.listMenu(userDetails);
         model.addAttribute("menus", menus);
         model.addAttribute("owner", true);
-        model.addAttribute("images", images);
         return "menu/listMenu";
     }
 
@@ -79,7 +77,7 @@ public class MenuController {
                            @ModelAttribute MenuRequestDto requestDto,
                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
-            menuService.editSaveMenu(requestDto, id);
+            menuService.editSaveMenu(requestDto, id, images);
             imageService.editImageMenu(images, id, userDetails);
         } catch (IOException e) {
             logger.error("파일 업로드 중 오류 발생", e);

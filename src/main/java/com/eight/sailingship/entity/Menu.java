@@ -53,6 +53,14 @@ public class Menu {
         this.imageUrl = url;
     }
 
+    public void update(MenuRequestDto requestDto, String storedFileName) {
+        this.menuName = requestDto.getMenuName();
+        this.introduce = requestDto.getIntroduce();
+        this.price = requestDto.getPrice();
+        this.menuCategory = requestDto.getMenuCategory();
+        this.imageUrl = storedFileName;
+    }
+
     public void update(MenuRequestDto requestDto) {
         this.menuName = requestDto.getMenuName();
         this.introduce = requestDto.getIntroduce();
