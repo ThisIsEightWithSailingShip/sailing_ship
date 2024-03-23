@@ -101,12 +101,17 @@ public class StoreServiceImpl implements StoreService {
     @Override
     @Transactional
     public Long createStore(StoreRequestDto requestDto, UserDetailsImpl userDetails) {
+
+
+        if (storeRepository.findByOwner_UserId(userDetails.getUser().getUserId()).isPresent()) {
+            throw new IllegalAccessError("이미 매장을 생성하였습니다.");
+        }
         // 사용자 ID를 기반으로 사용자 조회
         User owner = userRepository.findById(userDetails.getUser().getUserId())
                 .orElseThrow(() -> new RuntimeException("Owner not found with ID"));
 
         // 매장 생성 로직
-        Store store = new Store(requestDto, userDetails);;
+        Store store = new Store(requestDto, owner);;
 
         return storeRepository.save(store).getStoreId();
     }

@@ -41,12 +41,13 @@ public class MenuController {
     public String createMenu(@ModelAttribute MenuRequestDto requestDto,
                              @RequestParam(value = "image") MultipartFile images,
                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
         try {
-            Long menuId = menuService.createMenu(requestDto, userDetails);
-            imageService.saveMenuImage(images, menuId, userDetails);
+            menuService.createMenu(requestDto, userDetails, images);
         } catch (IOException e) {
-            logger.error("이미지 파일 업로드 중 오류 발생", e);
+            logger.error("파일 업로드 중 오류 발생", e);
         }
+
         return "redirect:/sail/listmenu";
     }
 

@@ -6,11 +6,12 @@ import com.eight.sailingship.entity.Menu;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface MenuService {
 
-    Long createMenu(MenuRequestDto requestDto, UserDetailsImpl userDetails);
+    void createMenu(MenuRequestDto requestDto, UserDetailsImpl userDetails, MultipartFile images) throws IOException;
 
     List<Menu> listMenu(UserDetailsImpl userDetails);
     Menu editMenu(Long menuId, UserDetailsImpl userDetails);

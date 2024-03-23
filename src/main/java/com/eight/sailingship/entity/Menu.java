@@ -31,6 +31,9 @@ public class Menu {
     @Column(name = "menu_category")
     private String menuCategory;
 
+    @Column
+    private String imageUrl;
+
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
@@ -41,12 +44,13 @@ public class Menu {
     @OneToOne(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
     private ImagePhoto imagePhoto;
 
-    public Menu(MenuRequestDto requestDto, Store store) {
+    public Menu(MenuRequestDto requestDto, Store store, String url) {
         this.menuName = requestDto.getMenuName();
         this.introduce = requestDto.getIntroduce();
         this.price = requestDto.getPrice();
         this.menuCategory = requestDto.getMenuCategory();
         this.store = store;
+        this.imageUrl = url;
     }
 
     public void update(MenuRequestDto requestDto) {

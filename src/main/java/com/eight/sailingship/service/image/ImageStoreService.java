@@ -37,10 +37,8 @@ public class ImageStoreService {
 
         // 이미지 업로드 로직
         String storedFileName = s3Uploader.upload(images, "storeImage");
-        if(storedFileName == null || storedFileName.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ImageUploadResponseDto(null, "이미지 업로드에 실패했습니다."));
-        }
-        Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId())
+
+        Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 상점 번호입니다."));
 
         ImageStore imageStore = new ImageStore(storedFileName, store);

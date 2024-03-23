@@ -6,6 +6,7 @@ import com.eight.sailingship.entity.ImagePhoto;
 import com.eight.sailingship.entity.Store;
 import com.eight.sailingship.entity.StoreEnum;
 import com.eight.sailingship.service.image.ImageService;
+import com.eight.sailingship.service.image.ImageStoreService;
 import com.eight.sailingship.service.store.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,7 @@ public class StoreController {
 
     private final StoreService storeService;
     private final ImageService imageService;
+    private final ImageStoreService imageStoreService;
     private static final Logger logger = LoggerFactory.getLogger(MenuController.class);
 
     // 전체 매장 페이지 조회(메인페이지)
@@ -129,21 +131,18 @@ public class StoreController {
 
     @PostMapping("/sail/store")
     @Secured("ROLE_OWNER")
-    public ResponseEntity<?> createStore(@ModelAttribute StoreRequestDto requestDto,
+    public String createStore(@ModelAttribute StoreRequestDto requestDto,
                                          @RequestParam(value = "image", required = false) MultipartFile image,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
-            Long userId = storeService.createStore(requestDto, userDetails);
-            Map<String, Long> response = new HashMap<>();
-            response.put("storeId", createdStore.getStoreId());
-            return ResponseEntity.ok(response);
+            Long storeId = storeService.createStore(requestDto, userDetails);
         } catch (IOException e) {
             logger.error("파일 업로드 중 오류 발생", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+
         } catch (Exception e) {
             logger.error("매장 생성 중 오류 발생", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+        return "redirect:/";
     }
 
     @GetMapping("/owner-btn2")

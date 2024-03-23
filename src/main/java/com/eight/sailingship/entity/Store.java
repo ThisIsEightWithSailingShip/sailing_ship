@@ -1,6 +1,5 @@
 package com.eight.sailingship.entity;
 
-import com.eight.sailingship.auth.user.UserDetailsImpl;
 import com.eight.sailingship.dto.store.StoreRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -48,13 +47,13 @@ public class Store {
     @OneToOne(mappedBy = "store")
     private ImageStore imageStore;
 
-    public Store(StoreRequestDto requestDto, UserDetailsImpl userDetails) {
+    public Store(StoreRequestDto requestDto, User owner) {
         this.address = requestDto.getAddress();
         this.phone = requestDto.getPhone();
         this.category = StoreEnum.valueOf(requestDto.getCategory().toUpperCase());
         this.storeName = requestDto.getStoreName();
         this.ownerName = requestDto.getOwnerName();
-        this.owner = userDetails.getUser();
+        this.owner = owner;
     }
 
 
