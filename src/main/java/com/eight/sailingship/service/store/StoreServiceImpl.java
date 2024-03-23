@@ -53,21 +53,30 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Transactional
-    public Store getUpdateStore(Long storeId, String ownerEmail) {
-        return storeRepository.findById(storeId).orElseThrow();
-    }
+    public Store getUpdateStore(Long storeId, Long userId) {
+        User owner = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
 
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("Store not found with id: " + storeId));
+
+        if (!store.getOwner().equals(owner)) {
+            throw new IllegalStateException("User does not have permission to update this store.");
+        }
+
+        return store;
+
+    }
 
     @Override
     @Transactional
-    public void updateStore(Long storeId, StoreRequestDto requestDto, String ownerEmail, MultipartFile image) throws IOException {
+    public void updateStore(Long storeId, StoreRequestDto requestDto, Long userId, MultipartFile image) throws IOException {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("Store not found with id: " + storeId));
 
-        User owner = userRepository.findByEmail(ownerEmail)
-                .orElseThrow(() -> new RuntimeException("Owner not found with email: " + ownerEmail));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
-        if (!store.getOwner().equals(owner)) {
+        if (!store.getOwner().equals(user)) {
             throw new IllegalStateException("User does not have permission to update this store.");
         }
 
@@ -77,76 +86,70 @@ public class StoreServiceImpl implements StoreService {
 
         String categoryStr = requestDto.getCategory() == null ? "ETC" : requestDto.getCategory().toUpperCase();
         StoreEnum category = StoreEnum.valueOf(categoryStr);
-
         store.setAddress(requestDto.getAddress());
         store.setPhone(requestDto.getPhone());
         store.setCategory(category);
         store.setStoreName(requestDto.getStoreName());
-        store.setOwnerName(store.getOwnerName());
+
 
         storeRepository.save(store);
     }
 
 
+
     @Override
     @Transactional
-    public Store createStore(StoreRequestDto requestDto, String ownerEmail, MultipartFile image) throws IOException {
+    public Store createStore(StoreRequestDto requestDto, Long userId, MultipartFile image) throws Exception {
+        // 사용자 ID를 기반으로 사용자 조회
+        User owner = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Owner not found with ID: " + userId));
 
-        String categoryStr = requestDto.getCategory() == null ? "ETC" : requestDto.getCategory().toUpperCase();
-        StoreEnum category = StoreEnum.valueOf(categoryStr);
-
+        // 매장 생성 로직
         Store store = new Store();
         store.setAddress(requestDto.getAddress());
         store.setPhone(requestDto.getPhone());
-        store.setCategory(category);
+        store.setCategory(StoreEnum.valueOf(requestDto.getCategory().toUpperCase()));
         store.setStoreName(requestDto.getStoreName());
         store.setOwnerName(requestDto.getOwnerName());
+        store.setOwner(owner);
 
-        // 이미 매장을 소유한 유저인지 확인하기 위해 이메이을 불러옴.
-        Optional<User> ownerOptional = userRepository.findByEmail(ownerEmail);
-        User owner = ownerOptional.orElseThrow(() -> new RuntimeException("Owner not found with email: " + ownerEmail));
+        Store savedStore = storeRepository.save(store); // 매장 저장
 
-        if (owner.getStore() != null) {
-            // 매장을 소유하고 있는 유저인지 확인.
-            throw new IllegalStateException("User already has a store assigned. Cannot create another.");
-        }
-
-        Store savedStore = storeRepository.save(store);
         owner.setStore(savedStore);
-        userRepository.save(owner);
+        userRepository.save(owner); //이걸 안해서 안됐구나...
 
-        if (image == null || image.isEmpty()) {
-            imageService.saveDefaultImage(savedStore.getStoreId());
+        // 이미지 처리 로직
+        if (image != null && !image.isEmpty()) {
+            imageService.updateStoreImage(image, savedStore.getStoreId());
         } else {
-            imageService.saveStoreImage(image, savedStore.getStoreId());
+            // 기본 이미지 설정 로직
+            imageService.saveDefaultImage(savedStore.getStoreId());
         }
 
         return savedStore;
     }
 
+
     @Override
-    public boolean checkIfUserHasStore(String userEmail) {
-        Optional<User> userOptional = userRepository.findByEmail(userEmail);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            return user.getStore() != null;
-        }
-        return false;
+    public boolean checkIfUserHasStore(Long userId) {
+        return userRepository.findById(userId)
+                .map(User::getStore)
+                .isPresent();
     }
 
-    public Long findStoreIdByUserEmail(String userEmail) {
-        return userRepository.findByEmail(userEmail)
+    public Long findStoreIdByUserId(Long userId) {
+        return userRepository.findById(userId)
                 .map(User::getStore)
                 .map(Store::getStoreId)
-                .orElseThrow(() -> new RuntimeException("No store found for user."));
+                .orElseThrow(() -> new RuntimeException("No store found for user with ID: " + userId));
     }
 
     @Override
-    public boolean checkStorePermission(Long storeId, String userEmail) {
+    public boolean checkStorePermission(Long storeId, Long userId) {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("Store not found"));
 
-        if (!store.getOwner().getEmail().equals(userEmail)) {
+        if (!store.getOwner().getUserId().equals(userId)) {
             throw new IllegalStateException("User does not have permission to update this store.");
         }
         return true;
