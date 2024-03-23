@@ -75,7 +75,7 @@
 <!-- header -->
 <header class="header">
     <div class="header-left">
-        <img th:src="@{/images/logo.png}" class="logo" />
+        <img th:src="@{/images/logo.png}" id="logo" />
     </div>
     <div class="header-center">
         <form class="input-form">
@@ -145,6 +145,11 @@
     </div>
 </main>
 <script src="/js/authModule.js"></script>
+<script>
+    document.getElementById("logo").addEventListener("click", function() {
+        window.location.href = "/";
+    });
+</script>
 <script>
 
     function checkPermissionAndUpdate() {
@@ -296,7 +301,7 @@
                 if (response.ok) {
                     // 주문 성공 시 알림창 표시
                     window.alert('장바구니 담기 성공! 결제 페이지로 이동합니다.');
-                    window.location.href = "/sail/cart"
+                    window.location.href = "/sail/pay"
                 } else if (response.status === 400) {
                     // 잘못된 요청일 경우
                     return response.text().then(errorMessage => {

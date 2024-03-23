@@ -221,7 +221,7 @@
 <!-- header -->
 <header class="header">
   <div class="header-left">
-    <img th:src="@{/images/logo.png}" class="logo" />
+    <img th:src="@{/images/logo.png}" id="logo" />
   </div>
   <div class="header-center">
     <form class="input-form">
@@ -294,6 +294,11 @@
               alert("오류 발생. 다시 시도해주세요.");
               console.error("오류 발생:", error);
             });
+  });
+</script>
+<script>
+  document.getElementById("logo").addEventListener("click", function() {
+    window.location.href = "/";
   });
 </script>
 </body>
