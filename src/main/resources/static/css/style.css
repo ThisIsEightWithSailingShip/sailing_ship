@@ -85,10 +85,21 @@
   justify-content: space-around;
 }
 
-.logo {
+#logo {
   width: 6rem;
   height: 6rem;
   z-index: 20;
+  transition: transform 0.3s ease;
+}
+
+#logo:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+#logo:active {
+  transform: scale(0.9);
+  cursor: grab;
 }
 
 h1,
