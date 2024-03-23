@@ -31,7 +31,8 @@ public class Store {
     @Column(name = "owner_name")
     private String ownerName;
 
-    @OneToOne(mappedBy = "store", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_id", unique = true)
     private User owner;
 
     @OneToMany(mappedBy = "store", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
