@@ -24,4 +24,6 @@ public interface StoreService {
 
     Long findStoreIdByUserEmail(String userEmail);
 
+    boolean checkStorePermission(Long storeId, String userEmail);
+
 }

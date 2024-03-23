@@ -47,17 +47,12 @@ public class StoreController {
     @GetMapping("/sail/store/{storeId}")
     public String getStore(@PathVariable Long storeId, Model model) {
 
-        logger.info("Entering getStore method. Store ID: {}", storeId);
-
-
         String viewName = storeService.getStore(model, storeId);
-        logger.info("View name returned from storeService: {}", viewName);
 
         try {
             // 매장의 이미지 정보 조회
             List<ImagePhoto> images = imageService.listImagesByStoreId(storeId);
             model.addAttribute("images", images);
-            logger.info("Successfully retrieved image list for store ID: {}. Image count: {}", storeId, images.size());
         } catch (Exception e) {
             logger.error("Error retrieving images for store ID: {}", storeId, e);
         }
@@ -95,16 +90,28 @@ public class StoreController {
 
         if (image != null && !image.isEmpty()) {
             try {
-                imageService.updateStoreImage(image, storeId); // Assuming you have or will create this method
+                imageService.updateStoreImage(image, storeId);
             } catch (IOException e) {
                 logger.error("파일 업로드 중 오류 발생", e);
-                // Handle the error accordingly
+
             }
         }
 
         return "redirect:/sail/store/" + storeId;
     }
 
+    //수정하기 버튼 클릭시 확인하는거
+    @GetMapping("/sail/store/check-permission/{storeId}")
+    @ResponseBody
+    public ResponseEntity<?> checkPermission(@PathVariable Long storeId, @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            boolean hasPermission = storeService.checkStorePermission(storeId, userDetails.getUsername());
+            return ResponseEntity.ok(Map.of("hasPermission", hasPermission));
+        } catch (Exception e) {
+            logger.error("Error checking permission", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Error checking permission"));
+        }
+    }
 
 
     // 매장 생성
@@ -155,7 +162,4 @@ public class StoreController {
             return "redirect:/sail/store";
         }
     }
-
-
-
 }

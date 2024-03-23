@@ -93,11 +93,11 @@ public class ImageService {
         if (!image.isEmpty()) {
             String storedFileName = s3Uploader.upload(image, "image");
             imagePhoto.setImageUrl(storedFileName);
-            // 매장 ID로 매장을 조회하여 이미지에 연결합니다.
+
             Store store = storeRepository.findById(storeId).orElseThrow(() -> new EntityNotFoundException("매장을 찾을 수 없습니다."));
             imagePhoto.setStore(store);
         }
-        // 이미지를 저장하고 저장된 이미지 정보를 반환합니다.
+
         ImagePhoto savedImage = imageRepository.save(imagePhoto);
         String responseSentence = "이미지를 성공적으로 업로드 했습니다.";
 
