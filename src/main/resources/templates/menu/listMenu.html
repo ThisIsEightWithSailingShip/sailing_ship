@@ -116,10 +116,13 @@
             <p><span>Price: $</span><span th:text="${menu.price}"></span></p>
             <p><span>Category: </span><span th:text="${menu.menuCategory}"></span></p>
 
+
             <!-- 이미지 출력 부분 -->
-            <div th:each="image : ${images}">
-                <img th:if="${image.menu.menuId == menu.menuId}" th:src="@{${image.imageUrl}}" alt="Menu Image"/>
+            <!-- 이미지 출력 부분: Directly use menu.imageUrl -->
+            <div th:if="${menu.imageUrl}">
+                <img th:src="@{${menu.imageUrl}}" alt="Menu Image" class="menu-image"/>
             </div>
+
 
             <div class="card-actions" th:if="${owner}">
                 <a th:href="@{/sail/menu/{id}(id=${menu.menuId})}">✏️</a>
