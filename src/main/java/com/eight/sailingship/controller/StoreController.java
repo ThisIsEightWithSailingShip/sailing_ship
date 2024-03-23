@@ -54,8 +54,8 @@ public class StoreController {
             model.addAttribute("images", images);
         } catch (Exception e) {
             logger.error("Error retrieving images for store ID: {}", storeId, e);
-            // 이미지가 없는 경우 기본 이미지의 URL을 추가
-            model.addAttribute("defaultImageUrl", "/images/logo.png");
+//            // 이미지가 없는 경우 기본 이미지의 URL을 추가
+//            model.addAttribute("defaultImageUrl", "/images/logo.png");
         }
 
         return viewName;
@@ -67,24 +67,24 @@ public class StoreController {
     // 매장 수정 페이지 조회
     @GetMapping("/sail/store/update/{storeId}")
     public String updateStore(@PathVariable Long storeId, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            storeService.checkStorePermission(storeId, userDetails.getUsername());
 
-        if (!storeService.checkStorePermission(storeId, userDetails.getUsername())) {
-            // 권한이 없는 경우 접근 거부
-            return "redirect:/error-page"; // 또는 다른 적절한 경로로 리디렉션할 수 있습니다.
+            String ownerEmail = userDetails.getUsername();
+            Store store = storeService.getUpdateStore(storeId, ownerEmail);
+
+            model.addAttribute("store", store);
+
+            List<String> categoriesList = Arrays.stream(StoreEnum.values())
+                    .map(Enum::name)
+                    .collect(Collectors.toList());
+
+            model.addAttribute("categoriesList", categoriesList);
+
+            return "store/store-update";
+        } catch (IllegalStateException e) {
+            return "redirect:/error-page";
         }
-
-        String ownerEmail = userDetails.getUsername();
-        Store store = storeService.getUpdateStore(storeId, ownerEmail);
-
-        model.addAttribute("store", store);
-
-        List<String> categoriesList = Arrays.stream(StoreEnum.values())
-                .map(Enum::name)
-                .collect(Collectors.toList());
-
-        model.addAttribute("categoriesList", categoriesList);
-
-        return "store/store-update";
     }
 
     // 수정 처리
@@ -93,19 +93,13 @@ public class StoreController {
                               @ModelAttribute StoreRequestDto requestDto,
                               @RequestParam(value = "image", required = false) MultipartFile image,
                               @AuthenticationPrincipal UserDetails userDetails) {
-        String ownerEmail = userDetails.getUsername();
-        storeService.updateStore(storeId, requestDto, ownerEmail);
-
-        if (image != null && !image.isEmpty()) {
-            try {
-                imageService.updateStoreImage(image, storeId);
-            } catch (IOException e) {
-                logger.error("파일 업로드 중 오류 발생", e);
-
-            }
+        try {
+            String ownerEmail = userDetails.getUsername();
+            storeService.updateStore(storeId, requestDto, ownerEmail, image);
+            return "redirect:/sail/store/" + storeId;
+        } catch (Exception e) {
+            return "redirect:/error";
         }
-
-        return "redirect:/sail/store/" + storeId;
     }
 
     //수정하기 버튼 클릭시 확인하는거

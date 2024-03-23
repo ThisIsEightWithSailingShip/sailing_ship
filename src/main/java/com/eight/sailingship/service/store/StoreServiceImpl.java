@@ -9,11 +9,14 @@ import com.eight.sailingship.entity.StoreEnum;
 import com.eight.sailingship.entity.User;
 import com.eight.sailingship.repository.StoreRepository;
 import com.eight.sailingship.repository.UserRepository;
+import com.eight.sailingship.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +27,7 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
+    private final ImageService imageService;
 
     // 매장 전체 페이지 조회
     @Override
@@ -56,7 +60,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public void updateStore(Long storeId, StoreRequestDto requestDto, String ownerEmail) {
+    public void updateStore(Long storeId, StoreRequestDto requestDto, String ownerEmail, MultipartFile image) throws IOException {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("Store not found with id: " + storeId));
 
@@ -65,6 +69,10 @@ public class StoreServiceImpl implements StoreService {
 
         if (!store.getOwner().equals(owner)) {
             throw new IllegalStateException("User does not have permission to update this store.");
+        }
+
+        if (image != null && !image.isEmpty()) {
+            imageService.updateStoreImage(image, storeId);
         }
 
         String categoryStr = requestDto.getCategory() == null ? "ETC" : requestDto.getCategory().toUpperCase();
@@ -129,9 +137,16 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public boolean checkStorePermission(Long storeId, String userEmail) {
-        Store store = storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("Store not found"));
-        return store.getOwner().getEmail().equals(userEmail);
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new IllegalArgumentException("Store not found"));
+
+        if (!store.getOwner().getEmail().equals(userEmail)) {
+            throw new IllegalStateException("User does not have permission to update this store.");
+        }
+        return true;
     }
+
+
 
 
 }

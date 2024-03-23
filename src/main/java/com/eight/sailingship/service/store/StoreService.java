@@ -4,6 +4,9 @@ import com.eight.sailingship.dto.store.StoreRequestDto;
 import com.eight.sailingship.entity.Store;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 public interface StoreService {
     // 전체 매장 페이지 조회
@@ -15,7 +18,7 @@ public interface StoreService {
     Store getUpdateStore(Long storeId, String ownerEmail);
 
     // 매장 정보 수정
-    void updateStore(Long storeId, StoreRequestDto requestDto, String ownerEmail);
+    void updateStore(Long storeId, StoreRequestDto requestDto, String ownerEmail, MultipartFile image) throws IOException;
 
     //매장 생성
     Store createStore(StoreRequestDto requestDto, String ownerEmail);
@@ -25,5 +28,7 @@ public interface StoreService {
     Long findStoreIdByUserEmail(String userEmail);
 
     boolean checkStorePermission(Long storeId, String userEmail);
+
+
 
 }
