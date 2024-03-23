@@ -1,5 +1,6 @@
 package com.eight.sailingship.handler;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class WebSocketCustomHandler extends TextWebSocketHandler {
 
     // 레포지토리 대신 임시 해쉬맵 구조
