@@ -88,7 +88,7 @@
         <a href="/sail/login" class="menu-button" id="signin-btn">SIGN IN</a>
         <a class="menu-button" id="owner-btn1" style="display: none;">주문 정보</a>
         <a href="/owner-btn2" class="menu-button" id="owner-btn2" style="display: none;">매장 정보</a>
-        <a href="/your-link-url" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
+        <a href="/sail/order" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
         <a class="menu-button" id="logout-btn" style="display: none;" href="javascript:logout()">LOGOUT</a>
     </div>
 
@@ -103,9 +103,9 @@
     <div class="store-info">
         <input type="hidden" id="storeId" th:value="${store.storeId}" />
         <h2><span th:text="${store.storeName}">매장 이름</span></h2>
-            <th:block th:each="image : ${images}">
-                <img th:src="@{${image.imageUrl}}" alt="Store Image"/>
-            </th:block>
+
+        <img th:src="@{${store.imageUrl}}" alt="Store Image"/>
+
         <p><strong>위치:</strong> <span th:text="${store.address}">매장 주소</span></p>
         <p><strong>전화번호:</strong> <span th:text="${store.phone}">매장 전화번호</span></p>
         <button onclick="checkPermissionAndUpdate()">매장 수정</button>
@@ -296,7 +296,7 @@
                 if (response.ok) {
                     // 주문 성공 시 알림창 표시
                     window.alert('장바구니 담기 성공! 결제 페이지로 이동합니다.');
-                    window.location.href = "/sail/cart"
+                    window.location.href = "/sail/pay"
                 } else if (response.status === 400) {
                     // 잘못된 요청일 경우
                     return response.text().then(errorMessage => {

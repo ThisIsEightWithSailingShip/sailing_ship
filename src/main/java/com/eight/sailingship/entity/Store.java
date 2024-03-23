@@ -41,6 +41,9 @@ public class Store {
     @OneToMany(mappedBy = "store")
     private List<ImagePhoto> imagePhotos;
 
+    @Column
+    private String imageUrl;
+
 
 
     public void addMenuList(Menu menu) {
