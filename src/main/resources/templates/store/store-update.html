@@ -38,9 +38,10 @@
 <main>
     <div class="main-background">
         <div class="update-form-container">
-            <form id="store-update-form" th:action="@{/sail/store/update/{storeId}(storeId=${store.storeId})}" th:method="put">
+            <form id="store-update-form" th:action="@{/sail/store/update/{storeId}(storeId=${store.storeId})}" th:method="put" enctype="multipart/form-data">
 
-                <label for="address">Address:</label>
+
+            <label for="address">Address:</label>
                 <input type="text" id="address" name="address" th:value="${store.address}"/>
 
                 <label for="phone">Phone:</label>

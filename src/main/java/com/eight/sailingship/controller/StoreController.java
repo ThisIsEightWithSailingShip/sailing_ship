@@ -86,11 +86,25 @@ public class StoreController {
 
     // 수정 처리
     @PutMapping("/sail/store/update/{storeId}")
-    public String updateStore(@PathVariable Long storeId, @ModelAttribute StoreRequestDto requestDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public String updateStore(@PathVariable Long storeId,
+                              @ModelAttribute StoreRequestDto requestDto,
+                              @RequestParam(value = "image", required = false) MultipartFile image,
+                              @AuthenticationPrincipal UserDetails userDetails) {
         String ownerEmail = userDetails.getUsername();
         storeService.updateStore(storeId, requestDto, ownerEmail);
+
+        if (image != null && !image.isEmpty()) {
+            try {
+                imageService.updateStoreImage(image, storeId); // Assuming you have or will create this method
+            } catch (IOException e) {
+                logger.error("파일 업로드 중 오류 발생", e);
+                // Handle the error accordingly
+            }
+        }
+
         return "redirect:/sail/store/" + storeId;
     }
+
 
 
     // 매장 생성
