@@ -1,5 +1,6 @@
 package com.eight.sailingship.controller;
 
+import com.eight.sailingship.auth.user.UserDetailsImpl;
 import com.eight.sailingship.dto.store.StoreRequestDto;
 import com.eight.sailingship.entity.ImagePhoto;
 import com.eight.sailingship.entity.Store;
@@ -46,7 +47,6 @@ public class StoreController {
     // 특정 매장 페이지 조회
     @GetMapping("/sail/store/{storeId}")
     public String getStore(@PathVariable Long storeId, Model model) {
-
         String viewName = storeService.getStore(model, storeId);
 
         try {
@@ -55,6 +55,7 @@ public class StoreController {
             model.addAttribute("images", images);
         } catch (Exception e) {
             logger.error("Error retrieving images for store ID: {}", storeId, e);
+
         }
 
         return viewName;
@@ -63,20 +64,25 @@ public class StoreController {
 
     // 매장 수정 페이지 조회
     @GetMapping("/sail/store/update/{storeId}")
-    public String updateStore(@PathVariable Long storeId, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String updateStore(@PathVariable Long storeId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            storeService.checkStorePermission(storeId, userDetails.getUser().getUserId());
 
-        String ownerEmail = userDetails.getUsername();
-        Store store = storeService.getUpdateStore(storeId, ownerEmail);
+            Long userId = userDetails.getUser().getUserId();
+            Store store = storeService.getUpdateStore(storeId, userId);
 
-        model.addAttribute("store", store);
+            model.addAttribute("store", store);
 
-        List<String> categoriesList = Arrays.stream(StoreEnum.values())
-                .map(Enum::name)
-                .collect(Collectors.toList());
+            List<String> categoriesList = Arrays.stream(StoreEnum.values())
+                    .map(Enum::name)
+                    .collect(Collectors.toList());
 
-        model.addAttribute("categoriesList", categoriesList);
+            model.addAttribute("categoriesList", categoriesList);
 
-        return "store/store-update";
+            return "store/store-update";
+        } catch (IllegalStateException e) {
+            return "redirect:/error-page";
+        }
     }
 
     // 수정 처리
@@ -84,28 +90,22 @@ public class StoreController {
     public String updateStore(@PathVariable Long storeId,
                               @ModelAttribute StoreRequestDto requestDto,
                               @RequestParam(value = "image", required = false) MultipartFile image,
-                              @AuthenticationPrincipal UserDetails userDetails) {
-        String ownerEmail = userDetails.getUsername();
-        storeService.updateStore(storeId, requestDto, ownerEmail);
-
-        if (image != null && !image.isEmpty()) {
-            try {
-                imageService.updateStoreImage(image, storeId);
-            } catch (IOException e) {
-                logger.error("파일 업로드 중 오류 발생", e);
-
-            }
+                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            Long userId = userDetails.getUser().getUserId(); // UserDetailsImpl을 통해 사용자 ID를 가져옵니다.
+            storeService.updateStore(storeId, requestDto, userId, image); // 사용자 ID를 사용하여 서비스 메서드를 호출
+            return "redirect:/sail/store/" + storeId;
+        } catch (Exception e) {
+            return "redirect:/error"; // 에러 발생 시, 에러 페이지로 리디렉션
         }
-
-        return "redirect:/sail/store/" + storeId;
     }
 
     //수정하기 버튼 클릭시 확인하는거
     @GetMapping("/sail/store/check-permission/{storeId}")
     @ResponseBody
-    public ResponseEntity<?> checkPermission(@PathVariable Long storeId, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<?> checkPermission(@PathVariable Long storeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
-            boolean hasPermission = storeService.checkStorePermission(storeId, userDetails.getUsername());
+            boolean hasPermission = storeService.checkStorePermission(storeId, userDetails.getUser().getUserId());
             return ResponseEntity.ok(Map.of("hasPermission", hasPermission));
         } catch (Exception e) {
             logger.error("Error checking permission", e);
@@ -124,42 +124,39 @@ public class StoreController {
 
         model.addAttribute("categoriesList", categoriesList);
 
-
         return "store/store-create";
     }
 
     @PostMapping("/sail/store")
     @Secured("ROLE_OWNER")
     public ResponseEntity<?> createStore(@ModelAttribute StoreRequestDto requestDto,
-                                         @RequestParam(value = "image") MultipartFile images,
-                                         @AuthenticationPrincipal UserDetails userDetails) {
-
+                                         @RequestParam(value = "image", required = false) MultipartFile image,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
-            String ownerEmail = userDetails.getUsername();
-            Store createdStore = storeService.createStore(requestDto, ownerEmail);
-            imageService.saveStoreImage(images, createdStore.getStoreId());
-
-            // 생성된 매장의 ID를 JSON 형태로 반환
+            Long userId = storeService.createStore(requestDto, userDetails);
             Map<String, Long> response = new HashMap<>();
             response.put("storeId", createdStore.getStoreId());
             return ResponseEntity.ok(response);
         } catch (IOException e) {
             logger.error("파일 업로드 중 오류 발생", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (Exception e) {
+            logger.error("매장 생성 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
     @GetMapping("/owner-btn2")
-    public String redirectToAppropriatePage(@AuthenticationPrincipal UserDetails userDetails) {
+    public String redirectToAppropriatePage(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Long userId = userDetails.getUser().getUserId(); // UserDetailsImpl로부터 사용자 ID를 추출합니다.
 
-        String userEmail = userDetails.getUsername();
-
-        boolean hasStore = storeService.checkIfUserHasStore(userEmail);
+        boolean hasStore = storeService.checkIfUserHasStore(userId); // 사용자 ID를 기반으로 매장 소유 여부를 확인합니다.
         if (hasStore) {
-            Long storeId = storeService.findStoreIdByUserEmail(userEmail);
+            Long storeId = storeService.findStoreIdByUserId(userId); // 사용자 ID를 기반으로 매장 ID를 찾습니다.
             return "redirect:/sail/store/" + storeId;
         } else {
             return "redirect:/sail/store";
         }
     }
+
 }

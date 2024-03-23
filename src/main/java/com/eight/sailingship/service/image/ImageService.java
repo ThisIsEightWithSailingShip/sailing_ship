@@ -3,9 +3,11 @@ package com.eight.sailingship.service.image;
 import com.eight.sailingship.auth.user.UserDetailsImpl;
 import com.eight.sailingship.dto.Image.ImageUploadResponseDto;
 import com.eight.sailingship.entity.ImagePhoto;
+import com.eight.sailingship.entity.ImageStore;
 import com.eight.sailingship.entity.Menu;
 import com.eight.sailingship.entity.Store;
 import com.eight.sailingship.repository.ImageRepository;
+import com.eight.sailingship.repository.ImageStoreRepository;
 import com.eight.sailingship.repository.MenuRepository;
 import com.eight.sailingship.repository.StoreRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,6 +30,7 @@ public class ImageService {
     private final ImageRepository imageRepository;
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
+    private final ImageStoreRepository imageStoreRepository;
 
     @Autowired
     private S3Uploader s3Uploader;
@@ -44,9 +47,11 @@ public class ImageService {
         if(storedFileName == null || storedFileName.isEmpty()) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ImageUploadResponseDto(null, "이미지 업로드에 실패했습니다."));
         }
+        Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 상점 번호입니다."));
 
-        ImagePhoto imagePhoto = new ImagePhoto(storedFileName, userDetails.getUser().getStore());
-        menuRepository.findByStore_StoreId(userDetails.getUser().getStore().getStoreId()).stream()
+        ImagePhoto imagePhoto = new ImagePhoto(storedFileName, store);
+        menuRepository.findByStore_StoreId(store.getStoreId()).stream()
                 .filter(menu -> Objects.equals(menu.getMenuId(), menuId))
                 .findFirst()
                 .ifPresent(imagePhoto::setMenu);
@@ -60,13 +65,17 @@ public class ImageService {
 
     @Transactional(readOnly = true)
     public List<ImagePhoto> listImage(UserDetailsImpl userDetails) {
-        return imageRepository.findByStore_StoreId(userDetails.getUser().getStore().getStoreId());
+        Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 상점 번호입니다."));
+        return imageRepository.findByStore_StoreId(store.getStoreId());
     }
 
     @Transactional
     public void editImageMenu(MultipartFile images, Long menuId, UserDetailsImpl userDetails) throws IOException {
         if (!images.isEmpty()) {
-            ImagePhoto imagePhoto = imageRepository.findByStore_StoreIdAndMenu_MenuId(userDetails.getUser().getStore().getStoreId(), menuId);
+            Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId())
+                    .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 상점 번호입니다."));
+            ImagePhoto imagePhoto = imageRepository.findByStore_StoreIdAndMenu_MenuId(store.getStoreId(), menuId);
             Menu menu = menuRepository.findById(menuId).get();
 
             String storedFileName = s3Uploader.upload(images, "image");
@@ -78,23 +87,6 @@ public class ImageService {
 
 
     //매장 이미지
-    @Transactional
-    public ResponseEntity<ImageUploadResponseDto> saveStoreImage(MultipartFile image, Long storeId) throws IOException {
-        ImagePhoto imagePhoto = new ImagePhoto();
-        if (!image.isEmpty()) {
-            String storedFileName = s3Uploader.upload(image, "image");
-            imagePhoto.setImageUrl(storedFileName);
-
-            Store store = storeRepository.findById(storeId).orElseThrow(() -> new EntityNotFoundException("매장을 찾을 수 없습니다."));
-            imagePhoto.setStore(store);
-        }
-
-        ImagePhoto savedImage = imageRepository.save(imagePhoto);
-        String responseSentence = "이미지를 성공적으로 업로드 했습니다.";
-
-        ImageUploadResponseDto response = new ImageUploadResponseDto(savedImage.getImageId(), responseSentence);
-        return ResponseEntity.ok(response);
-    }
 
     public List<ImagePhoto> listImagesByStoreId(Long storeId) {
         return imageRepository.findByStoreId(storeId);
@@ -132,6 +124,20 @@ public class ImageService {
         String responseSentence = "이미지가 성공적으로 업데이트 되었습니다.";
         ImageUploadResponseDto response = new ImageUploadResponseDto(savedImage.getImageId(), responseSentence);
         return ResponseEntity.ok(response);
+    }
+
+    public void saveDefaultImage(Long storeId) {
+        String defaultImageUrl = "/images/logo.png";
+
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new RuntimeException("Store not found with id " + storeId));
+
+
+        ImagePhoto image = new ImagePhoto(defaultImageUrl, store);
+
+
+        imageRepository.save(image);
     }
 
 

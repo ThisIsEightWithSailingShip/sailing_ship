@@ -1,7 +1,10 @@
 package com.eight.sailingship.entity;
 
+import com.eight.sailingship.auth.user.UserDetailsImpl;
+import com.eight.sailingship.dto.store.StoreRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -10,6 +13,7 @@ import java.util.List;
 @Table(name = "stores")
 @Getter
 @Setter
+@RequiredArgsConstructor
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +35,8 @@ public class Store {
     @Column(name = "owner_name")
     private String ownerName;
 
-    @OneToOne(mappedBy = "store", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL) // cascade를 하는 것이 맞는지
+    @JoinColumn(name = "owner_id", unique = true)
     private User owner;
 
     @OneToMany(mappedBy = "store", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
@@ -40,6 +45,17 @@ public class Store {
     @OneToMany(mappedBy = "store")
     private List<ImagePhoto> imagePhotos;
 
+    @OneToOne(mappedBy = "store")
+    private ImageStore imageStore;
+
+    public Store(StoreRequestDto requestDto, UserDetailsImpl userDetails) {
+        this.address = requestDto.getAddress();
+        this.phone = requestDto.getPhone();
+        this.category = StoreEnum.valueOf(requestDto.getCategory().toUpperCase());
+        this.storeName = requestDto.getStoreName();
+        this.ownerName = requestDto.getOwnerName();
+        this.owner = userDetails.getUser();
+    }
 
 
     public void addMenuList(Menu menu) {

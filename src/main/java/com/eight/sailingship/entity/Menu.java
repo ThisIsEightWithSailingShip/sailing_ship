@@ -38,7 +38,7 @@ public class Menu {
     @OneToMany(mappedBy = "menu", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<OrderMenu> orderMenuList;
 
-    @OneToOne(mappedBy = "menu")
+    @OneToOne(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
     private ImagePhoto imagePhoto;
 
     public Menu(MenuRequestDto requestDto, Store store) {
