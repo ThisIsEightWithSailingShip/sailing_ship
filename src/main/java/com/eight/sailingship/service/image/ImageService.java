@@ -44,9 +44,11 @@ public class ImageService {
         if(storedFileName == null || storedFileName.isEmpty()) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ImageUploadResponseDto(null, "이미지 업로드에 실패했습니다."));
         }
+        Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 상점 번호입니다."));
 
-        ImagePhoto imagePhoto = new ImagePhoto(storedFileName, userDetails.getUser().getStore());
-        menuRepository.findByStore_StoreId(userDetails.getUser().getStore().getStoreId()).stream()
+        ImagePhoto imagePhoto = new ImagePhoto(storedFileName, store);
+        menuRepository.findByStore_StoreId(store.getStoreId()).stream()
                 .filter(menu -> Objects.equals(menu.getMenuId(), menuId))
                 .findFirst()
                 .ifPresent(imagePhoto::setMenu);
@@ -60,13 +62,17 @@ public class ImageService {
 
     @Transactional(readOnly = true)
     public List<ImagePhoto> listImage(UserDetailsImpl userDetails) {
-        return imageRepository.findByStore_StoreId(userDetails.getUser().getStore().getStoreId());
+        Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 상점 번호입니다."));
+        return imageRepository.findByStore_StoreId(store.getStoreId());
     }
 
     @Transactional
     public void editImageMenu(MultipartFile images, Long menuId, UserDetailsImpl userDetails) throws IOException {
         if (!images.isEmpty()) {
-            ImagePhoto imagePhoto = imageRepository.findByStore_StoreIdAndMenu_MenuId(userDetails.getUser().getStore().getStoreId(), menuId);
+            Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId())
+                    .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 상점 번호입니다."));
+            ImagePhoto imagePhoto = imageRepository.findByStore_StoreIdAndMenu_MenuId(store.getStoreId(), menuId);
             Menu menu = menuRepository.findById(menuId).get();
 
             String storedFileName = s3Uploader.upload(images, "image");
@@ -101,9 +107,9 @@ public class ImageService {
     }
 
     @Transactional
-    public ResponseEntity<ImageUploadResponseDto> updateStoreImage(MultipartFile image, Long storeId) throws IOException {
+    public void updateStoreImage(MultipartFile image, Long storeId) throws IOException {
         if (image.isEmpty()) {
-            return ResponseEntity.badRequest().body(new ImageUploadResponseDto(null, "업로드할 이미지가 없습니다."));
+            throw new IllegalArgumentException();
         }
 
         // 매장 ID로 매장을 조회하여 이미지에 연결합니다.
@@ -111,27 +117,29 @@ public class ImageService {
                 .orElseThrow(() -> new EntityNotFoundException("매장을 찾을 수 없습니다."));
 
         // 해당 매장의 기존 이미지들을 조회
-        List<ImagePhoto> existingImages = imageRepository.findByStoreId(storeId);
 
         // 기존 이미지들을 모두 삭제
-        for (ImagePhoto img : existingImages) {
-            imageRepository.delete(img);
-            // 필요한 경우, S3에서 이미지 파일도 삭제
-            // s3Uploader.delete(img.getImageUrl());
-        }
 
         // S3에 새 이미지 업로드 후 URL 반환
         String storedFileName = s3Uploader.upload(image, "image");
 
         // 새 이미지 정보 설정 및 저장
-        ImagePhoto newImage = new ImagePhoto();
-        newImage.setImageUrl(storedFileName);
-        newImage.setStore(store);
-        ImagePhoto savedImage = imageRepository.save(newImage);
+        store.setImageUrl(storedFileName);
 
-        String responseSentence = "이미지가 성공적으로 업데이트 되었습니다.";
-        ImageUploadResponseDto response = new ImageUploadResponseDto(savedImage.getImageId(), responseSentence);
-        return ResponseEntity.ok(response);
+    }
+
+    public void saveDefaultImage(Long storeId) {
+        String defaultImageUrl = "/images/logo.png";
+
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new RuntimeException("Store not found with id " + storeId));
+
+
+        ImagePhoto image = new ImagePhoto(defaultImageUrl, store);
+
+
+        imageRepository.save(image);
     }
 
 
