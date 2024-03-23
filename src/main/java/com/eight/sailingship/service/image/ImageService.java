@@ -134,6 +134,21 @@ public class ImageService {
         return ResponseEntity.ok(response);
     }
 
+    public void saveDefaultImage(Long storeId) {
+        String defaultImageUrl = "/images/logo.png"; // 프로젝트 구조에 따라 경로 조정 필요
+
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new RuntimeException("Store not found with id " + storeId));
+
+
+        ImagePhoto image = new ImagePhoto(defaultImageUrl, store); // 수정된 생성자 사용
+
+
+        imageRepository.save(image);
+    }
+
+
 
 
 }

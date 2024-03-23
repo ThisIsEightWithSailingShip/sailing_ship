@@ -46,7 +46,6 @@ public class StoreController {
     // 특정 매장 페이지 조회
     @GetMapping("/sail/store/{storeId}")
     public String getStore(@PathVariable Long storeId, Model model) {
-
         String viewName = storeService.getStore(model, storeId);
 
         try {
@@ -55,15 +54,24 @@ public class StoreController {
             model.addAttribute("images", images);
         } catch (Exception e) {
             logger.error("Error retrieving images for store ID: {}", storeId, e);
+            // 이미지가 없는 경우 기본 이미지의 URL을 추가
+            model.addAttribute("defaultImageUrl", "/images/logo.png");
         }
 
         return viewName;
     }
 
 
+
+
     // 매장 수정 페이지 조회
     @GetMapping("/sail/store/update/{storeId}")
     public String updateStore(@PathVariable Long storeId, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+
+        if (!storeService.checkStorePermission(storeId, userDetails.getUsername())) {
+            // 권한이 없는 경우 접근 거부
+            return "redirect:/error-page"; // 또는 다른 적절한 경로로 리디렉션할 수 있습니다.
+        }
 
         String ownerEmail = userDetails.getUsername();
         Store store = storeService.getUpdateStore(storeId, ownerEmail);
@@ -124,7 +132,6 @@ public class StoreController {
 
         model.addAttribute("categoriesList", categoriesList);
 
-
         return "store/store-create";
     }
 
@@ -137,9 +144,17 @@ public class StoreController {
         try {
             String ownerEmail = userDetails.getUsername();
             Store createdStore = storeService.createStore(requestDto, ownerEmail);
-            imageService.saveStoreImage(images, createdStore.getStoreId());
 
-            // 생성된 매장의 ID를 JSON 형태로 반환
+
+            if (images == null || images.isEmpty()) {
+
+                imageService.saveDefaultImage(createdStore.getStoreId());
+            } else {
+
+                imageService.saveStoreImage(images, createdStore.getStoreId());
+            }
+
+
             Map<String, Long> response = new HashMap<>();
             response.put("storeId", createdStore.getStoreId());
             return ResponseEntity.ok(response);
