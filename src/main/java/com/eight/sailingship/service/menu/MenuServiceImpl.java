@@ -6,11 +6,15 @@ import com.eight.sailingship.entity.Menu;
 import com.eight.sailingship.entity.Store;
 import com.eight.sailingship.repository.MenuRepository;
 import com.eight.sailingship.repository.StoreRepository;
+import com.eight.sailingship.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -20,13 +24,18 @@ public class MenuServiceImpl implements MenuService {
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
 
+    @Autowired
+    private S3Uploader s3Uploader;
+
 
     @Transactional
-    public Long createMenu(MenuRequestDto requestDto, UserDetailsImpl userDetails) {
+    public void createMenu(MenuRequestDto requestDto, UserDetailsImpl userDetails, MultipartFile images) throws IOException {
         Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 상점 번호입니다."));
-        Menu menu = new Menu(requestDto, store);
-        return menuRepository.save(menu).getMenuId();
+        String storedFileName = s3Uploader.upload(images, "image");
+
+        Menu menu = new Menu(requestDto, store, storedFileName);
+        menuRepository.save(menu);
     }
 
     @Transactional(readOnly = true)
@@ -47,9 +56,15 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Transactional
-    public void editSaveMenu(MenuRequestDto requestDto, Long id) {
+    public void editSaveMenu(MenuRequestDto requestDto, Long id, MultipartFile images) throws IOException {
         Menu menu = menuRepository.findById(id).get();
-        menu.update(requestDto);
+        if (!images.isEmpty()) {
+            String storedFileName = s3Uploader.upload(images, "image");
+            menu.update(requestDto, storedFileName);
+        } else {
+            menu.update(requestDto);
+        }
+
         menuRepository.save(menu);
     }
 

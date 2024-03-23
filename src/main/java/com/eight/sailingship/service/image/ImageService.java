@@ -3,9 +3,11 @@ package com.eight.sailingship.service.image;
 import com.eight.sailingship.auth.user.UserDetailsImpl;
 import com.eight.sailingship.dto.Image.ImageUploadResponseDto;
 import com.eight.sailingship.entity.ImagePhoto;
+import com.eight.sailingship.entity.ImageStore;
 import com.eight.sailingship.entity.Menu;
 import com.eight.sailingship.entity.Store;
 import com.eight.sailingship.repository.ImageRepository;
+import com.eight.sailingship.repository.ImageStoreRepository;
 import com.eight.sailingship.repository.MenuRepository;
 import com.eight.sailingship.repository.StoreRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,6 +30,7 @@ public class ImageService {
     private final ImageRepository imageRepository;
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
+    private final ImageStoreRepository imageStoreRepository;
 
     @Autowired
     private S3Uploader s3Uploader;
@@ -84,23 +87,6 @@ public class ImageService {
 
 
     //매장 이미지
-    @Transactional
-    public ResponseEntity<ImageUploadResponseDto> saveStoreImage(MultipartFile image, Long storeId) throws IOException {
-        ImagePhoto imagePhoto = new ImagePhoto();
-        if (!image.isEmpty()) {
-            String storedFileName = s3Uploader.upload(image, "image");
-            imagePhoto.setImageUrl(storedFileName);
-
-            Store store = storeRepository.findById(storeId).orElseThrow(() -> new EntityNotFoundException("매장을 찾을 수 없습니다."));
-            imagePhoto.setStore(store);
-        }
-
-        ImagePhoto savedImage = imageRepository.save(imagePhoto);
-        String responseSentence = "이미지를 성공적으로 업로드 했습니다.";
-
-        ImageUploadResponseDto response = new ImageUploadResponseDto(savedImage.getImageId(), responseSentence);
-        return ResponseEntity.ok(response);
-    }
 
     public List<ImagePhoto> listImagesByStoreId(Long storeId) {
         return imageRepository.findByStoreId(storeId);
@@ -141,7 +127,6 @@ public class ImageService {
 
         imageRepository.save(image);
     }
-
 
 
 }
