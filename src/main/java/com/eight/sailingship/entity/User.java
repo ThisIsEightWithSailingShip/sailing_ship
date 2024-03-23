@@ -44,10 +44,7 @@ public class User {
 
 //    @Column(name = "is_owner", nullable = true)
 //    private Boolean isOwner;
-//
-    @OneToOne
-    @JoinColumn(name = "store_id", unique = true)
-    private Store store;
+
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<Order> orderList;
