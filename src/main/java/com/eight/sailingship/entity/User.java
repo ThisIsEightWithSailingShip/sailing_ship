@@ -44,7 +44,7 @@ public class User {
 
 //    @Column(name = "is_owner", nullable = true)
 //    private Boolean isOwner;
-//
+
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<Order> orderList;

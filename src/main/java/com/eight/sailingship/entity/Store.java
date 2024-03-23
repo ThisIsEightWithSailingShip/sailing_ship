@@ -1,9 +1,7 @@
 package com.eight.sailingship.entity;
 
-import com.eight.sailingship.dto.store.StoreRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -12,7 +10,6 @@ import java.util.List;
 @Table(name = "stores")
 @Getter
 @Setter
-@RequiredArgsConstructor
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +31,7 @@ public class Store {
     @Column(name = "owner_name")
     private String ownerName;
 
-    @OneToOne(cascade = CascadeType.ALL) // cascade를 하는 것이 맞는지
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_id", unique = true)
     private User owner;
 
@@ -44,17 +41,9 @@ public class Store {
     @OneToMany(mappedBy = "store")
     private List<ImagePhoto> imagePhotos;
 
-    @OneToOne(mappedBy = "store")
-    private ImageStore imageStore;
+    @Column
+    private String imageUrl;
 
-    public Store(StoreRequestDto requestDto, User owner) {
-        this.address = requestDto.getAddress();
-        this.phone = requestDto.getPhone();
-        this.category = StoreEnum.valueOf(requestDto.getCategory().toUpperCase());
-        this.storeName = requestDto.getStoreName();
-        this.ownerName = requestDto.getOwnerName();
-        this.owner = owner;
-    }
 
 
     public void addMenuList(Menu menu) {

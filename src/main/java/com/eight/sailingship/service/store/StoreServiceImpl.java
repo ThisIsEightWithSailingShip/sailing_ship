@@ -1,7 +1,6 @@
 package com.eight.sailingship.service.store;
 
 
-import com.eight.sailingship.auth.user.UserDetailsImpl;
 import com.eight.sailingship.dto.store.StoreRequestDto;
 
 import com.eight.sailingship.entity.Menu;
@@ -100,20 +99,34 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public Long createStore(StoreRequestDto requestDto, UserDetailsImpl userDetails) {
-
-
-        if (storeRepository.findByOwner_UserId(userDetails.getUser().getUserId()).isPresent()) {
-            throw new IllegalAccessError("이미 매장을 생성하였습니다.");
-        }
+    public Store createStore(StoreRequestDto requestDto, Long userId, MultipartFile image) throws Exception {
         // 사용자 ID를 기반으로 사용자 조회
-        User owner = userRepository.findById(userDetails.getUser().getUserId())
-                .orElseThrow(() -> new RuntimeException("Owner not found with ID"));
+        User owner = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Owner not found with ID: " + userId));
 
         // 매장 생성 로직
-        Store store = new Store(requestDto, owner);;
+        Store store = new Store();
+        store.setAddress(requestDto.getAddress());
+        store.setPhone(requestDto.getPhone());
+        store.setCategory(StoreEnum.valueOf(requestDto.getCategory().toUpperCase()));
+        store.setStoreName(requestDto.getStoreName());
+        store.setOwnerName(requestDto.getOwnerName());
+        store.setOwner(owner);
 
-        return storeRepository.save(store).getStoreId();
+        Store savedStore = storeRepository.save(store); // 매장 저장
+
+//        owner.setStore(savedStore);
+//        userRepository.save(owner); //이걸 안해서 안됐구나...
+
+        // 이미지 처리 로직
+        if (image != null && !image.isEmpty()) {
+            imageService.updateStoreImage(image, savedStore.getStoreId());
+        } else {
+            // 기본 이미지 설정 로직
+            imageService.saveDefaultImage(savedStore.getStoreId());
+        }
+
+        return savedStore;
     }
 
 

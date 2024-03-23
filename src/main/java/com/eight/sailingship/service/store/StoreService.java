@@ -1,6 +1,5 @@
 package com.eight.sailingship.service.store;
 
-import com.eight.sailingship.auth.user.UserDetailsImpl;
 import com.eight.sailingship.dto.store.StoreRequestDto;
 import com.eight.sailingship.entity.Store;
 import org.springframework.ui.Model;
@@ -19,7 +18,7 @@ public interface StoreService {
     void updateStore(Long storeId, StoreRequestDto requestDto, Long userId, MultipartFile image) throws Exception;
 
     //매장 생성
-    Long createStore(StoreRequestDto requestDto, UserDetailsImpl userDetails) throws Exception;
+    Store createStore(StoreRequestDto requestDto, Long userId, MultipartFile image) throws Exception;
 
     boolean checkIfUserHasStore(Long userId);
 

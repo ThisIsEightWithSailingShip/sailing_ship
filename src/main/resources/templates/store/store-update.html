@@ -11,7 +11,7 @@
 <!-- header -->
 <header class="header">
     <div class="header-left">
-        <img th:src="@{/images/logo.png}" class="logo" />
+        <img th:src="@{/images/logo.png}" id="logo" />
     </div>
     <div class="header-center">
         <form class="input-form">
@@ -68,6 +68,11 @@
     </div>
 </main>
 <script src="/js/authModule.js"></script>
+<script>
+    document.getElementById("logo").addEventListener("click", function() {
+        window.location.href = "/";
+    });
+</script>
 <!--<script src="/js/store-update.js"></script>-->
 </body>
 </html>

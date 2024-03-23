@@ -89,7 +89,7 @@
 <body>
 <header class="header">
     <div class="header-left">
-        <img th:src="@{/images/logo.png}" alt="Logo" class="logo">
+        <img th:src="@{/images/logo.png}" alt="Logo" id="logo">
     </div>
     <div class="header-center">
         <form class="input-form">
@@ -102,7 +102,7 @@
         <a href="/sail/login" class="menu-button" id="signin-btn">SIGN IN</a>
         <a class="menu-button" id="owner-btn1" style="display: none;">주문 정보</a>
         <a class="menu-button" id="owner-btn2" style="display: none;">매장 정보</a>
-        <a href="/your-link-url" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
+        <a href="/sail/order" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
         <a class="menu-button" id="logout-btn" style="display: none;" href="javascript:logout()">LOGOUT</a>
     </div>
 </header>
@@ -154,5 +154,10 @@
     }
 </script>
 <script src="/js/authModule.js"></script>
+<script>
+    document.getElementById("logo").addEventListener("click", function() {
+        window.location.href = "/";
+    });
+</script>
 </body>
 </html>

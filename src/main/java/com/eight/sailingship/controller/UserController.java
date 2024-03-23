@@ -56,7 +56,7 @@ public class UserController {
         boolean email = true;
         boolean isOwner = (role == RoleEnum.OWNER);
 
-        System.out.println(email + ", " + role + ", " + isOwner);
+        System.err.println(email + ", " + role + ", " + isOwner);
 
         return new UserInfoDto(email, isOwner);
     }
