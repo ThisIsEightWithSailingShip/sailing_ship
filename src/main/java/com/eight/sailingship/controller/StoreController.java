@@ -54,14 +54,11 @@ public class StoreController {
             model.addAttribute("images", images);
         } catch (Exception e) {
             logger.error("Error retrieving images for store ID: {}", storeId, e);
-//            // 이미지가 없는 경우 기본 이미지의 URL을 추가
-//            model.addAttribute("defaultImageUrl", "/images/logo.png");
+
         }
 
         return viewName;
     }
-
-
 
 
     // 매장 수정 페이지 조회
@@ -132,29 +129,20 @@ public class StoreController {
     @PostMapping("/sail/store")
     @Secured("ROLE_OWNER")
     public ResponseEntity<?> createStore(@ModelAttribute StoreRequestDto requestDto,
-                                         @RequestParam(value = "image") MultipartFile images,
+                                         @RequestParam(value = "image", required = false) MultipartFile image,
                                          @AuthenticationPrincipal UserDetails userDetails) {
-
         try {
             String ownerEmail = userDetails.getUsername();
-            Store createdStore = storeService.createStore(requestDto, ownerEmail);
-
-
-            if (images == null || images.isEmpty()) {
-
-                imageService.saveDefaultImage(createdStore.getStoreId());
-            } else {
-
-                imageService.saveStoreImage(images, createdStore.getStoreId());
-            }
-
-
+            Store createdStore = storeService.createStore(requestDto, ownerEmail, image);
             Map<String, Long> response = new HashMap<>();
             response.put("storeId", createdStore.getStoreId());
             return ResponseEntity.ok(response);
         } catch (IOException e) {
             logger.error("파일 업로드 중 오류 발생", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (Exception e) {
+            logger.error("매장 생성 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 

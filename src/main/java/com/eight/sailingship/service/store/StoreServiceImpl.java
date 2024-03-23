@@ -90,7 +90,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public Store createStore(StoreRequestDto requestDto, String ownerEmail) {
+    public Store createStore(StoreRequestDto requestDto, String ownerEmail, MultipartFile image) throws IOException {
 
         String categoryStr = requestDto.getCategory() == null ? "ETC" : requestDto.getCategory().toUpperCase();
         StoreEnum category = StoreEnum.valueOf(categoryStr);
@@ -114,6 +114,12 @@ public class StoreServiceImpl implements StoreService {
         Store savedStore = storeRepository.save(store);
         owner.setStore(savedStore);
         userRepository.save(owner);
+
+        if (image == null || image.isEmpty()) {
+            imageService.saveDefaultImage(savedStore.getStoreId());
+        } else {
+            imageService.saveStoreImage(image, savedStore.getStoreId());
+        }
 
         return savedStore;
     }

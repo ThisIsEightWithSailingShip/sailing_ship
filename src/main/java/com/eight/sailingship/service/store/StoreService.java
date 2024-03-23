@@ -21,7 +21,7 @@ public interface StoreService {
     void updateStore(Long storeId, StoreRequestDto requestDto, String ownerEmail, MultipartFile image) throws IOException;
 
     //매장 생성
-    Store createStore(StoreRequestDto requestDto, String ownerEmail);
+    Store createStore(StoreRequestDto requestDto, String ownerEmail, MultipartFile image) throws IOException;
 
     boolean checkIfUserHasStore(String userEmail);
 
