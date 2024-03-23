@@ -42,7 +42,7 @@
           <!-- 매장 카드 -->
           <div class="store-card" th:each="store : ${stores}", th:attr="storeId = ${store.storeId}">
             <div class="store-img-cover">
-              <img th:src="@{/images/logo.png}" class="store-img"/>
+              <img th:src="${store.imagePhotos.isEmpty() ? '/path/to/default/image.png' : store.imagePhotos[0].imageUrl}" alt="Store Image" class="store-img"/>
             </div>
             <h3 th:text="${store.storeName}" class="store-info">가게명</h3>
             <p th:text="${store.phone}" class= "store-info">전화번호</p>
@@ -52,6 +52,6 @@
       </div>
     </main>
     <script src="/js/stores.js"></script>
-<!--    <script src="/js/authModule.js"></script>-->
+    <script src="/js/authModule.js"></script>
   </body>
 </html>

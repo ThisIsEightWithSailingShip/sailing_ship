@@ -46,12 +46,21 @@ public class StoreController {
     // 특정 매장 페이지 조회
     @GetMapping("/sail/store/{storeId}")
     public String getStore(@PathVariable Long storeId, Model model) {
-        // 기존 매장 정보 및 메뉴 조회 로직을 수행하고, 뷰 이름을 반환
-        String viewName = storeService.getStore(model, storeId);
 
-        // 매장의 이미지 정보 조회
-        List<ImagePhoto> images = imageService.listImagesByStoreId(storeId);
-        model.addAttribute("images", images);
+        logger.info("Entering getStore method. Store ID: {}", storeId);
+
+
+        String viewName = storeService.getStore(model, storeId);
+        logger.info("View name returned from storeService: {}", viewName);
+
+        try {
+            // 매장의 이미지 정보 조회
+            List<ImagePhoto> images = imageService.listImagesByStoreId(storeId);
+            model.addAttribute("images", images);
+            logger.info("Successfully retrieved image list for store ID: {}. Image count: {}", storeId, images.size());
+        } catch (Exception e) {
+            logger.error("Error retrieving images for store ID: {}", storeId, e);
+        }
 
         return viewName;
     }
@@ -69,11 +78,11 @@ public class StoreController {
 
         model.addAttribute("store", store);
 
-//        List<String> categoriesList = Arrays.stream(StoreEnum.values())
-//                .map(Enum::name)
-//                .collect(Collectors.toList());
-//
-//        model.addAttribute("categoriesList", categoriesList);
+        List<String> categoriesList = Arrays.stream(StoreEnum.values())
+                .map(Enum::name)
+                .collect(Collectors.toList());
+
+        model.addAttribute("categoriesList", categoriesList);
 
         return "store/store-update";
     }
