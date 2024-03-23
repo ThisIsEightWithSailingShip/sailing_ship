@@ -60,7 +60,6 @@ public class StoreServiceImpl implements StoreService {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("Store not found with id: " + storeId));
 
-
         User owner = userRepository.findByEmail(ownerEmail)
                 .orElseThrow(() -> new RuntimeException("Owner not found with email: " + ownerEmail));
 
@@ -68,10 +67,8 @@ public class StoreServiceImpl implements StoreService {
             throw new IllegalStateException("User does not have permission to update this store.");
         }
 
-
         String categoryStr = requestDto.getCategory() == null ? "ETC" : requestDto.getCategory().toUpperCase();
         StoreEnum category = StoreEnum.valueOf(categoryStr);
-
 
         store.setAddress(requestDto.getAddress());
         store.setPhone(requestDto.getPhone());
@@ -129,5 +126,12 @@ public class StoreServiceImpl implements StoreService {
                 .map(Store::getStoreId)
                 .orElseThrow(() -> new RuntimeException("No store found for user."));
     }
+
+    @Override
+    public boolean checkStorePermission(Long storeId, String userEmail) {
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("Store not found"));
+        return store.getOwner().getEmail().equals(userEmail);
+    }
+
 
 }

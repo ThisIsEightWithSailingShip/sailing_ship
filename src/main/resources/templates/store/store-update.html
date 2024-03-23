@@ -38,21 +38,31 @@
 <main>
     <div class="main-background">
         <div class="update-form-container">
-            <form id="store-update-form" th:action="@{/sail/store/update/{storeId}(storeId=${store.storeId})}" th:method="put">
+            <form id="store-update-form" th:action="@{/sail/store/update/{storeId}(storeId=${store.storeId})}" th:method="put" enctype="multipart/form-data">
 
-                <label for="address">Address:</label>
+
+            <label for="address">Address:</label>
                 <input type="text" id="address" name="address" th:value="${store.address}"/>
 
                 <label for="phone">Phone:</label>
                 <input type="text" id="phone" name="phone" th:value="${store.phone}"/>
 
-                <label for="category">Category:</label>
-                <input type="text" id="category" name="category" th:value="${store.category}"/>
-
                 <label for="storeName">Store Name:</label>
                 <input type="text" id="storeName" name="storeName" th:value="${store.storeName}"/>
 
-                <input id="submitBtn" type="submit" value="Update">
+
+                <label for="category">카테고리:</label>
+                <select id="category" name="category">
+                <option th:each="category : ${categoriesList}"
+                        th:value="${category}"
+                        th:text="${category}">카테고리 선택</option>
+                </select>
+
+                <label for="image">이미지 업로드:</label>
+                <input type="file" id="image" name="image" accept="image/jpeg">
+
+
+                <input id="submitBtn" type="submit" value="수정하기">
             </form>
         </div>
     </div>
