@@ -73,9 +73,6 @@ public class StoreController {
         String ownerEmail = userDetails.getUsername();
         Store store = storeService.getUpdateStore(storeId, ownerEmail);
 
-        //수정시 해당 사장의 매장인지 확인하는 작업 필요한데...
-
-
         model.addAttribute("store", store);
 
         List<String> categoriesList = Arrays.stream(StoreEnum.values())
