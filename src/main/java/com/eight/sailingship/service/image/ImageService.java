@@ -5,6 +5,7 @@ import com.eight.sailingship.dto.Image.ImageUploadResponseDto;
 import com.eight.sailingship.entity.ImagePhoto;
 import com.eight.sailingship.repository.ImageRepository;
 import com.eight.sailingship.repository.MenuRepository;
+import com.eight.sailingship.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,5 +1,4 @@
-package com.eight.sailingship.service.image;
-
+package com.eight.sailingship.util;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -16,7 +15,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class S3Uploader {
+public class S3Uploader { // static ㄱㄴ
 
     private final AmazonS3 amazonS3Client;
 
@@ -55,7 +54,7 @@ public class S3Uploader {
         }
     }
 
-    private Optional<File> convert(MultipartFile file) throws IOException {
+    private Optional<File> convert(MultipartFile file) throws IOException { //확장자.
         String originalFileName = file.getOriginalFilename();
         String extension = originalFileName.substring(originalFileName.lastIndexOf(".")); // 파일 확장자 추출
 

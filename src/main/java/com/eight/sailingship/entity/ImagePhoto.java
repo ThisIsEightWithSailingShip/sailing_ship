@@ -22,7 +22,7 @@ public class ImagePhoto {
     private Store store;
 
     @OneToOne
-    @JoinColumn(name = "menu_menuId")
+    @JoinColumn(name = "menu_menuId") ///suspect
     private Menu menu;
 
     public ImagePhoto(String storedFileName, Store store) {
