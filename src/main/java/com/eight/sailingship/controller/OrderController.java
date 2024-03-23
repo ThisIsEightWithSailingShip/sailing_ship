@@ -23,8 +23,8 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    //장바구니에 물품 담기
-    @PostMapping("/sail/cart")  // 예외처리 완료
+    // 주문 생성
+    @PostMapping("/sail/order")  // 예외처리 완료
     public ResponseEntity<?> createOrder(@RequestBody OrderBeforePayRequestDto orderBeforePayRequestDto,
                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
@@ -39,8 +39,33 @@ public class OrderController {
         }
     }
 
+    // 전체 주문 내역 확인
+    @GetMapping("/sail/order")
+    public String getOrderList(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<OrderResponseDto> orderList = orderService.getOrderList(userDetails.getUser());
+        model.addAttribute("orders", orderList);
+
+        return "order/orders";
+    }
+
+
+    // 주문 취소
+    @DeleteMapping("/sail/order")
+    public ResponseEntity<?> deleteOrder(@RequestBody OrderDeleteRequestDto orderDeleteRequestDto,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            orderService.cancelOrder(orderDeleteRequestDto,userDetails);
+            return ResponseEntity.ok().build();
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(SERVER_ERROR);
+        }
+
+    }
+
     // 결제하지 않은 주문 확인
-    @GetMapping("/sail/cart")   // 예외 처리 완료
+    @GetMapping("/sail/pay")   // 예외 처리 완료
     public String getNotPayOrder(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         OrderResponseDto orderResponseDto = orderService.getNotPayOrder(userDetails.getUser());
         model.addAttribute("cart", orderResponseDto);
@@ -48,7 +73,7 @@ public class OrderController {
     }
 
     // 결제
-    @PatchMapping("/sail/order")
+    @PatchMapping("/sail/pay")
     public ResponseEntity<?> saveOrder(@RequestBody OrderAfterPayRequestDto orderAfterPayRequestDto,
                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
@@ -64,31 +89,6 @@ public class OrderController {
         }
 
     }
-
-    // 전체 주문 내역 확인
-    @GetMapping("/sail/order")
-    public String getOrderList(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-            List<OrderResponseDto> orderList = orderService.getOrderList(userDetails.getUser());
-            model.addAttribute("orders", orderList);
-
-            return "order/orders";
-    }
-
-    // 주문 취소
-    @DeleteMapping("/sail/order")
-    public ResponseEntity<?> deleteOrder(@RequestBody OrderDeleteRequestDto orderDeleteRequestDto,
-                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        try {
-            orderService.cancelOrder(orderDeleteRequestDto,userDetails);
-            return ResponseEntity.ok().build();
-        }catch (IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(SERVER_ERROR);
-        }
-
-    }
-
 
     // 사장 입장 주문 확인 페이지 불러오기
     @GetMapping("/sail/order/check")

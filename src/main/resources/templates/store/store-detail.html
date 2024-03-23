@@ -141,7 +141,7 @@
         <button onclick="checkout()">주문하기</button>
     </div>
 </main>
-<!--<script src="/js/authModule.js"></script>-->
+<script src="/js/authModule.js"></script>
 <script>
     let cart = [];
 
@@ -258,7 +258,7 @@
         const orderData = exportOrderData(totalPrice); // 주문 정보 및 총 가격을 JSON으로 내보냅니다.
 
         // fetch를 사용하여 POST 요청을 보냅니다.
-        fetch('/sail/cart', {
+        fetch('/sail/order', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -274,7 +274,7 @@
                     // 잘못된 요청일 경우
                     return response.text().then(errorMessage => {
                         window.alert(errorMessage);
-                        window.location.href = "/sail/cart"
+                        window.location.href = "/sail/pay"
                     });
                 } else if (response.status === 404) {
                     // 찾을 수 없는 리소스일 경우
