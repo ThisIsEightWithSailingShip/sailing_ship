@@ -128,20 +128,5 @@ public class ImageService {
         imageRepository.save(image);
     }
 
-    public void saveDefaultImage(Long storeId) {
-        String defaultImageUrl = "/images/logo.png";
-
-
-        Store store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new RuntimeException("Store not found with id " + storeId));
-
-
-        ImagePhoto image = new ImagePhoto(defaultImageUrl, store);
-
-
-        imageRepository.save(image);
-    }
-
-
 
 }
