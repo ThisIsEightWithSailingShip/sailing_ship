@@ -82,12 +82,10 @@
         </form>
     </div>
     <div class="header-right">
-        <a href="/sail/signup" class="menu-button" id="signup-btn">SIGN UP</a>
-        <a href="/sail/login" class="menu-button" id="signin-btn">SIGN IN</a>
-        <a class="menu-button" id="owner-btn1" style="display: none;">주문 정보</a>
-        <a href="/owner-btn2" class="menu-button" id="owner-btn2" style="display: none;">매장 정보</a>
-        <a href="/sail/order" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
-        <a class="menu-button" id="logout-btn" style="display: none;" href="javascript:logout()">LOGOUT</a>
+        <nav class="menu">
+            <span class="menu-button">SIGN UP</span>
+            <span class="menu-button">SIGN IN</span>
+        </nav>
     </div>
 </header>
 <h1 class="order-introduce">고객님의 주문 목록입니다.</h1>
@@ -149,5 +147,10 @@
 </script>
 <script src="/js/authModule.js"></script>
 
+<script>
+    document.getElementById("logo").addEventListener("click", function() {
+        window.location.href = "/";
+    });
+</script>
 </body>
 </html>
