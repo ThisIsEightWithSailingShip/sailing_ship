@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface ImageRepository extends JpaRepository<ImagePhoto, Long> {
     List<ImagePhoto> findByStore_StoreId(long storeId);
-
     ImagePhoto findByStore_StoreIdAndMenu_MenuId(long storeId, Long menuId);
 
     @Query("SELECT i FROM image i WHERE i.store.storeId = :storeId")
