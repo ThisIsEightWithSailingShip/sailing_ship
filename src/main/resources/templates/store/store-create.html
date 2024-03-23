@@ -195,6 +195,18 @@
       font-size: 16px;
     }
 
+    .form-group select {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      width: 100%; /* 폭을 100%로 지정하여 부모 요소 너비에 맞춤 */
+      background-color: #fff; /* 배경색을 흰색으로 지정 */
+    }
+
+
+
     .signup-form button:hover {
       background-color: #2cb6b6;
     }
@@ -246,13 +258,17 @@
     <!-- 매장생성 페이지 -->
     <div class="signup-container">
       <h2>매장생성</h2>
-      <form class="signup-form" id="createStoreForm">
-        <input type="text" id="storeName" name="storeName" placeholder="가게명">
+      <form class="signup-form" id="createStoreForm" method="post" enctype="multipart/form-data">
+      <input type="text" id="storeName" name="storeName" placeholder="가게명">
         <input type="text" id="ownerName" name="ownerName" placeholder="사장이름">
         <input type="text" id="address" name="address" placeholder="매장주소">
         <input type="text" id="phone" name="phone" placeholder="전화번호">
+        <!-- 이미지 파일을 선택하기 위한 input 필드 추가 -->
+        <label for="image">이미지 업로드:</label>
+        <input type="file" id="image" name="image" accept="image/jpeg">
+
         <div class="form-group">
-          <label for="category">카테고리</label>
+<!--          <label for="category">카테고리</label>-->
           <select id="category" name="category">
             <option th:each="category : ${categoriesList}"
                     th:value="${category}"
@@ -273,40 +289,31 @@
   document.getElementById("createStoreForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
-    const formData = {
-      storeName: document.getElementById("storeName").value,
-      ownerName: document.getElementById("ownerName").value,
-      address: document.getElementById("address").value,
-      phone: document.getElementById("phone").value,
-      category: document.getElementById("category").value,
-    };
+    const formData = new FormData(this); // FormData 객체를 사용하여 폼 데이터를 생성합니다.
 
-    console.log(formData)
-
-    fetch("/sail/store", { // 서버에 POST 요청 보내기
+    fetch("/sail/store", {
       method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
+      body: formData, // FormData 객체를 직접 전송합니다.
+      // Content-Type 헤더를 설정하지 않습니다. 브라우저가 자동으로 처리합니다.
     })
             .then(response => {
               if (!response.ok) {
                 throw new Error('Network response was not ok');
               }
-              return response.json(); // 여기에서 응답을 JSON으로 파싱합니다.
+              return response.json(); // 응답을 JSON으로 파싱합니다.
             })
             .then(data => {
-              // 파싱된 데이터에서 storeId를 사용하여 리디렉션합니다.
-              alert("매장생성 성공!");
-              window.location.href = `/sail/store/${data.storeId}`; // 성공 시 매장 상세 페이지로 리디렉션
+              // 매장 생성 성공 후 처리, 예를 들어 생성된 매장의 상세 페이지로 이동
+              alert("매장 생성 성공!");
+              window.location.href = `/sail/store/${data.storeId}`;
             })
             .catch(error => {
-              // 오류 발생 시 처리
+              // 오류 처리
               alert("오류 발생. 다시 시도해주세요.");
               console.error("오류 발생:", error);
             });
   });
+
 </script>
 
 </body>
