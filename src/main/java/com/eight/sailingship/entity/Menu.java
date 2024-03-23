@@ -3,6 +3,7 @@ package com.eight.sailingship.entity;
 import com.eight.sailingship.dto.menu.MenuRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@RequiredArgsConstructor
 @Table(name = "menus")
 public class Menu {
     @Id
@@ -38,6 +40,14 @@ public class Menu {
 
     @OneToOne(mappedBy = "menu")
     private ImagePhoto imagePhoto;
+
+    public Menu(MenuRequestDto requestDto, Store store) {
+        this.menuName = requestDto.getMenuName();
+        this.introduce = requestDto.getIntroduce();
+        this.price = requestDto.getPrice();
+        this.menuCategory = requestDto.getMenuCategory();
+        this.store = store;
+    }
 
     public void update(MenuRequestDto requestDto) {
         this.menuName = requestDto.getMenuName();

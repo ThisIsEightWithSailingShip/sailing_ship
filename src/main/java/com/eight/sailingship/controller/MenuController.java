@@ -12,13 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -33,13 +31,13 @@ public class MenuController {
 
 
     @Secured("ROLE_OWNER")
-    @GetMapping("/sail/menu") // 메뉴 보여주는 창 -> 따라서 getmapping 이용. 조회 목적
-    public String createMenu(Model model){
+    @GetMapping("/sail/menu") // 메뉴 생성 html
+    public String createMenu(){
         return "menu/createMenu";
     }
 
     @Secured("ROLE_OWNER")
-    @PostMapping("/sail/menu")//새로운 메뉴를 추가해주는 api. 따라서 postmapping 이용.
+    @PostMapping("/sail/menu") // 메뉴 생성
     public String createMenu(@ModelAttribute MenuRequestDto requestDto,
                              @RequestParam(value = "image") MultipartFile images,
                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -47,37 +45,34 @@ public class MenuController {
             Long menuId = menuService.createMenu(requestDto, userDetails);
             imageService.saveMenuImage(images, menuId, userDetails);
         } catch (IOException e) {
-            logger.error("파일 업로드 중 오류 발생", e);
-
+            logger.error("이미지 파일 업로드 중 오류 발생", e);
         }
         return "redirect:/sail/listmenu";
     }
 
-    //나중에 authorization 필요
     @Secured("ROLE_OWNER")
-    @GetMapping("/sail/listmenu") // owner만 접슨할 수 있도록 authorization해야함.
+    @GetMapping("/sail/listmenu") // 메뉴 조회
     public String listMenu(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<ImagePhoto> images = imageService.listImage(userDetails);
         List<Menu> menus = menuService.listMenu(userDetails);
         model.addAttribute("menus", menus);
-        model.addAttribute("owner", true); // *** 이 부분 빼던가 해야함.
+        model.addAttribute("owner", true);
         model.addAttribute("images", images);
         return "menu/listMenu";
     }
 
 
     @Secured("ROLE_OWNER")
-    @GetMapping("/sail/menu/{id}") // 바꾸는 창을 띄워주고 -> 메뉴 보여주는 창 -> 따라서 getmapping 이용. 조회 목적.
+    @GetMapping("/sail/menu/{id}") // 메뉴 수정 html
     public String editMenu(@PathVariable Long id, Model model,
                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
- // 나중에authorization 써서, 실제 storeId를 넘겨줘야함.
         Menu menu = menuService.editMenu(id, userDetails);
         model.addAttribute("menu", menu);
         return "menu/editMenu";
     }
 
     @Secured("ROLE_OWNER")
-    @PatchMapping("/sail/menu/{id}") // 바뀐 값들을 적용해주는
+    @PatchMapping("/sail/menu/{id}") // 메뉴 수정
     public String editMenu(@PathVariable Long id,
                            @RequestParam(value = "image") MultipartFile images,
                            @ModelAttribute MenuRequestDto requestDto,
@@ -92,20 +87,17 @@ public class MenuController {
         return "redirect:/sail/listmenu";
     }
 
-
     @Secured("ROLE_OWNER")
-    @GetMapping("/sail/Error")
+    @GetMapping("/sail/Error") // 다른 owner의 매장 수정 시도 시, 에러 페이지
     public String showEditError(@ModelAttribute("error") String error, Model model) {
-        model.addAttribute("error", error); // RedirectAttributes에서 전달받은 오류 메시지를 모델에 추가
-        return "menu/errorMenu"; // 오류 메시지를 표시할 템플릿
+        model.addAttribute("error", error);
+        return "menu/errorMenu";
     }
 
-
     @Secured("ROLE_OWNER")
-    @DeleteMapping("/sail/menu/trash/{id}")
+    @DeleteMapping("/sail/menu/trash/{id}") // 메뉴 삭제
     public ResponseEntity<String> deleteMenu(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return menuService.deleteMenu(id, userDetails);
     }
-
 
 }

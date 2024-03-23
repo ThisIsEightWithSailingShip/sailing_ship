@@ -25,4 +25,8 @@ public class ImagePhoto {
     @JoinColumn(name = "menu_menuId")
     private Menu menu;
 
+    public ImagePhoto(String storedFileName, Store store) {
+        this.imageUrl = storedFileName;
+        this.store = store;
+    }
 }
