@@ -1,5 +1,7 @@
 package com.eight.sailingship.service.email;
 
+import com.eight.sailingship.dto.email.EmailCheckDto;
+import com.eight.sailingship.dto.email.EmailRequestDto;
 import com.eight.sailingship.service.redis.RedisUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -36,7 +38,9 @@ public class EmailService {
 
 
     //mail을 어디서 보내는지, 어디로 보내는지 , 인증 번호를 html 형식으로 어떻게 보내는지 작성합니다.
-    public String joinEmail(String email) {
+    public String joinEmail(EmailRequestDto requestDto) {
+        String email = requestDto.getEmail();
+
         makeRandomNumber();
         String authNum = String.valueOf(authNumber);
         redisUtil.setDataExpire(email, authNum, 1800000);
@@ -77,7 +81,10 @@ public class EmailService {
     }
 
     // 검증 로직
-    public boolean checkAuthNum(String email,String authNum){
+    public boolean checkAuthNum(EmailCheckDto checkDto){
+        String email = checkDto.getEmail();
+        String authNum = checkDto.getAuthNum();
+
         System.out.println(redisUtil.getData(email));
 
         if(redisUtil.getData(email) == null){
