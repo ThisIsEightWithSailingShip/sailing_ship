@@ -25,10 +25,11 @@
         </form>
     </div>
     <div class="header-right">
-        <nav class="menu">
-            <span class="menu-button">SIGN UP</span>
-            <span class="menu-button">SIGN IN</span>
-        </nav>
+        <a href="/sail/signup" class="menu-button" id="signup-btn">SIGN UP</a>
+        <a href="/sail/login" class="menu-button" id="signin-btn">SIGN IN</a>
+        <a href="/sail/order/check" class="menu-button" id="owner-btn1" style="display: none;">주문 정보</a>
+        <a href="/sail/order" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
+        <a class="menu-button" id="logout-btn" style="display: none;" href="javascript:logout()">LOGOUT</a>
     </div>
 </header>
 
@@ -90,7 +91,7 @@
         }
     }
 </script>
-
+<script src="/js/authModule.js"></script>
 <script>
     // 이 부분에는 다른 자바스크립트 코드가 있을 수 있습니다.
     document.getElementById("logo").addEventListener("click", function() {
