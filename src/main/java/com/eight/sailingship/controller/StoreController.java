@@ -102,6 +102,7 @@ public class StoreController {
     //수정하기 버튼 클릭시 확인하는거
     @GetMapping("/sail/store/check-permission/{storeId}")
     @ResponseBody
+
     public ResponseEntity<?> checkPermission(@PathVariable Long storeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             boolean hasPermission = storeService.checkStorePermission(storeId, userDetails.getUser().getUserId());
@@ -158,5 +159,7 @@ public class StoreController {
             return "redirect:/sail/store";
         }
     }
+
+
 
 }
