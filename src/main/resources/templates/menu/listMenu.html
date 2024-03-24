@@ -107,13 +107,14 @@
 </header>
 
 <main>
+    <h1 class="menu-introduce">메뉴를 골라보세요</h1>
     <img th:src="@{/images/logo.png}" class="logo" />
     <div class="card-container">
         <div th:each="menu, menuStat : ${menus}" class="card" th:data-menu-id="${menu.menuId}">
-            <h3 th:text="${menu.menuName}">Menu Name</h3>
-            <p th:text="${menu.introduce}">Introduction</p>
-            <p><span>Price: $</span><span th:text="${menu.price}"></span></p>
-            <p><span>Category: </span><span th:text="${menu.menuCategory}"></span></p>
+            <h3 class="menu-info" th:text="${menu.menuName}">Menu Name</h3>
+            <p class="menu-info" th:text="${menu.introduce}">Introduction</p>
+            <p class="menu-info" th:text="${menu.price}"></p>
+            <p class="menu-info" th:text="${menu.menuCategory}"></p>
 
 
             <!-- 이미지 출력 부분 -->
