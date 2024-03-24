@@ -38,7 +38,6 @@
         <h1 class="order-introduce">현재까지 들어온 주문입니다.</h1>
         <div class="order-container">
             <!-- 주문 확인 카드 -->
-<!--            주문자 주소, 주문자 닉네임, 주문자 전화번호, 주문 메뉴 리스트, 주문 상태 변환하는 버튼-->
             <div class="order-card"
                  th:each="orderCheck : ${orderCheckList}"
                  th:attr="storeId = ${orderCheck.store.storeId}">
@@ -56,12 +55,11 @@
                 <input id="orderCompleteBtn" type="submit" value="배달 완료"
                        th:attr="data-orderId=${orderCheck.orderId}"
                        onclick="completeOrder(this.getAttribute('data-orderId'), this)">
-
-<!--                해결책 : 결제 완료된 놈들만 불러오게 한다.-->
             </div>
         </div>
     </div>
 </main>
+
 <script th:inline="javascript">
     function completeOrder(orderId, button) {
         console.log(orderId);
@@ -90,25 +88,13 @@
         }
     }
 </script>
+
 <script>
+    // 이 부분에는 다른 자바스크립트 코드가 있을 수 있습니다.
     document.getElementById("logo").addEventListener("click", function() {
         window.location.href = "/";
     });
 </script>
+
 </body>
 </html>
-
-<!--OrderMenu를 기반으로 정보 조회 시켜야 할듯-->
-
-<!--<h1 class="store-introduce">원하시는 매장을 찾아보세요</h1>-->
-<!--<div class="store-container">-->
-<!--    &lt;!&ndash; 매장 카드 &ndash;&gt;-->
-<!--    <div class="store-card" th:each="store : ${stores}", th:attr="storeId = ${store.storeId}">-->
-<!--        <div class="store-img-cover">-->
-<!--            <img th:src="@{/images/logo.png}" class="store-img"/>-->
-<!--        </div>-->
-<!--        <h3 th:text="${store.storeName}" class="store-info">가게명</h3>-->
-<!--        <p th:text="${store.phone}" class= "store-info">전화번호</p>-->
-<!--        <p th:text="${store.address}" class="store-info">주소</p>-->
-<!--    </div>-->
-<!--</div>-->

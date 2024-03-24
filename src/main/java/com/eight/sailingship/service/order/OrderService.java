@@ -1,10 +1,7 @@
 package com.eight.sailingship.service.order;
 
 import com.eight.sailingship.auth.user.UserDetailsImpl;
-import com.eight.sailingship.dto.order.OrderAfterPayRequestDto;
-import com.eight.sailingship.dto.order.OrderBeforePayRequestDto;
-import com.eight.sailingship.dto.order.OrderDeleteRequestDto;
-import com.eight.sailingship.dto.order.OrderResponseDto;
+import com.eight.sailingship.dto.order.*;
 import com.eight.sailingship.entity.User;
 import com.eight.sailingship.entity.Order;
 
@@ -20,9 +17,11 @@ public interface OrderService {
 
     void processOrderPayment(OrderAfterPayRequestDto orderAfterPayRequestDto, UserDetailsImpl user);
     // 매장 id 기반 해당 주문들 전부 조회
-    List<Order> getOrderCheckList(Long storeId);
+    List<Order> getOrderCheckList(UserDetailsImpl userDetails);
 
     void completeOrderCheck(Long orderId);
 
     void cancelOrder(OrderDeleteRequestDto orderDeleteRequestDto, UserDetailsImpl userDetails);
+
+    void completeOrderCheck(OrderCheckRequestDto orderCheckRequestDto, UserDetailsImpl userDetails);
 }
