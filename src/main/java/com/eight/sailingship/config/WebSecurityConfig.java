@@ -76,11 +76,6 @@ public class WebSecurityConfig {
                                 .requestMatchers("/sail/user/email-verify").permitAll()
                                 .requestMatchers("/sail/user/email-check").permitAll()
                                 .requestMatchers("/sail/authInfo").permitAll()
-                                .requestMatchers("/sail/image").permitAll() // 잠시 이미지 구현을 위해 permitall****
-//                                .requestMatchers("/api/products/{productId}").permitAll()
-//                                .requestMatchers(HttpMethod.GET, "/api/products").permitAll()
-//                                .requestMatchers(HttpMethod.POST, "/api/products").hasRole("ADMIN") // 1차 권한방어
-//                                .requestMatchers(HttpMethod.POST, "/api/images").hasRole("SUPER_ADMIN")
                                 .anyRequest().authenticated() // 그 외 모든 요청 인증처리 요구
         );
 

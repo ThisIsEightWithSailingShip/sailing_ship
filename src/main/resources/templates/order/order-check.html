@@ -63,12 +63,6 @@
     </div>
 </main>
 <script th:inline="javascript">
-    import { checkTokenExpirationAndHandle } from "../../static/js/authModule"
-
-    document.addEventListener("DOMContentLoaded", function() {
-        checkTokenExpirationAndHandle();
-    });
-
     function completeOrder(orderId, button) {
         console.log(orderId);
         if (orderId) {
