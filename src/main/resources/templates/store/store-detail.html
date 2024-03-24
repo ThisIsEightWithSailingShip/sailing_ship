@@ -190,6 +190,7 @@
             },
         })
             .then(response => {
+                console.log(response)
                 if (response.ok) {
                     alert("인증이 성공적으로 되었습니다.");
                     window.location.href = `/sail/listmenu/${storeId}`;
