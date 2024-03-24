@@ -18,14 +18,6 @@ public class JwtAccessDenyHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException, IOException {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        response.setContentType("application/json;charset=UTF-8");
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonMessage = objectMapper.writeValueAsString(new StatusResponse(HttpServletResponse.SC_FORBIDDEN, "접근 관련 예외"));
-        PrintWriter writer = response.getWriter();
-
-        writer.print(jsonMessage);
-        writer.flush();
-        writer.close();
+        request.getRequestDispatcher("/sail/Error").forward(request, response);
     }
 }

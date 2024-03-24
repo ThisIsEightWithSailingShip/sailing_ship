@@ -126,8 +126,7 @@
         <!-- 메뉴 카드 -->
         <div class="menu-card" th:each="menu : ${menus}" th:attr="data-category=${menu.menuCategory}">
             <h3 th:text="${menu.menuName}">메뉴 제목</h3>
-            <img class="store-img" th:if="${store.imagePhotos.size() == 0}" src="/images/logo.png" alt="매장 이미지" />
-            <img class="store-img" th:if="${store.imagePhotos.size() > 0}" th:src="${store.imagePhotos[0].imageUrl}" alt="매장 이미지" />
+            <img class="store-img" th:src="@{${menu.imageUrl}}"  alt="메뉴 이미지" />
 
 
 
@@ -191,6 +190,7 @@
             },
         })
             .then(response => {
+                console.log(response)
                 if (response.ok) {
                     alert("인증이 성공적으로 되었습니다.");
                     window.location.href = `/sail/listmenu/${storeId}`;
