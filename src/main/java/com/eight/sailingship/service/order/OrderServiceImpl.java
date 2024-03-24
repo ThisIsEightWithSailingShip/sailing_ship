@@ -71,7 +71,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public List<OrderResponseDto> getOrderList(User userDetails) {
         User user = getUser(userDetails);   // 계정 검증
-        List<Order> customerOrders = orderRepository.findByUser(user); //해당 계정에 해당하는 주문 목록 가져오기
+        List<Order> customerOrders = orderRepository.findByUserOrderByOrderDateDesc(user); //해당 계정에 해당하는 주문 목록 가져오기
         List<OrderResponseDto> orderResponseDtoList = getOrderResponseDtos(customerOrders); // ResponseDto로 변환
 
         return orderResponseDtoList;
@@ -80,8 +80,10 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<Order> getOrderCheckList(Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow();
+    public List<Order> getOrderCheckList(UserDetailsImpl userDetails) {
+        User user = getUser(userDetails.getUser());
+        Store store = storeRepository.findByOwner_UserId(user.getUserId()).orElseThrow(()->
+                new NullPointerException("매장이 존재하지 않습니다"));
         return orderRepository.findByStoreAndStatus(store, StatusEnum.PAY_COMPLETE);
     }
 
@@ -91,8 +93,16 @@ public class OrderServiceImpl implements OrderService{
     public void completeOrderCheck(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow();
         order.deliveryComplete();
+    }
 
-        System.out.println(order.getStatus());
+    @Override
+    @Transactional
+    public void completeOrderCheck(OrderCheckRequestDto orderCheckRequestDto, UserDetailsImpl userDetails) {
+        Order order = orderRepository.findById(orderCheckRequestDto.getOrderId()).orElseThrow();
+        Store store = order.getStore();
+        if(store.getOwner().getUserId()==userDetails.getUser().getUserId()){
+            order.deliveryComplete();
+        }
     }
 
     @Override
@@ -111,6 +121,8 @@ public class OrderServiceImpl implements OrderService{
         throw new IllegalArgumentException(NOT_MATCH_ORDER);
 
     }
+
+
 
     //  -------------------------------private method-------------------------------
 
