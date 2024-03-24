@@ -42,13 +42,13 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Transactional(readOnly = true)
-    public List<Menu> listMenu(UserDetailsImpl userDetails, Long storeId) {
+    public List<Menu> listMenu(UserDetailsImpl userDetails, Long storeId) throws IllegalArgumentException {
         checkListMenu(userDetails, storeId);
         return menuRepository.findByStore_StoreId(userDetails.getUser().getUserId());
     }
 
     @Transactional
-    public Menu editMenu(Long menuId, UserDetailsImpl userDetails) {
+    public Menu editMenu(Long menuId, UserDetailsImpl userDetails) throws IllegalArgumentException {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 메뉴 번호 입니다."));
         long menuOwnerId = menu.getStore().getStoreId();
         Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId())
@@ -86,14 +86,10 @@ public class MenuServiceImpl implements MenuService {
         return ResponseEntity.ok().body("삭제 되었습니다.");
     }
 
-    public void checkListMenu(UserDetailsImpl userDetails, Long storeId) {
-        try {
-            Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId()).orElseThrow(() -> new IllegalArgumentException("매장을 아직 생성하지 않았습니다."));
-            if (store.getStoreId() != storeId) {
-                throw new IllegalArgumentException("사장님의 매장이 아닙니다.");
-            }
-        } catch (IllegalArgumentException e) {
-            throw e;
+    public void checkListMenu(UserDetailsImpl userDetails, Long storeId) throws IllegalArgumentException {
+        Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId()).orElseThrow(() -> new IllegalArgumentException("매장을 아직 생성하지 않았습니다."));
+        if (store.getStoreId() != storeId) {
+            throw new IllegalArgumentException("사장님의 매장이 아닙니다.");
         }
 
     }

@@ -6,9 +6,6 @@ import com.eight.sailingship.entity.Menu;
 import com.eight.sailingship.service.image.ImageService;
 import com.eight.sailingship.service.menu.MenuServiceImpl;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,14 +19,11 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
-@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class MenuController {
 
     private final MenuServiceImpl menuService;
-    private final ImageService imageService;
-    private static final Logger logger = LoggerFactory.getLogger(MenuController.class);
 
 
     @Secured("ROLE_OWNER")
@@ -57,15 +51,14 @@ public class MenuController {
     @Secured("ROLE_OWNER")
     @GetMapping("/sail/listmenu/{storeId}") // 메뉴 조회
     public String listMenu(Model model,
-                                           @PathVariable Long storeId,
-                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                           @PathVariable Long storeId,
+                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             List<Menu> menus = menuService.listMenu(userDetails, storeId);
             model.addAttribute("menus", menus);
             model.addAttribute("owner", true);
             return "menu/listMenu";
         } catch (IllegalArgumentException e) {
-            //logger.error("파일 업로드 중 오류 발생", e);
             return "redirect:/sail/Error";
         }
     }
