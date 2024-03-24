@@ -94,6 +94,8 @@ public class StoreController {
         try {
             Long userId = userDetails.getUser().getUserId(); // UserDetailsImpl을 통해 사용자 ID를 가져옵니다.
             storeService.updateStore(storeId, requestDto, userId, image); // 사용자 ID를 사용하여 서비스 메서드를 호출
+
+            System.out.println(storeId.toString() + ", " + requestDto.getStoreName() + ", " + userId.toString());
             return "redirect:/sail/store/" + storeId;
         } catch (Exception e) {
             return "redirect:/error"; // 에러 발생 시, 에러 페이지로 리디렉션
