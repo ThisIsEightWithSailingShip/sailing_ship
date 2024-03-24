@@ -19,16 +19,16 @@ public class Menu {
     @Column(name = "menu_id")
     private Long menuId;
 
-    @Column(name = "menu_name")
+    @Column(name = "menu_name", nullable = false)
     private String menuName;
 
-    @Column(name = "introduce")
+    @Column(name = "introduce", nullable = false)
     private String introduce;
 
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private Long price;
 
-    @Column(name = "menu_category")
+    @Column(name = "menu_category", nullable = false)
     private String menuCategory;
 
     @Column
