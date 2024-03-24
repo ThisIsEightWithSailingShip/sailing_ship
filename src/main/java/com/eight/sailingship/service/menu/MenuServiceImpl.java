@@ -81,4 +81,11 @@ public class MenuServiceImpl implements MenuService {
         return ResponseEntity.ok().body("삭제 되었습니다.");
     }
 
+    public void checkListMenu(UserDetailsImpl userDetails, Long storeId) {
+        Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId()).orElseThrow(() -> new IllegalArgumentException("매장을 아직 생성하지 않았습니다."));
+        if (store.getStoreId() != storeId) {
+            throw new IllegalArgumentException("사장님의 매장이 아닙니다.");
+        }
+
+    }
 }

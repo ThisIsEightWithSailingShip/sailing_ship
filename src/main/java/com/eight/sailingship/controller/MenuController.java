@@ -60,6 +60,13 @@ public class MenuController {
         return "menu/listMenu";
     }
 
+    @Secured("ROLE_OWNER")
+    @GetMapping("/sail/listmenu/{storeId}") // 메뉴 인증
+    public void checkListMenu(@PathVariable Long storeId,
+                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        menuService.checkListMenu(userDetails, storeId);
+    }
+
 
     @Secured("ROLE_OWNER")
     @GetMapping("/sail/menu/{id}") // 메뉴 수정 html
@@ -78,7 +85,6 @@ public class MenuController {
                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             menuService.editSaveMenu(requestDto, id, images);
-            imageService.editImageMenu(images, id, userDetails);
         } catch (IOException e) {
             logger.error("파일 업로드 중 오류 발생", e);
         }

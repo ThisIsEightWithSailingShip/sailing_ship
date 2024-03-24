@@ -17,4 +17,5 @@ public interface MenuService {
     Menu editMenu(Long menuId, UserDetailsImpl userDetails);
     void editSaveMenu(MenuRequestDto requestDto, Long id, MultipartFile images) throws IOException;
     ResponseEntity<String> deleteMenu(Long menuId, UserDetailsImpl userDetails);
+    void checkListMenu(UserDetailsImpl userDetails, Long storeId);
 }
