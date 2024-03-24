@@ -86,7 +86,6 @@ public class MenuController {
         return "redirect:/sail/listmenu";
     }
 
-    @Secured("ROLE_OWNER")
     @GetMapping("/sail/Error") // 다른 owner의 매장 수정 시도 시, 에러 페이지
     public String showEditError(@ModelAttribute("error") String error, Model model) {
         model.addAttribute("error", error);

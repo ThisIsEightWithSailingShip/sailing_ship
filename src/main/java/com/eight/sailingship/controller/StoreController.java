@@ -3,6 +3,7 @@ package com.eight.sailingship.controller;
 import com.eight.sailingship.auth.user.UserDetailsImpl;
 import com.eight.sailingship.dto.store.StoreRequestDto;
 import com.eight.sailingship.entity.ImagePhoto;
+import com.eight.sailingship.entity.RoleEnum;
 import com.eight.sailingship.entity.Store;
 import com.eight.sailingship.entity.StoreEnum;
 import com.eight.sailingship.service.image.ImageService;
@@ -60,6 +61,7 @@ public class StoreController {
 
 
     // 매장 수정 페이지 조회
+    @Secured(RoleEnum.Role.OWNER)
     @GetMapping("/sail/store/update/{storeId}")
     public String updateStore(@PathVariable Long storeId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
@@ -78,7 +80,7 @@ public class StoreController {
 
             return "store/store-update";
         } catch (IllegalStateException e) {
-            return "redirect:/error-page";
+            return "redirect:/sail/Error";
         }
     }
 
