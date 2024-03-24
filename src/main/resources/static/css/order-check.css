@@ -1,4 +1,5 @@
 .order-introduce {
+    margin-top: 25px;
     color: teal;
 }
 
@@ -35,7 +36,8 @@
 /*}*/
 
 .order-nickname {
-    height: 5%
+    height: 5%;
+    font-weight: 600;
 }
 
 .order-address {
@@ -49,6 +51,8 @@
 }
 
 .order-information {
+    max-height: 500px; /* 원하는 높이로 설정합니다. */
+    overflow-y: auto;
     color: teal;
     display: flex;
     flex-direction: row;

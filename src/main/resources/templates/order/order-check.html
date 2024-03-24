@@ -25,30 +25,33 @@
         </form>
     </div>
     <div class="header-right">
-        <nav class="menu">
-            <span class="menu-button">SIGN UP</span>
-            <span class="menu-button">SIGN IN</span>
-        </nav>
+        <a href="/sail/signup" class="menu-button" id="signup-btn">SIGN UP</a>
+        <a href="/sail/login" class="menu-button" id="signin-btn">SIGN IN</a>
+        <a href="/sail/order/check" class="menu-button" id="owner-btn1" style="display: none;">주문 정보</a>
+        <a href="/sail/order" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
+        <a class="menu-button" id="logout-btn" style="display: none;" href="javascript:logout()">LOGOUT</a>
     </div>
 </header>
 
 <!-- main -->
 <main>
     <div class="main-background">
-        <h1 class="order-introduce">현재까지 들어온 주문입니다.</h1>
+        <h1 class="order-introduce">현재까지 들어온 주문입니다</h1>
         <div class="order-container">
             <!-- 주문 확인 카드 -->
             <div class="order-card"
                  th:each="orderCheck : ${orderCheckList}"
                  th:attr="storeId = ${orderCheck.store.storeId}">
-                <h4 th:text="${orderCheck.user.nickname}" class="order-nickname">
+                <div th:text="${orderCheck.user.nickname}" class="order-nickname">
                     닉네임
-                </h4>
+                </div>
                 <h2 th:text="${orderCheck.user.address}" class="order-address">
                     주소
                 </h2>
-                <p th:text="${orderCheck.user.phone}" class="order-info">주문자 전화번호</p>
-                <p th:text="${orderCheck.totalPrice}" class="order-info">결제 금액</p>
+                <p th:text="${'주문자 전화번호: ' + orderCheck.user.phone}" class="order-info">주문자 전화번호</p>
+                <p th:text="${'결제 금액: ' + orderCheck.totalPrice + ' 원'}" class="order-info">결제 금액</p>
+                <p th:text="${'매장 메세지: ' + orderCheck.messageToStore}" class="order-info">매장 메세지</p>
+                <p th:text="${'라이더 메세지: ' + orderCheck.messageToStore}" class="order-info">라이더 메세지</p>
                 <div th:each="orderMenu :${orderCheck.orderMenuList}" class="order-information">
                     <p class="order-info" th:text="${orderMenu.menu.menuName}"></p> : <p class="order-info" th:text="${orderMenu.menu.price}"></p>
                 </div>
@@ -88,7 +91,7 @@
         }
     }
 </script>
-
+<script src="/js/authModule.js"></script>
 <script>
     // 이 부분에는 다른 자바스크립트 코드가 있을 수 있습니다.
     document.getElementById("logo").addEventListener("click", function() {

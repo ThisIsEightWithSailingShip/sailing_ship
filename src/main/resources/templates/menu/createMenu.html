@@ -13,38 +13,57 @@
             height: 100vh;
             margin: 0;
         }
+
         .form-container {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 190px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .form-container h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+            color: teal;
+        }
+
+        .create-form {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            width: 100%;
-            max-width: 500px;
         }
+
         input[type="text"], select {
-            width: 100%;
             padding: 10px;
-            margin: 8px 0;
-            display: inline-block;
+            margin-bottom: 10px;
             border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+            border-radius: 5px;
+            font-size: 16px;
         }
         input[type="submit"] {
-            width: 100%;
-            background-color: #4CAF50;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
+            padding: 10px;
+            background-color: teal;
+            color: #fff;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
         }
+
         input[type="submit"]:hover {
-            background-color: #45a049;
+            background-color: #2cb6b6;
+        }
+
+        input[type="file"] {
+            margin-top: 9px;
+            margin-bottom: 9px;
+        }
+
+        label {
+            color: teal;
         }
     </style>
 
@@ -63,8 +82,7 @@
     <div class="header-right">
         <a href="/sail/signup" class="menu-button" id="signup-btn">SIGN UP</a>
         <a href="/sail/login" class="menu-button" id="signin-btn">SIGN IN</a>
-        <a class="menu-button" id="owner-btn1" style="display: none;">주문 정보</a>
-        <a class="menu-button" id="owner-btn2" style="display: none;">매장 정보</a>
+        <a href="/sail/order/check" class="menu-button" id="owner-btn1" style="display: none;">주문 정보</a>
         <a href="/your-link-url" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
         <a class="menu-button" id="logout-btn" style="display: none;" href="javascript:logout()">LOGOUT</a>
     </div>
@@ -73,21 +91,22 @@
 <!-- Form Section -->
 <main>
     <div class="form-container">
-        <form action="/sail/menu" method="post" enctype="multipart/form-data">
-            <label for="menuName">메뉴 이름:</label>
+        <h2>메뉴 생성</h2>
+        <form class="create-form" action="/sail/menu" method="post" enctype="multipart/form-data">
+            <label for="menuName">메뉴 이름</label>
             <input type="text" id="menuName" name="menuName" required> <!-- required 추가 -->
 
-            <label for="introduce">설명:</label>
+            <label for="introduce">설명</label>
             <input type="text" id="introduce" name="introduce" required> <!-- required 추가 -->
 
-            <label for="price">가격:</label>
+            <label for="price">가격</label>
             <input type="text" id="price" name="price" required> <!-- required 추가 -->
 
-            <label for="menuCategory">카테고리:</label>
+            <label for="menuCategory">카테고리</label>
             <input type="text" id="menuCategory" name="menuCategory" required> <!-- 여기는 required 없음 -->
 
             <!-- 이미지 파일 선택 필드 -->
-            <label for="image">이미지 업로드:</label>
+            <label for="image">이미지 업로드</label>
             <input type="file" id="image" name="image" accept="image/jpeg" required> <!-- required 추가 -->
 
             <input type="submit" value="Submit">

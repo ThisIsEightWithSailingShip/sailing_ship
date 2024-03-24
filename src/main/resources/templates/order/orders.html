@@ -1,74 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sailor_Hang_Hae</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" th:href="@{/css/order-check.css}">
     <style>
-        .order-introduce {
-            margin-top: 45px;
-            color: teal;
-        }
 
-        .order-container {
-            margin: 40px auto;
-            max-width: 100%;
-            display: flex;
-            justify-content: flex-start;
-            flex-wrap: wrap;
-            gap: 5.8em;
-        }
-
-        .order-card {
-            width: 20rem;
-            height: 20rem;
-            padding: 1rem;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: #f8f9fa;
-            transition: transform 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            gap: 0.2rem;
-        }
-
-        #orderCompleteBtn {
-            margin-top: 20px;
-            padding: 8px 16px;
-            background-color: teal;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        #orderCompleteBtn:hover {
-            background-color: #20a2a2;
-        }
-
-        #orderCompleteBtn:disabled {
-            background-color: #ccc;
-            color: #666;
-            cursor: not-allowed;
-        }
-
-        .order-store,
-        .order-info {
-            color: teal;
-        }
-
-        .order-information {
-            color: teal;
-            display: flex;
-            flex-direction: row;
-        }
     </style>
 </head>
 <body>
 <!-- header -->
 <header class="header">
     <div class="header-left">
-        <img th:src="@{/images/logo.png}" class="logo" />
+        <img th:src="@{/images/logo.png}" id="logo" />
     </div>
     <div class="header-center">
         <form class="input-form">
@@ -82,13 +28,14 @@
         </form>
     </div>
     <div class="header-right">
-        <nav class="menu">
-            <span class="menu-button">SIGN UP</span>
-            <span class="menu-button">SIGN IN</span>
-        </nav>
+        <a href="/sail/signup" class="menu-button" id="signup-btn">SIGN UP</a>
+        <a href="/sail/login" class="menu-button" id="signin-btn">SIGN IN</a>
+        <a href="/sail/order/check" class="menu-button" id="owner-btn1" style="display: none;">주문 정보</a>
+        <a href="/sail/order" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
+        <a class="menu-button" id="logout-btn" style="display: none;" href="javascript:logout()">LOGOUT</a>
     </div>
 </header>
-<h1 class="order-introduce">고객님의 주문 목록입니다.</h1>
+<h1 class="order-introduce">고객님의 주문 목록입니다</h1>
 
 <div class="order-container">
     <div th:each="order : ${orders}">
