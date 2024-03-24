@@ -11,10 +11,11 @@ import java.util.List;
 
 public interface MenuService {
 
-    void createMenu(MenuRequestDto requestDto, UserDetailsImpl userDetails, MultipartFile images) throws IOException;
+    long createMenu(MenuRequestDto requestDto, UserDetailsImpl userDetails, MultipartFile images) throws IOException;
 
-    List<Menu> listMenu(UserDetailsImpl userDetails);
+    List<Menu> listMenu(UserDetailsImpl userDetails, Long storeId);
     Menu editMenu(Long menuId, UserDetailsImpl userDetails);
-    void editSaveMenu(MenuRequestDto requestDto, Long id, MultipartFile images) throws IOException;
+    long editSaveMenu(MenuRequestDto requestDto, Long id, MultipartFile images, UserDetailsImpl userDetails) throws IOException;
     ResponseEntity<String> deleteMenu(Long menuId, UserDetailsImpl userDetails);
+    void checkListMenu(UserDetailsImpl userDetails, Long storeId);
 }
