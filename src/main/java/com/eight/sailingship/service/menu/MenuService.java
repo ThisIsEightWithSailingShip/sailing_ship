@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface MenuService {
 
-    void createMenu(MenuRequestDto requestDto, UserDetailsImpl userDetails, MultipartFile images) throws IOException;
+    long createMenu(MenuRequestDto requestDto, UserDetailsImpl userDetails, MultipartFile images) throws IOException;
 
     List<Menu> listMenu(UserDetailsImpl userDetails, Long storeId);
     Menu editMenu(Long menuId, UserDetailsImpl userDetails);

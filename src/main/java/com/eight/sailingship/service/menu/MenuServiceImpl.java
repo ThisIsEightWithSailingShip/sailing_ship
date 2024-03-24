@@ -29,15 +29,16 @@ public class MenuServiceImpl implements MenuService {
 
 
     @Transactional
-    public void createMenu(MenuRequestDto requestDto, UserDetailsImpl userDetails, MultipartFile images) throws IOException {
+    public long createMenu(MenuRequestDto requestDto, UserDetailsImpl userDetails, MultipartFile images) throws IllegalArgumentException, IOException {
         Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 상점 번호입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("상점이 생성되어 있지 않습니다."));
 
 
         String storedFileName = s3Uploader.upload(images, "image");
 
         Menu menu = new Menu(requestDto, store, storedFileName);
         menuRepository.save(menu);
+        return store.getStoreId();
     }
 
     @Transactional(readOnly = true)

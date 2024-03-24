@@ -44,13 +44,14 @@ public class MenuController {
                              @RequestParam(value = "image") MultipartFile images,
                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
+        long storeId;
         try {
-            menuService.createMenu(requestDto, userDetails, images);
-        } catch (IOException e) {
-            logger.error("파일 업로드 중 오류 발생", e);
+            storeId = menuService.createMenu(requestDto, userDetails, images);
+        } catch (IllegalArgumentException | IOException e) {
+            return "redirect:/sail/Error";
         }
+        return "redirect:/sail/listmenu/" + storeId;
 
-        return "redirect:/sail/listmenu";
     }
 
     @Secured("ROLE_OWNER")
