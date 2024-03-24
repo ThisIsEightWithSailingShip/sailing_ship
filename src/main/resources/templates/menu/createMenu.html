@@ -75,20 +75,20 @@
     <div class="form-container">
         <form action="/sail/menu" method="post" enctype="multipart/form-data">
             <label for="menuName">메뉴 이름:</label>
-            <input type="text" id="menuName" name="menuName">
+            <input type="text" id="menuName" name="menuName" required> <!-- required 추가 -->
 
             <label for="introduce">설명:</label>
-            <input type="text" id="introduce" name="introduce">
+            <input type="text" id="introduce" name="introduce" required> <!-- required 추가 -->
 
             <label for="price">가격:</label>
-            <input type="text" id="price" name="price">
+            <input type="text" id="price" name="price" required> <!-- required 추가 -->
 
             <label for="menuCategory">카테고리:</label>
-            <input type="text" id="menuCategory" name="menuCategory">
+            <input type="text" id="menuCategory" name="menuCategory" required> <!-- 여기는 required 없음 -->
 
-            <!-- 이미지 파일을 선택하기 위한 input 필드 추가 -->
+            <!-- 이미지 파일 선택 필드 -->
             <label for="image">이미지 업로드:</label>
-            <input type="file" id="image" name="image" accept="image/jpeg">
+            <input type="file" id="image" name="image" accept="image/jpeg" required> <!-- required 추가 -->
 
             <input type="submit" value="Submit">
         </form>

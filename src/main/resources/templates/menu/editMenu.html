@@ -74,16 +74,16 @@
     <div class="form-container">
         <form th:action="@{/sail/menu/{id}(id=${menu.menuId})}" th:method="patch" enctype="multipart/form-data">
             <label for="menuName">메뉴 이름:</label>
-            <input type="text" id="menuName" name="menuName" th:value="${menu.menuName}">
+            <input type="text" id="menuName" name="menuName" th:value="${menu.menuName}" required>
 
             <label for="introduce">설명:</label>
-            <input type="text" id="introduce" name="introduce" th:value="${menu.introduce}">
+            <input type="text" id="introduce" name="introduce" th:value="${menu.introduce}" required>
 
             <label for="price">가격:</label>
-            <input type="text" id="price" name="price" th:value="${menu.price}">
+            <input type="text" id="price" name="price" th:value="${menu.price}" required>
 
             <label for="menuCategory">카테고리:</label>
-            <input type="text" id="menuCategory" name="menuCategory" th:value="${menu.menuCategory}">
+            <input type="text" id="menuCategory" name="menuCategory" th:value="${menu.menuCategory}" required>
 
             <!-- 이미지 파일을 선택하기 위한 input 필드 추가 -->
             <label for="image">이미지 업로드:</label>
