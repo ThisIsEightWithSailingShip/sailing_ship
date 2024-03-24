@@ -8,11 +8,12 @@ import com.eight.sailingship.entity.StoreEnum;
 import com.eight.sailingship.service.image.ImageService;
 import com.eight.sailingship.service.store.StoreService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Controller
 @RequiredArgsConstructor
@@ -103,6 +100,7 @@ public class StoreController {
     //수정하기 버튼 클릭시 확인하는거
     @GetMapping("/sail/store/check-permission/{storeId}")
     @ResponseBody
+
     public ResponseEntity<?> checkPermission(@PathVariable Long storeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             boolean hasPermission = storeService.checkStorePermission(storeId, userDetails.getUser().getUserId());
@@ -159,5 +157,7 @@ public class StoreController {
             return "redirect:/sail/store";
         }
     }
+
+
 
 }

@@ -11,7 +11,7 @@
     <!-- header -->
     <header class="header">
       <div class="header-left">
-        <img th:src="@{/images/logo.png}" class="logo" />
+        <img th:src="@{/images/logo.png}" id="logo" />
       </div>
       <div class="header-center">
         <form class="input-form">
@@ -42,7 +42,7 @@
           <!-- 매장 카드 -->
           <div class="store-card" th:each="store : ${stores}", th:attr="storeId = ${store.storeId}">
             <div class="store-img-cover">
-              <img th:src="${store.imagePhotos.isEmpty() ? '/images/logo.png' : store.imagePhotos[0].imageUrl}" alt="Store Image" class="store-img"/>
+              <img th:src="@{${store.imageUrl}}" alt="Store Image" class="store-img"/>
 
             </div>
             <h3 th:text="${store.storeName}" class="store-info">가게명</h3>
@@ -52,6 +52,11 @@
         </div>
       </div>
     </main>
+    <script>
+      document.getElementById("logo").addEventListener("click", function() {
+        window.location.href = "/";
+      });
+    </script>
     <script src="/js/stores.js"></script>
     <script src="/js/authModule.js"></script>
   </body>

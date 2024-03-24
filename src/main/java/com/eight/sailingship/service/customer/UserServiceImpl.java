@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public void signup(UserSignUpRequestDto userSignUpRequestDto) {
-// 이메일과 비밀번호가 null 또는 빈 문자열인 경우 예외 발생
+    // 이메일과 비밀번호가 null 또는 빈 문자열인 경우 예외 발생
 
         System.err.println(userSignUpRequestDto.getEmail());
 

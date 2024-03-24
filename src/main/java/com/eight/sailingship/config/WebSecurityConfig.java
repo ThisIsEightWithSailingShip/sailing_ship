@@ -81,8 +81,8 @@ public class WebSecurityConfig {
                                 .anyRequest().authenticated() // 그 외 모든 요청 인증처리 요구
         );
 
-//        http.exceptionHandling(e ->
-//                e.authenticationEntryPoint(jwtAuthenticationEntryPoint).accessDeniedHandler(jwtAccessDenyHandler));
+        http.exceptionHandling(e ->
+                e.authenticationEntryPoint(jwtAuthenticationEntryPoint).accessDeniedHandler(jwtAccessDenyHandler));
 
         // 로그인 사용
         http.formLogin((formLogin) ->

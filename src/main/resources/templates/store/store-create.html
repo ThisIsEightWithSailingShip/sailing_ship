@@ -231,7 +231,7 @@
 <!-- header -->
 <header class="header">
   <div class="header-left">
-    <img th:src="@{/images/logo.png}" class="logo" />
+    <img th:src="@{/images/logo.png}" id="logo" />
   </div>
   <div class="header-center">
     <form class="input-form">
@@ -255,20 +255,16 @@
 <!-- main -->
 <main>
   <div class="main-background">
-    <!-- 매장생성 페이지 -->
     <div class="signup-container">
       <h2>매장생성</h2>
       <form class="signup-form" id="createStoreForm" method="post" enctype="multipart/form-data">
-      <input type="text" id="storeName" name="storeName" placeholder="가게명">
+        <input type="text" id="storeName" name="storeName" placeholder="가게명">
         <input type="text" id="ownerName" name="ownerName" placeholder="사장이름">
         <input type="text" id="address" name="address" placeholder="매장주소">
         <input type="text" id="phone" name="phone" placeholder="전화번호">
-        <!-- 이미지 파일을 선택하기 위한 input 필드 추가 -->
         <label for="image">이미지 업로드:</label>
         <input type="file" id="image" name="image" accept="image/jpeg">
-
         <div class="form-group">
-<!--          <label for="category">카테고리</label>-->
           <select id="category" name="category">
             <option th:each="category : ${categoriesList}"
                     th:value="${category}"
@@ -280,41 +276,48 @@
         </div>
       </form>
     </div>
-    <!-- 매장생성 페이지 끝 -->
   </div>
 </main>
 <script src="/js/authModule.js"></script>
-<!-- JavaScript 코드 추가 -->
 <script>
   document.getElementById("createStoreForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
-    const formData = new FormData(this); // FormData 객체를 사용하여 폼 데이터를 생성합니다.
+    const storeName = document.getElementById("storeName").value;
+    const ownerName = document.getElementById("ownerName").value;
+    const address = document.getElementById("address").value;
+    const phone = document.getElementById("phone").value;
+    const image = document.getElementById("image").value;
+    const category = document.getElementById("category").value;
+
+    if (storeName.trim() === '' || ownerName.trim() === '' || address.trim() === '' || phone.trim() === '' || category.trim() === '카테고리 선택') {
+      alert("모든 입력 필드를 작성해주세요.");
+      return;
+    }
+
+    const formData = new FormData(this);
 
     fetch("/sail/store", {
       method: "POST",
-      body: formData, // FormData 객체를 직접 전송합니다.
-      // Content-Type 헤더를 설정하지 않습니다. 브라우저가 자동으로 처리합니다.
+      body: formData,
     })
             .then(response => {
               if (!response.ok) {
                 throw new Error('Network response was not ok');
               }
-              return response.json(); // 응답을 JSON으로 파싱합니다.
+              return response.json();
             })
             .then(data => {
-              // 매장 생성 성공 후 처리, 예를 들어 생성된 매장의 상세 페이지로 이동
               alert("매장 생성 성공!");
               window.location.href = `/sail/store/${data.storeId}`;
             })
-            .catch(error => {
-              // 오류 처리
-              alert("오류 발생. 다시 시도해주세요.");
-              console.error("오류 발생:", error);
-            });
   });
 
 </script>
-
+<script>
+  document.getElementById("logo").addEventListener("click", function() {
+    window.location.href = "/";
+  });
+</script>
 </body>
 </html>

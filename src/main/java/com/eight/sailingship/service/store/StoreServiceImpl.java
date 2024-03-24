@@ -115,8 +115,8 @@ public class StoreServiceImpl implements StoreService {
 
         Store savedStore = storeRepository.save(store); // 매장 저장
 
-        owner.setStore(savedStore);
-        userRepository.save(owner); //이걸 안해서 안됐구나...
+//        owner.setStore(savedStore);
+//        userRepository.save(owner); //이걸 안해서 안됐구나...
 
         // 이미지 처리 로직
         if (image != null && !image.isEmpty()) {
@@ -132,16 +132,16 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public boolean checkIfUserHasStore(Long userId) {
-        return userRepository.findById(userId)
-                .map(User::getStore)
-                .isPresent();
-    }
+        // storeRepository.findByOwner_UserId(userId) 호출로 Optional<Store> 객체를 얻습니다.
+        Optional<Store> storeOptional = storeRepository.findByOwner_UserId(userId);
 
+        // Optional 객체가 값을 포함하고 있는지 확인합니다.
+        return storeOptional.isPresent();
+    }
     public Long findStoreIdByUserId(Long userId) {
-        return userRepository.findById(userId)
-                .map(User::getStore)
-                .map(Store::getStoreId)
-                .orElseThrow(() -> new RuntimeException("No store found for user with ID: " + userId));
+
+        Store store = storeRepository.findByOwner_UserId(userId).orElseThrow(() -> new RuntimeException("해당 아이디를 가진 유저 아이디가 없습니다. :" + userId));
+        return store.getStoreId();
     }
 
     @Override

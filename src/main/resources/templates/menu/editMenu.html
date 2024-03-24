@@ -51,7 +51,7 @@
 <body>
 <header class="header">
     <div class="header-left">
-        <img th:src="@{/images/logo.png}" class="logo" />
+        <img th:src="@{/images/logo.png}" id="logo" />
     </div>
     <div class="header-center">
         <form class="input-form">
@@ -94,5 +94,41 @@
     </div>
 </main>
 <script src="/js/authModule.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelector("form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Fetch API to submit the form data
+            fetch(this.action, {
+                method: this.method,
+                body: new FormData(this),
+                headers: {
+                    'Authorization': 'Bearer YOUR_ACCESS_TOKEN', // Include your access token here
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // If the response is successful, redirect to a success page or do something else
+                        window.location.href = "/success"; // Change this to your success page URL
+                    } else if (response.status === 401) {
+                        // If 401 error, handle it appropriately (e.g., redirect to login page)
+                        window.alert("로그인 후 이용해주세요")
+                        window.location.href = "/login"; // Change this to your login page URL
+                    } else {
+                        // Handle other errors
+                        console.error('Error:', response.statusText);
+                        // Display an error message to the user
+                        alert('Error occurred. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Display an error message to the user
+                    alert('Error occurred. Please try again.');
+                });
+        });
+    });
+</script>
 </body>
 </html>

@@ -89,7 +89,7 @@
 <body>
 <header class="header">
     <div class="header-left">
-        <img th:src="@{/images/logo.png}" alt="Logo" class="logo">
+        <img th:src="@{/images/logo.png}" alt="Logo" id="logo">
     </div>
     <div class="header-center">
         <form class="input-form">
@@ -102,7 +102,7 @@
         <a href="/sail/login" class="menu-button" id="signin-btn">SIGN IN</a>
         <a class="menu-button" id="owner-btn1" style="display: none;">주문 정보</a>
         <a class="menu-button" id="owner-btn2" style="display: none;">매장 정보</a>
-        <a href="/your-link-url" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
+        <a href="/sail/order" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
         <a class="menu-button" id="logout-btn" style="display: none;" href="javascript:logout()">LOGOUT</a>
     </div>
 </header>
@@ -116,10 +116,13 @@
             <p><span>Price: $</span><span th:text="${menu.price}"></span></p>
             <p><span>Category: </span><span th:text="${menu.menuCategory}"></span></p>
 
+
             <!-- 이미지 출력 부분 -->
-            <div th:each="image : ${images}">
-                <img th:if="${image.menu.menuId == menu.menuId}" th:src="@{${image.imageUrl}}" alt="Menu Image"/>
+            <!-- 이미지 출력 부분: Directly use menu.imageUrl -->
+            <div th:if="${menu.imageUrl}">
+                <img th:src="@{${menu.imageUrl}}" alt="Menu Image" class="menu-image"/>
             </div>
+
 
             <div class="card-actions" th:if="${owner}">
                 <a th:href="@{/sail/menu/{id}(id=${menu.menuId})}">✏️</a>
@@ -151,5 +154,10 @@
     }
 </script>
 <script src="/js/authModule.js"></script>
+<script>
+    document.getElementById("logo").addEventListener("click", function() {
+        window.location.href = "/";
+    });
+</script>
 </body>
 </html>
