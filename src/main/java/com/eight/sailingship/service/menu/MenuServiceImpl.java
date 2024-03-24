@@ -33,7 +33,6 @@ public class MenuServiceImpl implements MenuService {
         Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("상점이 생성되어 있지 않습니다."));
 
-
         String storedFileName = s3Uploader.upload(images, "image");
 
         Menu menu = new Menu(requestDto, store, storedFileName);
@@ -42,7 +41,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Transactional(readOnly = true)
-    public List<Menu> listMenu(UserDetailsImpl userDetails, Long storeId) throws IllegalArgumentException {
+    public List<Menu> listMenu(UserDetailsImpl userDetails, Long storeId) throws IllegalArgumentException{
         checkListMenu(userDetails, storeId);
         return menuRepository.findByStore_StoreId(userDetails.getUser().getUserId());
     }
@@ -74,7 +73,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Transactional
-    public ResponseEntity<String> deleteMenu(Long menuId, UserDetailsImpl userDetails) {
+    public ResponseEntity<String> deleteMenu(Long menuId, UserDetailsImpl userDetails) throws IllegalArgumentException {
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 메뉴 번호 입니다."));
         Long menuOwnerId = menu.getStore().getStoreId();
         Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId())

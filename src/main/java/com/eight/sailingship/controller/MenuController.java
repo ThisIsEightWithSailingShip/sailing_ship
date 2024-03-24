@@ -33,7 +33,7 @@ public class MenuController {
     }
 
     @Secured("ROLE_OWNER")
-    @PostMapping("/sail/menu") // 메뉴 생성
+    @PostMapping("/sail/menu") // 메뉴 생성 + 예외처리 완.
     public String createMenu(@ModelAttribute MenuRequestDto requestDto,
                              @RequestParam(value = "image") MultipartFile images,
                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -42,25 +42,21 @@ public class MenuController {
         try {
             storeId = menuService.createMenu(requestDto, userDetails, images);
         } catch (IllegalArgumentException | IOException e) {
-            return "redirect:/sail/Error";
+            return "redirect:/sail/error";
         }
         return "redirect:/sail/listmenu/" + storeId;
 
     }
 
     @Secured("ROLE_OWNER")
-    @GetMapping("/sail/listmenu/{storeId}") // 메뉴 조회
+    @GetMapping("/sail/listmenu/{storeId}") // 메뉴 조회 + 예외 처리 완.
     public String listMenu(Model model,
                            @PathVariable Long storeId,
                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        try {
-            List<Menu> menus = menuService.listMenu(userDetails, storeId);
-            model.addAttribute("menus", menus);
-            model.addAttribute("owner", true);
-            return "menu/listMenu";
-        } catch (IllegalArgumentException e) {
-            return "redirect:/sail/Error";
-        }
+        List<Menu> menus = menuService.listMenu(userDetails, storeId);
+        model.addAttribute("menus", menus);
+        model.addAttribute("owner", true);
+        return "menu/listMenu";
     }
 
 
@@ -103,7 +99,7 @@ public class MenuController {
         }
     }
 
-    @GetMapping("/sail/Error") // 다른 owner의 매장 수정 시도 시, 에러 페이지
+    @GetMapping("/sail/error") // 다른 owner의 매장 수정 시도 시, 에러 페이지
     public String showEditError(@ModelAttribute("error") String error, Model model) {
         String errorMessage = "접근 권한이 없습니다.";
         model.addAttribute("error", errorMessage);
