@@ -32,6 +32,8 @@ public class MenuServiceImpl implements MenuService {
     public void createMenu(MenuRequestDto requestDto, UserDetailsImpl userDetails, MultipartFile images) throws IOException {
         Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 상점 번호입니다."));
+
+
         String storedFileName = s3Uploader.upload(images, "image");
 
         Menu menu = new Menu(requestDto, store, storedFileName);
@@ -39,7 +41,8 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Transactional(readOnly = true)
-    public List<Menu> listMenu(UserDetailsImpl userDetails) {
+    public List<Menu> listMenu(UserDetailsImpl userDetails, Long storeId) {
+        checkListMenu(userDetails, storeId);
         return menuRepository.findByStore_StoreId(userDetails.getUser().getUserId());
     }
 
@@ -56,7 +59,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Transactional
-    public void editSaveMenu(MenuRequestDto requestDto, Long id, MultipartFile images) throws IOException {
+    public long editSaveMenu(MenuRequestDto requestDto, Long id, MultipartFile images, UserDetailsImpl userDetails) throws IOException {
         Menu menu = menuRepository.findById(id).get();
         if (!images.isEmpty()) {
             String storedFileName = s3Uploader.upload(images, "image");
@@ -64,8 +67,9 @@ public class MenuServiceImpl implements MenuService {
         } else {
             menu.update(requestDto);
         }
-
         menuRepository.save(menu);
+        Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId()).orElseThrow(() -> new IllegalArgumentException("상점 번호가 유효하지 않습니다."));
+        return store.getStoreId();
     }
 
     @Transactional
@@ -82,9 +86,13 @@ public class MenuServiceImpl implements MenuService {
     }
 
     public void checkListMenu(UserDetailsImpl userDetails, Long storeId) {
-        Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId()).orElseThrow(() -> new IllegalArgumentException("매장을 아직 생성하지 않았습니다."));
-        if (store.getStoreId() != storeId) {
-            throw new IllegalArgumentException("사장님의 매장이 아닙니다.");
+        try {
+            Store store = storeRepository.findByOwner_UserId(userDetails.getUser().getUserId()).orElseThrow(() -> new IllegalArgumentException("매장을 아직 생성하지 않았습니다."));
+            if (store.getStoreId() != storeId) {
+                throw new IllegalArgumentException("사장님의 매장이 아닙니다.");
+            }
+        } catch (IllegalArgumentException e) {
+            throw e;
         }
 
     }
