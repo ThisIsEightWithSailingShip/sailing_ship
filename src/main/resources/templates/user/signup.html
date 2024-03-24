@@ -255,6 +255,18 @@
       color: gray;
     }
 
+    #signupBtn:disabled {
+      cursor: not-allowed; /* 커서를 사용하지 못하도록 설정 */
+      background-color: #ccc; /* 회색으로 설정 */
+      color: #666; /* 텍스트 색상을 어둡게 설정 */
+    }
+
+    #signupBtn:disabled:hover {
+      transform: scale(1); /* 크기 변화 없음 */
+      background-color: #ccc; /* 회색으로 유지 */
+      color: #666; /* 텍스트 색상을 어둡게 유지 */
+    }
+
   </style>
 </head>
 <body>
@@ -297,7 +309,7 @@
         <input type="text" id="address" name="address" placeholder="주소">
         <input type="text" id="phone" name="phone" placeholder="전화번호">
         <input type="text" id="role" name="role" placeholder="사장님이라면 사장님이라고 입력해주세요">
-        <button type="submit" id="signupBtn">가입하기</button>
+        <button type="submit" id="signupBtn" disabled="disabled">가입하기</button>
       </form>
       <p id="introduce">이미 계정이 있으신가요? <a id="toLink" href="/sail/login">로그인</a></p>
     </div>
@@ -388,6 +400,7 @@
               if (response.status === 200) {
                 console.log(response.body)
                 alert("인증이 완료되었습니다.");
+                document.getElementById("signupBtn").disabled = false;
               } else {
                 alert("인증번호가 일치하지 않습니다. 다시 확인해주세요.");
                 console.error("인증번호 검증 실패:", response.message);

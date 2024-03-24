@@ -73,6 +73,8 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/sail/signup").permitAll()
                                 .requestMatchers("/sail/login").permitAll()
                                 .requestMatchers("/sail/user/login").permitAll()
+                                .requestMatchers("/sail/user/email-verify").permitAll()
+                                .requestMatchers("/sail/user/email-check").permitAll()
                                 .requestMatchers("/sail/authInfo").permitAll()
                                 .requestMatchers("/sail/image").permitAll() // 잠시 이미지 구현을 위해 permitall****
 //                                .requestMatchers("/api/products/{productId}").permitAll()
