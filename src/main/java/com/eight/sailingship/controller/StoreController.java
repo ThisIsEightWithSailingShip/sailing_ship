@@ -59,6 +59,14 @@ public class StoreController {
         return viewName;
     }
 
+    // 매장 정보 관리 페이지 조회
+    @Secured(RoleEnum.Role.OWNER)
+    @GetMapping("/sail/store-info")
+    public String getStoreInfo(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        System.err.println(userDetails.getUser().getUserId());
+        return updateStore(userDetails.getUser().getUserId(), model, userDetails);
+    }
+
 
     // 매장 수정 페이지 조회
     @Secured(RoleEnum.Role.OWNER)
