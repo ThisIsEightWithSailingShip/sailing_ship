@@ -126,7 +126,14 @@
         <!-- 메뉴 카드 -->
         <div class="menu-card" th:each="menu : ${menus}" th:attr="data-category=${menu.menuCategory}">
             <h3 th:text="${menu.menuName}">메뉴 제목</h3>
-            <img class="store-image" th:src="@{/images/logo.png}" alt="매장 이미지">
+            <img class="store-img" th:if="${store.imagePhotos.size() == 0}" src="/images/logo.png" alt="매장 이미지" />
+            <img class="store-img" th:if="${store.imagePhotos.size() > 0}" th:src="${store.imagePhotos[0].imageUrl}" alt="매장 이미지" />
+
+
+
+
+
+
             <p><strong>메뉴 설명:</strong> <span th:text="${menu.introduce}">메뉴 설명</span></p>
             <p><strong>가격:</strong> <span th:text="${menu.price}">가격</span></p>
             <p><strong>카테고리:</strong> <span th:text="${menu.menuCategory}">카테고리</span></p>

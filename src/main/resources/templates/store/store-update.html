@@ -40,8 +40,7 @@
         <div class="update-form-container">
             <form id="store-update-form" th:action="@{/sail/store/update/{storeId}(storeId=${store.storeId})}" th:method="put" enctype="multipart/form-data">
 
-
-            <label for="address">Address:</label>
+                <label for="address">Address:</label>
                 <input type="text" id="address" name="address" th:value="${store.address}"/>
 
                 <label for="phone">Phone:</label>
@@ -50,17 +49,15 @@
                 <label for="storeName">Store Name:</label>
                 <input type="text" id="storeName" name="storeName" th:value="${store.storeName}"/>
 
-
                 <label for="category">카테고리:</label>
                 <select id="category" name="category">
-                <option th:each="category : ${categoriesList}"
-                        th:value="${category}"
-                        th:text="${category}">카테고리 선택</option>
+                    <option th:each="category : ${categoriesList}"
+                            th:value="${category}"
+                            th:text="${category}">카테고리 선택</option>
                 </select>
 
                 <label for="image">이미지 업로드:</label>
                 <input type="file" id="image" name="image" accept="image/jpeg">
-
 
                 <input id="submitBtn" type="submit" value="수정하기">
             </form>
@@ -72,31 +69,22 @@
     document.getElementById("logo").addEventListener("click", function() {
         window.location.href = "/";
     });
+
+    document.getElementById("store-update-form").addEventListener("submit", function(event) {
+        // Form fields
+        var storeName = document.getElementById("storeName").value;
+        var address = document.getElementById("address").value;
+        var phone = document.getElementById("phone").value;
+        var image = document.getElementById("image").value;
+        var category = document.getElementById("category").value;
+
+        // Check if any field is empty
+        if (storeName.trim() === '' || address.trim() === '' || phone.trim() === '' || category.trim() === '카테고리 선택') {
+            alert("모든 입력 필드를 작성해주세요.");
+            event.preventDefault(); // Prevent form submission
+        }
+    });
 </script>
 <!--<script src="/js/store-update.js"></script>-->
 </body>
 </html>
-
-
-<!--<main>-->
-<!--    <div class="main-background">-->
-<!--        <div class="update-form-container">-->
-<!--            <form id="store-update-form" method="put">-->
-<!--                <label for="address">주소</label>-->
-<!--                <input type="text" id="address" name="address">-->
-
-<!--                <label for="phone">전화번호</label>-->
-<!--                <input type="text" id="phone" name="phone">-->
-
-<!--                <label for="category">분류</label>-->
-<!--                <input type="text" id="category" name="category">-->
-
-<!--                <label for="storeName">가게명</label>-->
-<!--                <input type="text" id="storeName" name="storeName">-->
-
-<!--                <button id="submitBtn" type="submit">수정</button>-->
-<!--            </form>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</main>-->
-<!--<script src="/js/store-update.js"></script>-->
