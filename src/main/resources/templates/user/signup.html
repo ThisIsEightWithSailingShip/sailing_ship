@@ -299,7 +299,7 @@
         <input type="text" id="role" name="role" placeholder="사장님이라면 사장님이라고 입력해주세요">
         <button type="submit" id="signupBtn">가입하기</button>
       </form>
-      <p>이미 계정이 있으신가요? <a id="toLink" href="/sail/login">로그인</a></p>
+      <p id="introduce">이미 계정이 있으신가요? <a id="toLink" href="/sail/login">로그인</a></p>
     </div>
     <!-- 회원가입 페이지 끝 -->
   </div>
@@ -383,6 +383,8 @@
       body: JSON.stringify({ email: email, authNum: authNum })
     })
             .then(response => {
+              console.log(response);
+
               if (response.status === 200) {
                 console.log(response.body)
                 alert("인증이 완료되었습니다.");
