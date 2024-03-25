@@ -88,7 +88,7 @@ public class StoreController {
 
             return "store/store-update";
         } catch (IllegalStateException e) {
-            return "redirect:/sail/Error";
+            return "redirect:/sail/error";
         }
     }
 
