@@ -18,6 +18,6 @@ public class JwtAccessDenyHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException, IOException {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        request.getRequestDispatcher("/sail/Error").forward(request, response);
+        request.getRequestDispatcher("/sail/error").forward(request, response);
     }
 }
