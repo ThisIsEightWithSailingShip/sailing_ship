@@ -107,8 +107,7 @@
 </header>
 
 <main>
-    <h1 class="menu-introduce">메뉴를 골라보세요</h1>
-    <img th:src="@{/images/logo.png}" class="logo" />
+    <h1 class="menu-introduce">메뉴 관리</h1>
     <div class="card-container">
         <div th:each="menu, menuStat : ${menus}" class="card" th:data-menu-id="${menu.menuId}">
             <h3 class="menu-info" th:text="${menu.menuName}">Menu Name</h3>
