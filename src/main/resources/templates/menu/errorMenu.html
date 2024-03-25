@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error Page</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2;
+            color: #333;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h2 {
+            color: #d9534f;
+        }
+
+        p {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        a {
+            display: inline-block;
+            background-color: teal;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: background-color 0.2s;
+        }
+
+        a:hover {
+            background-color: #1ab7b7;
+        }
+    </style>
+</head>
+<body>
+<h2>Error</h2>
+<p th:text="${error}">Error message</p>
+<div></div>
+<a href="/">메뉴 목록으로 돌아가기</a>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sailor_Hang_Hae</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            margin-top: 190px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .form-container h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+            color: teal;
+        }
+
+        .create-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"], select {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            padding: 10px;
+            background-color: teal;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2cb6b6;
+        }
+
+        input[type="file"] {
+            margin-top: 9px;
+            margin-bottom: 9px;
+        }
+
+        label {
+            color: teal;
+        }
+    </style>
+
+</head>
+<body>
+<header class="header">
+    <div class="header-left">
+        <img th:src="@{/images/logo.png}" id="logo" />
+    </div>
+    <div class="header-center">
+        <form class="input-form">
+            <input class="input" type="search" id="searchQuery" placeholder="주변 맛집을 검색해 보세요">
+            <button class="input-button">검색</button>
+        </form>
+    </div>
+    <div class="header-right">
+        <a href="/sail/signup" class="menu-button" id="signup-btn">SIGN UP</a>
+        <a href="/sail/login" class="menu-button" id="signin-btn">SIGN IN</a>
+        <a href="/sail/order/check" class="menu-button" id="owner-btn1" style="display: none;">주문 정보</a>
+        <a href="/your-link-url" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
+        <a class="menu-button" id="logout-btn" style="display: none;" href="javascript:logout()">LOGOUT</a>
+    </div>
+</header>
+
+<!-- Form Section -->
+<main>
+    <div class="form-container">
+        <h2>메뉴 생성</h2>
+        <form class="create-form" action="/sail/menu" method="post" enctype="multipart/form-data">
+            <label for="menuName">메뉴 이름</label>
+            <br /><input type="text" id="menuName" name="menuName" required> <!-- required 추가 -->
+
+            <label for="introduce">설명</label>
+            <input type="text" id="introduce" name="introduce" required> <!-- required 추가 -->
+
+            <label for="price">가격</label>
+            <input type="text" id="price" name="price" required> <!-- required 추가 -->
+
+            <label for="menuCategory">카테고리</label>
+            <input type="text" id="menuCategory" name="menuCategory" required> <!-- 여기는 required 없음 -->
+
+            <!-- 이미지 파일 선택 필드 -->
+            <label for="image">이미지 업로드</label>
+            <input type="file" id="image" name="image" accept="image/jpeg" required> <!-- required 추가 -->
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</main>
+<script src="/js/authModule.js"></script>
+<script>
+    document.getElementById("logo").addEventListener("click", function() {
+        window.location.href = "/";
+    });
+</script>
+</body>
+</html>

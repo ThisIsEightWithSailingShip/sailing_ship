@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sailor_Hang_Hae</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <style>
+        /* 추가한 CSS 스타일 */
+        .store-image {
+            width: 200px; /* 이미지 너비 조정 */
+            height: auto; /* 높이 자동으로 조정 */
+            display: block; /* 가운데 정렬을 위해 블록 요소로 변경 */
+            margin: 0 auto; /* 가운데 정렬 */
+        }
+
+        .store-info {
+            text-align: center; /* 텍스트를 가운데로 정렬합니다. */
+            margin-top: 20px; /* 위 여백을 추가합니다. */
+        }
+
+        /*.menu-card {*/
+        /*    border: 1px solid #ccc;*/
+        /*    border-radius: 5px;*/
+        /*    padding: 20px;*/
+        /*    margin: 20px auto; !* 가운데 정렬을 위해 margin 조정 *!*/
+        /*    width: 80%; !* 카드 너비 조정 *!*/
+        /*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+        /*}*/
+
+        /*.menu-card h3 {*/
+        /*    margin-top: 0;*/
+        /*}*/
+
+        .category-buttons {
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 15px;
+        }
+
+        .category-button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: teal;
+            color:white;
+            border: 1px solid #ccc;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        .category-button:hover {
+            background-color: #35cccc;
+        }
+
+        .cart-item {
+            margin-bottom: 10px;
+        }
+
+        .storeBtn {
+            cursor: pointer;
+        }
+
+        .quantity-button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #total-price {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .menu-container {
+            margin: 40px auto;
+            max-width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            gap: 5.8em;
+        }
+
+        .menu-card {
+            width: 20rem;
+            height: 24rem;
+            padding: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #f8f9fa;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            text-align: left;
+        }
+
+        .store-img-cover {
+        }
+
+        .menu-img-cover {
+            width: 100%;
+            height: 40%;
+            align-items: center;
+            background-color: white;
+        }
+
+        .menu-img {
+            width: 100%;
+            height: 100%;
+            border: 2px solid #44a3a3;
+        }
+
+        .menu-info {
+            color: teal;
+            text-align: left;
+            margin-top: 0.3rem;
+            margin-bottom: 0.3rem;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .add-to-cart-button {
+            width: 100%;
+            padding: 10px;
+            background-color: teal;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .add-to-cart-button:hover {
+            background-color: #2cb6b6;
+        }
+
+        .store-name {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .store-name span {
+            color: teal;
+            font-size: 40px;
+        }
+
+        .store-position {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .store-position strong, span {
+            font-size: 25px;
+        }
+
+        .store-phone {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .store-phone strong, span {
+            font-size: 25px;
+        }
+
+    </style>
+</head>
+
+<body>
+<!-- header -->
+<header class="header">
+    <div class="header-left">
+        <img th:src="@{/images/logo.png}" id="logo" />
+    </div>
+    <div class="header-center">
+        <form class="input-form">
+            <input class="input" type="search" id="searchQuery" placeholder="주변 맛집을 검색해 보세요"/>
+            <button class="input-button">검색</button>
+        </form>
+    </div>
+    <div class="header-right">
+        <a href="/sail/signup" class="menu-button" id="signup-btn">SIGN UP</a>
+        <a href="/sail/login" class="menu-button" id="signin-btn">SIGN IN</a>
+        <a href="/sail/order/check" class="menu-button" id="owner-btn1" style="display: none;">주문 정보</a>
+        <a href="/sail/order" class="menu-button" id="customer-btn" style="display: none;">주문 내역</a>
+        <a class="menu-button" id="logout-btn" style="display: none;" href="javascript:logout()">LOGOUT</a>
+    </div>
+
+
+
+</header>
+
+<!-- main -->
+
+<main>
+    <!-- 매장 정보 -->
+    <div class="store-info">
+        <input type="hidden" id="storeId" th:value="${store.storeId}" />
+
+        <div class="store-img-cover">
+            <img class="store-img" th:src="@{${store.imageUrl}}" alt="Store Image"/>
+        </div>
+
+        <h1 class="store-name"><span th:text="${store.storeName}">매장 이름</span></h1>
+        <p class="store-position"><strong>위치:</strong> <span th:text="${store.address}">매장 주소</span></p>
+        <p class="store-phone"><strong>전화번호:</strong> <span th:text="${store.phone}">매장 전화번호</span></p>
+        <button class="storeBtn" onclick="checkPermissionAndUpdate()">매장 수정</button>
+        <button class="storeBtn" onclick="reloadToMenu()">메뉴 추가</button>
+    </div>
+
+
+
+    <!-- 카테고리 버튼 -->
+    <div class="category-buttons">
+        <button class="category-button" onclick="filterMenu('all')">전체</button>
+        <button th:each="category : ${categories}" th:text="${category}" class="category-button"
+                th:attr="data-category=${category}" onclick="filterMenu(this.getAttribute('data-category'))"></button>
+    </div>
+
+    <div>
+    <h2>메뉴</h2>
+    <div class="menu-container">
+        <!-- 메뉴 카드 -->
+        <div class="menu-card" th:each="menu : ${menus}" th:attr="data-category=${menu.menuCategory}">
+            <h3 th:text="${menu.menuName}">메뉴 제목</h3>
+            <div class="menu-img-cover">
+                <img class="menu-img" th:src="@{${menu.imageUrl}}"  alt="메뉴 이미지" />
+            </div>
+            <p class="menu-info" th:text="${menu.introduce}">메뉴 설명</p>
+            <p class="menu-info" th:text="${menu.price}">가격</p>
+            <p class="menu-info" th:text="${menu.menuCategory}">카테고리</p>
+            <!-- 장바구니 추가 버튼 -->
+            <div>
+                <button class="add-to-cart-button" th:attr="data-menuId=${menu.menuId}, data-menuName=${menu.menuName}, data-price=${menu.price}"
+                        onclick="addToCart(this.getAttribute('data-menuId'), this.getAttribute('data-menuName'), this.getAttribute('data-price'))">장바구니에 추가</button>
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div id="cart" style="display: none;">
+        <h2>장바구니</h2>
+        <div id="cart-items"></div>
+        <div id="total-price">총합계: 0원</div>
+        <button onclick="checkout()">주문하기</button>
+    </div>
+</main>
+<script src="/js/authModule.js"></script>
+<script>
+    document.getElementById("logo").addEventListener("click", function() {
+        window.location.href = "/";
+    });
+</script>
+<script>
+
+    function checkPermissionAndUpdate() {
+        const storeId = document.getElementById('storeId').value; // 매장 ID를 가져옵니다.
+        fetch(`/sail/store/check-permission/${storeId}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.hasPermission) {
+                    // 권한이 있으면, 수정 페이지로 이동합니다.
+                    window.location.href = `/sail/store/update/${storeId}`;
+                } else {
+                    // 권한이 없으면, 경고창을 띄웁니다.
+                    alert('권한이 없습니다.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    function reloadToMenu() {
+        const storeId = document.getElementById('storeId').value; // 매장 ID를 가져옵니다.
+        fetch(`/sail/list/menu/${storeId}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                console.log(response)
+                if (response.ok) {
+                    alert("인증이 성공적으로 되었습니다.");
+                    window.location.href = `/sail/listmenu/${storeId}`;
+                } else {
+                    if (response.status === 403) {
+                        alert("매장이 사장님 소유가 아닙니다.");
+                    } else {
+                        // 그 외의 오류 처리
+                        alert("오류가 발생했습니다. 나중에 다시 시도해주세요.");
+                    }
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+
+    let cart = [];
+
+    // 카테고리 별 메뉴 필터링 함수
+    function filterMenu(category) {
+        const menuCards = document.querySelectorAll('.menu-card');
+        menuCards.forEach(card => {
+            if (category === 'all' || card.getAttribute('data-category') === category) {
+                card.style.display = 'block'; // 해당 카테고리의 메뉴는 보이도록 설정
+            } else {
+                card.style.display = 'none'; // 해당 카테고리 이외의 메뉴는 숨김 처리
+            }
+        });
+
+        // 클릭된 카테고리 버튼에 active 클래스 추가
+        const categoryButtons = document.querySelectorAll('.category-button');
+        categoryButtons.forEach(button => {
+            button.classList.remove('active');
+            if (button.textContent.trim() === category) {
+                button.classList.add('active');
+            }
+        });
+    }
+
+    // 장바구니에 메뉴 추가
+    function addToCart(menuId, menuName, price) {
+        const item = {
+            menuId: menuId,
+            menuName: menuName,
+            price: price,
+            quantity: 1 // 초기 수량 설정
+        };
+
+        let existingItem = cart.find(item => item.menuId === menuId);
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            cart.push(item);
+        }
+
+        renderCart(cart);
+    }
+
+    // 수량 감소
+    function decreaseQuantity(menuId) {
+        const item = cart.find(item => item.menuId === menuId);
+        if (item && item.quantity > 1) {
+            item.quantity--;
+            renderCart(cart);
+        }
+    }
+
+    // 수량 증가
+    function increaseQuantity(menuId) {
+        const item = cart.find(item => item.menuId === menuId);
+        if (item) {
+            item.quantity++;
+            renderCart(cart);
+        }
+    }
+
+    // 장바구니 표시
+    function renderCart(cart) {
+        const cartItemsDiv = document.getElementById('cart-items');
+        cartItemsDiv.innerHTML = '';
+        let totalPrice = 0;
+        cart.forEach(item => {
+            const div = document.createElement('div');
+            div.classList.add('cart-item');
+            div.dataset.menuId = item.menuId;
+            div.innerHTML = `
+                <span>${item.menuName}</span>
+                <span>${item.price}원</span>
+                <div class="quantity-buttons">
+                    <button class="quantity-button" onclick="decreaseQuantity('${item.menuId}')">-</button>
+                    <span>${item.quantity}</span>
+                    <button class="quantity-button" onclick="increaseQuantity('${item.menuId}')">+</button>
+                </div>
+                <button onclick="removeFromCart('${item.menuId}')">삭제</button>
+            `;
+            cartItemsDiv.appendChild(div);
+            totalPrice += item.price * item.quantity;
+        });
+        document.getElementById('cart').style.display = 'block';
+        document.getElementById('total-price').textContent = `총합계: ${totalPrice}원`;
+    }
+
+    // 장바구니에서 메뉴 삭제
+    function removeFromCart(menuId) {
+        cart = cart.filter(item => item.menuId !== menuId);
+        renderCart(cart);
+    }
+
+    // 주문 정보와 총 가격을 JSON 형식으로 내보내는 함수
+    function exportOrderData(totalPrice) {
+        const orderData = {
+            storeId: document.getElementById('storeId').value,
+            menus: cart.map(item => {
+                return {
+                    menuId: item.menuId,
+                    quantity: item.quantity
+                };
+            }),
+            totalPrice: totalPrice
+        };
+        return JSON.stringify(orderData);
+    }
+
+
+    // 주문하기
+    function checkout() {
+        // 주문 정보를 가져옵니다.
+        const totalPrice = calculateTotalPrice(); // 총 가격 계산
+        const orderData = exportOrderData(totalPrice); // 주문 정보 및 총 가격을 JSON으로 내보냅니다.
+
+        // fetch를 사용하여 POST 요청을 보냅니다.
+        fetch('/sail/order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: orderData
+        })
+            .then(response => {
+                if (response.ok) {
+                    // 주문 성공 시 알림창 표시
+                    window.alert('장바구니 담기 성공! 결제 페이지로 이동합니다.');
+                    window.location.href = "/sail/pay"
+                } else if (response.status === 400) {
+                    // 잘못된 요청일 경
+                    return response.text().then(errorMessage => {
+                        window.alert(errorMessage);
+                        window.location.href = "/sail/pay"
+                    });
+                } else if (response.status === 404) {
+                    // 찾을 수 없는 리소스일 경우
+                    window.alert('해당하는 매장 또는 메뉴가 존재하지 않습니다.');
+                }else if (response.status = 401){
+                    console.log(response)
+                    window.alert("로그인 해주세요")
+                    window.location.href = "/sail/login"
+                } else {
+                    // 기타 오류 처리
+                    window.alert('서버 오류로 인해 주문을 처리할 수 없습니다.');
+                }
+            })
+            .catch(error => {
+                console.error(error.message);
+                // fetch 오류 시 알림창 표시
+                window.alert('서버 오류로 인해 주문을 처리할 수 없습니다.');
+            });
+    }
+    // 총 가격을 계산하는 함수
+    function calculateTotalPrice() {
+        let totalPrice = 0;
+        cart.forEach(item => {
+            totalPrice += item.price * item.quantity;
+        });
+        return totalPrice;
+    }
+
+
+</script>
+</body>
+
+</html>
